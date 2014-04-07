@@ -176,13 +176,13 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
     <h2>API</h2>
 
     <p>
-      See the <a href='https://github.com/MikeMcl/decimal.js'>README</a> on GitHub for a quickstart
+      See the <a href='https://github.com/MikeMcl/decimal.js'>README</a> on GitHub for a quick-start
       introduction.
     </p>
     <p>
       In all examples below, <code>var</code> and semicolons are not shown, and if a commented-out
       value is in quotes it means <code>toString</code> has been called on the preceding expression.
-    </p>
+    </p><br />
     <p>
       When the library is loaded, it defines a single function object,
       <a href='#decimal'><code>Decimal</code></a>, the constructor of Decimal numbers.
@@ -326,8 +326,9 @@ new Decimal(1.23456789).round()          // '1.2346'</pre>
     <p>Configures the 'global' settings for this particular Decimal constructor.</p>
     <p>Returns this Decimal constructor.</p>
     <p>
-      The configuration object can contain some or all of the properties described in detail at
-      <a href="#constructor-properties">Properties</a> and shown in the example below.
+      The configuration object, <code>object</code>, can contain some or all of the properties
+      described in detail at <a href="#constructor-properties">Properties</a> and shown in the
+      example below.
     </p>
     <p>
       The values of the configuration object properties are checked for validity and then stored as
@@ -350,6 +351,10 @@ Decimal.config({
     crypto: false,
     modulo: 1
 })</pre>
+    <p>
+      The properties of a Decimal constructor can also be set by direct assignment, but that will
+      obviously by-pass the validity checking that this method performs.
+    </p>
 
 
 
@@ -493,7 +498,6 @@ x.equals(y)                    // true</pre>
     <p>
       <code>limit</code>: <i>number|string|Decimal</i><br /> Default value: <code>1</code><br />
       <code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive<br />
-      Default value: <code>precision</code><br />
       <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
     </p>
     <p>
@@ -543,11 +547,8 @@ Decimal.random(10)                      // '6'
 // An integer in the range (-100, 0]
 Decimal.random(-100)                    // '-82'
 
-// An integer in the range [0, 99.99)
-Decimal.random('99.99')                 // '47'
-
 // An integer in the range [0, 9e9999999999)
-Decimal.random('9e99999999999')         // The browser will hang
+Decimal.random('9e99999999999')         // A browser will hang
 
 // A value in the range [0, 9e9999999999) with 10 significant digits
 Decimal.random('9e99999999999', 25)     // '1.508652055e+99999999999'
@@ -619,8 +620,8 @@ Decimal.precision = 0
       <code>precision</code> significant digits except
       <a href='#abs'><code>absoluteValue</code></a>, <a href='#ceil'><code>ceil</code></a>,
       <a href='#floor'><code>floor</code></a>, <a href='#neg'><code>negated</code></a>,
-      <a href='#round'><code>round</code></a>, <a href='#toDP'><code>toDecimalPlaces</code></a>
-      and <a href='#toNear'><code>toNearest</code></a>.
+      <a href='#toDP'><code>toDecimalPlaces</code></a> and
+      <a href='#toNear'><code>toNearest</code></a>.
     </p>
     <p>
       A Decimal constructor will also not round to <code>precision</code> unless a base is
@@ -643,7 +644,10 @@ Decimal.precision                  // 5</pre>
       <a href='#toE'><code>toExponential</code></a>, <a href='#toFi'><code>toFixed</code></a>,
       <a href='#toFo'><code>toFormat</code></a>, and <a href='#toP'><code>toPrecision</code></a>.
     </p>
-    <p>The modes are available as enumerated properties of the constructor.</p>
+    <p>
+      The <a href='#modes'>rounding modes</a> are available as enumerated properties of the
+      constructor.
+    </p>
     <pre>Decimal.config({ rounding: Decimal.ROUND_UP })
 Decimal.config({ rounding: 0 })    // equivalent
 Decimal.rounding                   // 0</pre>
@@ -665,12 +669,12 @@ Decimal.rounding                   // 0</pre>
       JavaScript numbers underflow to zero for exponents below <code>-324</code>.
     </p>
     <pre>Decimal.config({ minE: -500 })
-Decimal.minE                      // -500
+Decimal.minE                       // -500
 new Decimal('1e-500')              // '1e-500'
 new Decimal('9.9e-501')            // '0'
 
 Decimal.config({ minE: -3 })
-new Decimal(0.001)                 // '0.01'       e is only -3
+new Decimal(0.001)                 // '0.01'       e is -3
 new Decimal(0.0001)                // '0'          e is -4</pre>
     <p>
       The smallest possible magnitude of a non-zero Decimal is <code>1e-9000000000000000</code>
@@ -694,12 +698,12 @@ new Decimal(0.0001)                // '0'          e is -4</pre>
       JavaScript numbers overflow to <code>Infinity</code> for exponents above <code>308</code>.
     </p>
     <pre>Decimal.config({ maxE: 500 })
-Decimal.maxE                      // 500
+Decimal.maxE                       // 500
 new Decimal('9.999e500')           // '9.999e+500'
 new Decimal('1e501')               // 'Infinity'
 
 Decimal.config({ maxE: 4 })
-new Decimal(99999)                 // '99999'      e is only 4
+new Decimal(99999)                 // '99999'      e is 4
 new Decimal(100000)                // 'Infinity'</pre>
     <p>
       The largest possible magnitude of a finite Decimal is <code>9.999...e+9000000000000000</code>
@@ -718,7 +722,7 @@ new Decimal(100000)                // 'Infinity'</pre>
     </p>
     <pre>Decimal.config({ toExpNeg: -7 })
 Decimal.toExpNeg                 // -7
-new Decimal(0.00000123)            // '0.00000123'       e is only -6
+new Decimal(0.00000123)            // '0.00000123'       e is -6
 new Decimal(0.000000123)           // '1.23e-7'
 
 // Always return exponential notation:
@@ -750,8 +754,8 @@ Decimal.config({ toExpNeg: 0 })</pre>
       returns exponential notation.
     </p>
     <pre>Decimal.config({ toExpPos: 2 })
-Decimal.toExpPos                 // 2
-new Decimal(12.3)                  // '12.3'        e is only 1
+Decimal.toExpPos                   // 2
+new Decimal(12.3)                  // '12.3'        e is 1
 new Decimal(123)                   // '1.23e+2'
 
 // Always return exponential notation:
@@ -838,7 +842,7 @@ Decimal.errors                     // false</pre>
        </tr>
     </table>
     <p>
-      The <code>rounding/modulo</code> modes are available as enumerated properties of the Decimal
+      The rounding/modulo modes are available as enumerated properties of the Decimal
       constructor.
     </p>
     <pre>Decimal.config({ modulo: Decimal.EUCLID })
@@ -867,10 +871,12 @@ Decimal.modulo                     // 9</pre>
     </p>
     <pre>
 Decimal.crypto                     // false
-Decimal.config({ crypto: true })
-
-// If crypto.getRandomValues and crypto.randomBytes are undefined
-Decimal.crypto                     // false</pre>
+Decimal.config({ crypto: true })</pre>
+    <p>
+      If <code>crypto.getRandomValues</code> and <code>crypto.randomBytes</code> are undefined, the
+      crypto property will remain <code>false</code>.
+    </p>
+    <pre>Decimal.crypto                     // false</pre>
 
 
 
@@ -981,19 +987,19 @@ y.ceil()                      // '-1'</pre>
     <table>
       <tr><th>Returns</th><th>&nbsp;</th></tr>
       <tr>
-        <td class='centre'>1</td>
+        <td class='centre'><code>1</code></td>
         <td>If the value of this Decimal is greater than the value of <code>n</code></td>
       </tr>
       <tr>
-        <td class='centre'>-1</td>
+        <td class='centre'><code>-1</code></td>
         <td>If the value of this Decimal is less than the value of <code>n</code></td>
       </tr>
       <tr>
-        <td class='centre'>0</td>
+        <td class='centre'><code>0</code></td>
         <td>If this Decimal and <code>n</code> have the same value</td>
       </tr>
       <tr>
-        <td class='centre'>null</td>
+        <td class='centre'><code>null</code></td>
         <td>If the value of either this Decimal or <code>n</code> is <code>NaN</code> </td>
       </tr>
     </table>
@@ -1138,7 +1144,7 @@ y.floor()                   // '-2'</pre>
     </p>
     <p>Note: This method uses the <code>cmp</code> method internally.</p>
     <pre>
-0.1 &gt; (0.3 - 0.2)                         // true
+0.1 &gt; (0.3 - 0.2)                            // true
 x = new Decimal(0.1)
 x.greaterThan(Decimal(0.3).minus(0.2))       // false
 new Decimal(0).gt(x)                         // false
@@ -1160,7 +1166,7 @@ new Decimal(11, 3).gt(11.1, 2)               // true</pre>
     </p>
     <p>Note: This method uses the <code>cmp</code> method internally.</p>
     <pre>
-(0.3 - 0.2) &gt;= 0.1                    // false
+(0.3 - 0.2) &gt;= 0.1                       // false
 x = new Decimal(0.3).minus(0.2)
 x.greaterThanOrEqualTo(0.1)              // true
 new Decimal(1).gte(x)                    // true
@@ -1202,7 +1208,7 @@ y.isInt()                     // false</pre>
 
     <h5 id="isNaN">isNaN<code class='inset'>.isNaN() <i>&rArr; boolean</i></code></h5>
     <p>
-      Returns <code>true</code> if the value of this Decimal is NaN, otherwise returns
+      Returns <code>true</code> if the value of this Decimal is <code>NaN</code>, otherwise returns
       <code>false</code>.
     </p>
     <pre>
@@ -1386,16 +1392,16 @@ y.ln()                          // '69.28'</pre>
       natural logarithm function is non-terminating, unless its argument is <code>1</code>).
     </p>
     <p>
-      Internally, this method is dependent on a constant with value the natural logarithm of
-      10. This <code>LN10</code> variable in the source code currently has a precision of
-      <code>1025</code> digits, meaning that this method can accurately calculate up to
+      Internally, this method is dependent on a constant whose value is the natural logarithm of
+      <code>10</code>. This <code>LN10</code> variable in the source code currently has a precision
+      of <code>1025</code> digits, meaning that this method can accurately calculate up to
       <code>1000</code> digits.
     </p>
     <p>
       If more than <code>1000</code> digits is required then the precision of <code>LN10</code>
       will need to be increased to <code>25</code> digits more than is required - though, as the
       time-taken by this method increases exponentially with increasing digits, it is unlikely to be
-      viable to calculate over 1000 digits anyway.
+      viable to calculate over <code>1000</code> digits anyway.
     </p>
 
 
@@ -1498,8 +1504,8 @@ x                                         // '9876.54321'</pre>
       to an infinite number of correct digits before rounding.
     </p>
     <p>
-      The square root is method is much faster than using the
-      <a href='#pow'><code>toPower</code></a> method with an exponent of <code>0.5</code>.
+      This method is much faster than using the <a href='#pow'><code>toPower</code></a> method with
+      an exponent of <code>0.5</code>.
     </p>
     <pre>
 x = new Decimal(16)
@@ -1596,15 +1602,15 @@ y.toDP(1, 1)                   // '9876.5'</pre>
     <pre>
 x = 45.6
 y = new Decimal(x)
-x.toExponential()         // '4.56e+1'
-y.toExponential()         // '4.56e+1'
-x.toExponential(0)        // '5e+1'
-y.toExponential(0)        // '5e+1'
-x.toExponential(1)        // '4.6e+1'
-y.toExponential(1)        // '4.6e+1'
-y.toExponential(1, 1)     // '4.5e+1'  (ROUND_DOWN)
-x.toExponential(3)        // '4.560e+1'
-y.toExponential(3)        // '4.560e+1'</pre>
+x.toExponential()              // '4.56e+1'
+y.toExponential()              // '4.56e+1'
+x.toExponential(0)             // '5e+1'
+y.toExponential(0)             // '5e+1'
+x.toExponential(1)             // '4.6e+1'
+y.toExponential(1)             // '4.6e+1'
+y.toExponential(1, 1)          // '4.5e+1'  (ROUND_DOWN)
+x.toExponential(3)             // '4.560e+1'
+y.toExponential(3)             // '4.560e+1'</pre>
 
 
 
@@ -1623,11 +1629,12 @@ y.toExponential(3)        // '4.560e+1'</pre>
     </p>
     <p>
       Unlike <code>Number.prototype.toFixed</code>, which returns exponential notation if a number
-      is greater or equal to 10<sup>21</sup>, this method will always return normal notation.
+      is greater or equal to <code>10<sup>21</sup></code>, this method will always return normal
+      notation.
     </p>
     <p>
-      If <code>dp</code> is omitted or is <code>null</code> or undefined, then the return value is
-      unrounded and in normal notation. This is unlike <code>Number.prototype.toFixed</code>,
+      If <code>dp</code> is omitted or is <code>null</code> or undefined, then the return value will
+      be unrounded and in normal notation. This is unlike <code>Number.prototype.toFixed</code>,
       which returns the value to zero decimal places, but is useful when because of the current
       <a href="#toExpNeg"><code>toExpNeg</code></a> or
       <a href="#toExpPos"><code>toExpNeg</code></a> values, <code><a href='#toS'>toString</a></code>
@@ -1794,15 +1801,18 @@ JSON.parse(str, function (key, val) {
       <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
     </p>
     <p>
-      Returns a new Decimal whose value is the nearest multiple of the magnitude of <code>n</code>
-      to the value of this Decimal.
+      Returns a new Decimal whose value is the nearest multiple of <code>n</code> to the value of
+      this Decimal.
     </p>
      <p>
       If the value of this Decimal is equidistant from two multiples of <code>n</code>, the rounding
       mode <code>rm</code>, or <a href='#rounding'><code>rounding</code></a> if <code>rm</code> is
       omitted or is <code>null</code> or undefined, determines the direction of the nearest.
-      In this context, rounding mode 4 (<a href='#rounding'><code>ROUND_HALF_UP</code></a>) is the
-      same as rounding mode 0 (<a href='#rounding'><code>ROUND_UP</code></a>), and so on.
+    </p>
+    <p>
+      In this context, rounding mode <a href='#rounding'><code>ROUND_HALF_UP</code></a> is
+      interpreted the same as rounding mode <a href='#rounding'><code>ROUND_UP</code></a>, and so
+      on. The rounding is either up, down, to ceil, to floor or to even.
     </p>
     <p>
       The return value will always have the same sign as this Decimal, unless either this Decimal
@@ -1828,15 +1838,15 @@ y.toNearest(0.5, 1)            // '0.5'  (ROUND_DOWN)</pre>
     </p>
     <pre>
 x = new Decimal(456.789)
-x.toNumber()            // 456.789
-+x                      // 456.789
+x.toNumber()                   // 456.789
++x                             // 456.789
 
 y = new Decimal('45987349857634085409857349856430985')
-y.toNumber()            // 4.598734985763409e+34
+y.toNumber()                   // 4.598734985763409e+34
 
 z = new Decimal(-0)
-1 / +z                 // Infinity
-1 / z.toNumber()       // -Infinity</pre>
+1 / +z                         // Infinity
+1 / z.toNumber()               // -Infinity</pre>
 
 
 
@@ -1857,10 +1867,10 @@ z = new Decimal(-0)
       digits is required, the performance of this method may not be adequate.
     </p>
     <pre>
-Math.pow(0.7, 2)             // 0.48999999999999994
-x = new Decimal(0.7)
-x.toPower(2)                 // '0.49'
-new Decimal(3).pow(-2)       // '0.11111111111111111111'
+Math.pow(0.7, 2)               // 0.48999999999999994
+x = new Decimal(0.7)           
+x.toPower(2)                   // '0.49'
+new Decimal(3).pow(-2)         // '0.11111111111111111111'
 
 new Decimal(1217652.23).pow('98765.489305603941')
 // '4.8227010515242461181e+601039'</pre>
@@ -1883,8 +1893,8 @@ new Decimal(1217652.23).pow('98765.489305603941')
     <p>
       The return value may, depending on the rounding mode, be incorrectly rounded only if the first
       <code>15</code> rounding digits are <code>15</code> zeros (and there are non-zero digits
-      following at some point) or <code>15</code> nines (the first rounding digit may also be 5 or
-      4 respectively).
+      following at some point) or <code>15</code> nines (the first rounding digit may also be
+      <code>5</code> or <code>4</code> respectively).
     </p>
     <p>
       Therefore, assuming the first <code>15</code> rounding digits are each equally likely to be
@@ -1938,14 +1948,14 @@ new Decimal(28).pow('6.166675020000903537297764507632802193308677149')
     <pre>
 x = 45.6
 y = new Decimal(x)
-x.toPrecision()           // '45.6'
-y.toPrecision()           // '45.6'
-x.toPrecision(1)          // '5e+1'
-y.toPrecision(1)          // '5e+1'
-y.toPrecision(2, 0)       // '4.6e+1'  (ROUND_UP)
-y.toPrecision(2, 1)       // '4.5e+1'  (ROUND_DOWN)
-x.toPrecision(5)          // '45.600'
-y.toPrecision(5)          // '45.600'</pre>
+x.toPrecision()                // '45.6'
+y.toPrecision()                // '45.6'
+x.toPrecision(1)               // '5e+1'
+y.toPrecision(1)               // '5e+1'
+y.toPrecision(2, 0)            // '4.6e+1'  (ROUND_UP)
+y.toPrecision(2, 1)            // '4.5e+1'  (ROUND_DOWN)
+x.toPrecision(5)               // '45.600'
+y.toPrecision(5)               // '45.600'</pre>
 
 
 
@@ -1953,12 +1963,12 @@ y.toPrecision(5)          // '45.600'</pre>
     <p><code>base</code>: <i>number</i>: integer, 2 to 64 inclusive</p>
     <p>
       Returns a string representing the value of this Decimal in the specified base, or base 10 if
-      <code>base</code> is omitted.
+      <code>base</code> is omitted or is <code>null</code> or undefined.
     </p>
     <p>
       For bases above 10, values from 10 to 35 are represented by <code>a-z</code> (as with
-      <code>Number.toString</code>), 36 to 61 by <code>A-Z</code>, and 62 and 63 by <code>$</code>
-      and <code>_</code> respectively.
+      <code>Number.prototype.toString</code>), 36 to 61 by <code>A-Z</code>, and 62 and 63 by
+      <code>$</code> and <code>_</code> respectively.
     </p>
     <p>
       If a base is specified the value is rounded to <a href='#precision'><code>precision</code></a>
@@ -2135,13 +2145,13 @@ x                                     // '0.00001234'</pre>
       </tr>
     </table>
     <pre>
-x = new Number(-0)      // 0
-1 / x == -Infinity      // true
-
-y = new Decimal(-0)     // '0'
-y.c                     // '0' ( [0].toString() )
-y.e                     //  0
-y.s                     // -1</pre>
+x = new Number(-0)             // 0
+1 / x == -Infinity             // true
+                               
+y = new Decimal(-0)            // '0'
+y.c                            // '0' ( [0].toString() )
+y.e                            //  0
+y.s                            // -1</pre>
 
 
 

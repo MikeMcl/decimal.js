@@ -11,7 +11,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - Includes a `toFraction` and correctly-rounded `exp`, `ln`, `log` and `sqrt` functions
   - Supports non-integer powers (although performance is limited)
   - Works with numbers with or without fraction digits in bases from 2 to 64 inclusive
-  - Stores values in an accessible decimal floating point format
+  - Stores values in an accessible decimal floating-point format
   - No dependencies
   - Uses JavaScript 1.5 (ECMAScript 3) features only
   - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
@@ -40,13 +40,7 @@ It can be loaded via a script tag in an HTML document for the browser
 
 or as a CommonJS, [Node.js](http://nodejs.org) or AMD module using `require`.
 
-For Node, put the *decimal.js* file into the same directory as the file that is requiring it and use
-
-    var Decimal = require('./decimal');
-
-or put it in a *node_modules* directory within the directory and use `require('decimal')`.
-
-The library is also available from the [npm](https://npmjs.org/) registry
+For Node, the library is also available from the [npm](https://npmjs.org/) registry
 
     $ npm install decimal.js
 
@@ -103,12 +97,25 @@ Like JavaScript's Number type, there are `toExponential`, `toFixed` and `toPreci
  and a base can be specified for `toString`.
 
     x.toString(16)        // 'ff.8'
+    
+There is a `toFraction` method with an optional *maximum denominator* argument
+
+    y = new Decimal(355)
+    pi = y.dividedBy(113)        // '3.1415929204'
+    pi.toFraction()              // [ '7853982301', '2500000000' ]
+    pi.toFraction(1000)          // [ '355', '113' ]
+
+and `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` values.
+
+    x = new Decimal(NaN)                                           // 'NaN'
+    y = new Decimal(Infinity)                                      // 'Infinity'
+    x.isNaN() && !y.isNaN() && !x.isFinite() && !y.isFinite()      // true
 
 As mentioned above, multiple Decimal constructors can be created, each with their own independent
  configuration which applies to all Decimal numbers created from it.
 
 All calculations are rounded to the number of significant digits specified by the `precision` property
-of a Decimal constructor and rounded using the rounding mode specified by the `rounding` property.
+of each Decimal constructor and rounded using the rounding mode specified by the `rounding` property.
 
     Decimal.config({ precision: 5, rounding: 4 })
 
@@ -124,23 +131,10 @@ of a Decimal constructor and rounded using the rounding mode specified by the `r
     Decimal.precision                  // 5
     D.precision                        // 10
 
-Many of the methods of JavaScript's Math object are replicated as static methods of a Decimal constructor
+Many of the methods of JavaScript's Math object are also replicated
 
     Decimal.sqrt('6.98372465832e+9823')      // '8.3568682281821340204e+4911'
     Decimal.pow(2, 0.0979843)                // '1.0702770511687781839'
-
-There is a `toFraction` method with an optional *maximum denominator* argument
-
-    y = new Decimal(355)
-    pi = y.dividedBy(113)        // '3.1415929204'
-    pi.toFraction()              // [ '7853982301', '2500000000' ]
-    pi.toFraction(1000)          // [ '355', '113' ]
-
-and `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` values.
-
-    x = new Decimal(NaN)                                           // 'NaN'
-    y = new Decimal(Infinity)                                      // 'Infinity'
-    x.isNaN() && !y.isNaN() && !x.isFinite() && !y.isFinite()      // true
 
 The value of a Decimal is stored in a decimal floating point format in terms of a coefficient, exponent and sign.
 
@@ -184,15 +178,15 @@ then
 
 will create *decimal.min.js*.
 
-The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.8*.
+The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.8* (in protest at 
+uglify-js failing to preserve licensing comments).
 
 ## Feedback
 
 Open an issue, or email
 Michael <a href='mailto:M8ch88l@gmail.com'>M8ch88l@gmail.com</a>
 
-Many hours of work have gone into this library.
-A [bitcoin](https://bitcoin.org/en/getting-started) donation would be gratefully received:
+[Bitcoin](https://bitcoin.org/en/getting-started) donations gratefully received:
 **1PjzRBjGJycti49AXTiKsdC4PRCnTbyUyf**
 
 Thank you
@@ -204,6 +198,9 @@ MIT Expat.
 See LICENCE.
 
 ## Change Log
+
+####1.0.1
+* 07/04/2014 Minor documentation clean-up.
 
 ####1.0.0
 * 02/04/2014 Initial release
