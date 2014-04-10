@@ -200,9 +200,12 @@ See LICENCE.
 
 ## Change Log
 
+####2.0.1
+* 10/04/2014 Update npmignore
+
 ####2.0.0
-* 10/04/2014 Added `toSignificantDigits`
-* Removed `toInteger`
+* 10/04/2014 Add `toSignificantDigits`
+* Remove `toInteger`
 * No arguments to `ceil`, `floor`, `round` and `trunc`
 
 ####1.0.1
