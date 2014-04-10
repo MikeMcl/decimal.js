@@ -152,6 +152,7 @@ var count = (function minMax(Decimal) {
     T(-Infinity, 1, [1, '-1e+9000000000000001', -1e200]);
     T(0, 1, [1, '1e-9000000000000001', 1e-200]);
     T(0, 1, [1, '-1e-9000000000000001', 1e-200]);
+    T(-3, 3, [1, '2', 3, '-1', -2, '-3']);
 
     log('\n ' + passed + ' of ' + total + ' tests passed in ' + (+new Date() - start) + ' ms \n');
     return [passed, total];

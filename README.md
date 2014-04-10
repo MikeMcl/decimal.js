@@ -13,7 +13,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - Works with numbers with or without fraction digits in bases from 2 to 64 inclusive
   - Stores values in an accessible decimal floating-point format
   - No dependencies
-  - Uses JavaScript 1.5 (ECMAScript 3) features only
+  - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
   - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
   - 8 KB minified and gzipped
 
@@ -111,25 +111,27 @@ and `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` 
     y = new Decimal(Infinity)                                      // 'Infinity'
     x.isNaN() && !y.isNaN() && !x.isFinite() && !y.isFinite()      // true
 
+All calculations are rounded to the number of significant digits specified by the `precision` property
+of the Decimal constructor and rounded using the rounding mode specified by the `rounding` property.
+
 As mentioned above, multiple Decimal constructors can be created, each with their own independent
  configuration which applies to all Decimal numbers created from it.
 
-All calculations are rounded to the number of significant digits specified by the `precision` property
-of each Decimal constructor and rounded using the rounding mode specified by the `rounding` property.
+
 
     Decimal.config({ precision: 5, rounding: 4 })
 
-    D = Decimal.constructor()                      // constructor is a factory method
-    D.config({ precision: 10, rounding: 1 })
+    // constructor is a factory method and it can also accept a configuration object
+    Decimal10 = Decimal.constructor({ precision: 10, rounding: 1 })    
 
     x = new Decimal(5)
-    y = new D(5)
+    y = new Decimal10(5)
 
     x.div(3)                           // '1.6667'
     y.div(3)                           // '1.666666666'
 
     Decimal.precision                  // 5
-    D.precision                        // 10
+    Decimal10.precision                // 10
 
 Many of the methods of JavaScript's Math object are also replicated
 
@@ -178,8 +180,7 @@ then
 
 will create *decimal.min.js*.
 
-The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.8* (in protest at 
-uglify-js failing to preserve licensing comments).
+The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.8*.
 
 ## Feedback
 
@@ -199,8 +200,13 @@ See LICENCE.
 
 ## Change Log
 
+####2.0.0
+* 10/04/2014 Added `toSignificantDigits`
+* Removed `toInteger`
+* No arguments to `ceil`, `floor`, `round` and `trunc`
+
 ####1.0.1
-* 07/04/2014 Minor documentation clean-up.
+* 07/04/2014 Minor documentation clean-up
 
 ####1.0.0
 * 02/04/2014 Initial release

@@ -124,8 +124,8 @@ var count = (function constructor(Decimal) {
 
     assert(false, new Decimal(9.99).eq(new D3('-9.99')));
     assert(true, new Decimal(9.99).eq(new D5('9.99')));
-    assert(false, new Decimal(123.456789).round().eq(new D3('123.456789').round()));
-    assert(true, new Decimal(123.456789).round(5).eq(new D3('123.456789').round(5)));
+    assert(false, new Decimal(123.456789).toSD().eq(new D3('123.456789').toSD()));
+    assert(true, new Decimal(123.456789).round().eq(new D3('123.456789').round()));
 
     log('\n ' + passed + ' of ' + total + ' tests passed in ' + (+new Date() - start) + ' ms \n');
     return [passed, total];

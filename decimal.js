@@ -1,10 +1,10 @@
-/*! decimal.js v1.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v2.0.0 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (global) {
     'use strict';
 
 
     /*
-     *  decimal.js v1.0.1
+     *  decimal.js v2.0.0
      *  An arbitrary-precision Decimal type for JavaScript.
      *  https://github.com/MikeMcl/decimal.js
      *  Copyright (c) 2014 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -28,7 +28,7 @@
 
         /*
          The limit on the value of #precision, and on the argument to #toDecimalPlaces,
-         #toExponential, #toFixed, #toPrecision, #ceil, #floor, #round, and #truncate.
+         #toExponential, #toFixed, #toFormat, #toPrecision and #toSignificantDigits.
          */
         MAX_DIGITS = 1E9,                      // 0 to 1e+9
 
@@ -62,19 +62,13 @@
 
 
     /*
-     * Return a new Decimal whose value is this Decimal rounded to a maximum of #d significant
-     * digits using rounding mode ROUND_CEIL, or to an integer if #d is omitted.
-     *
-     * [d] {number} Significant digits. Integer, 1 to MAX_DIGITS inclusive.
-     *
-     * 'ceil() digits out of range: {d}'
-     * 'ceil() digits not an integer: {d}'
+     * Return a new Decimal whose value is the value of this Decimal rounded to a whole number in
+     * the direction of positive Infinity.
      *
      */
-    P['ceil'] = function (d) {
+    P['ceil'] = function () {
 
-        return rnd( new this['constructor'](this), d == null ||
-          !checkArg( this, d, 'ceil', 1 ) ? this['e'] + 1 : d | 0, 2 );
+        return rnd( new this['constructor'](this), this['e'] + 1, 2 );
     };
 
 
@@ -222,19 +216,13 @@
 
 
     /*
-     * Return a new Decimal whose value is the value of this Decimal rounded to a maximum of #d
-     * significant digits using rounding mode ROUND_FLOOR, or to an integer if #d is omitted.
-     *
-     * [d] {number} Significant digits. Integer, 1 to MAX_DIGITS inclusive.
-     *
-     * 'floor() digits out of range: {d}'
-     * 'floor() digits not an integer: {d}'
+     * Return a new Decimal whose value is the value of this Decimal rounded to a whole number in
+     * the direction of negative Infinity.
      *
      */
-    P['floor'] = function (d) {
+    P['floor'] = function () {
 
-        return rnd( new this['constructor'](this), d == null ||
-          !checkArg( this, d, 'floor', 1 ) ? this['e'] + 1 : d | 0, 3 );
+        return rnd( new this['constructor'](this), this['e'] + 1, 3 );
     };
 
 
@@ -902,27 +890,15 @@
 
 
     /*
-     * Return a new Decimal whose value is this Decimal rounded to a maximum of #d significant
-     * digits using rounding mode #rm, or to #precision and #rounding respectively if omitted.
-     *
-     * [d] {number} Significant digits. Integer, 1 to MAX_DIGITS inclusive.
-     * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
-     *
-     * 'round() digits out of range: {d}'
-     * 'round() digits not an integer: {d}'
-     * 'round() rounding mode not an integer: {rm}'
-     * 'round() rounding mode out of range: {rm}'
+     * Return a new Decimal whose value is the value of this Decimal rounded to a whole number using
+     * rounding mode #rounding.
      *
      */
-    P['round'] = function ( d, rm ) {
+    P['round'] = function () {
         var x = this,
             Decimal = x['constructor'];
 
-        x = new Decimal(x);
-
-        return d == null || !checkArg( x, d, 'round', 1 )
-          ? rnd( x, Decimal['precision'], Decimal['rounding'] )
-          : rnd( x, d | 0, checkRM( x, rm, 'round' ) );
+        return rnd( new Decimal(x), x['e'] + 1, Decimal['rounding'] );
     };
 
 
@@ -1377,23 +1353,6 @@
 
 
     /*
-     * Return a new Decimal whose value is the value of this Decimal rounded to an integer using
-     * rounding mode #rm or #rounding if #rm is omitted.
-     *
-     * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
-     *
-     * 'toInteger() rounding mode not an integer: {rm}'
-     * 'toInteger() rounding mode out of range: {rm}'
-     *
-     */
-    P['toInteger'] = P['toInt'] = function (rm) {
-        var x = this;
-
-        return rnd( new x['constructor'](x), x['e'] + 1, checkRM( x, rm, 'toInteger' ) );
-    };
-
-
-    /*
      * Returns a new Decimal whose value is the nearest multiple of the magnitude of #n to the value
      * of this Decimal.
      *
@@ -1703,6 +1662,31 @@
 
 
     /*
+     * Return a new Decimal whose value is this Decimal rounded to a maximum of #d significant
+     * digits using rounding mode #rm, or to #precision and #rounding respectively if omitted.
+     *
+     * [d] {number} Significant digits. Integer, 1 to MAX_DIGITS inclusive.
+     * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
+     *
+     * 'toSD() digits out of range: {d}'
+     * 'toSD() digits not an integer: {d}'
+     * 'toSD() rounding mode not an integer: {rm}'
+     * 'toSD() rounding mode out of range: {rm}'
+     *
+     */
+    P['toSignificantDigits'] = P['toSD'] = function ( d, rm ) {
+        var x = this,
+            Decimal = x['constructor'];
+
+        x = new Decimal(x);
+
+        return d == null || !checkArg( x, d, 'toSD', 1 )
+          ? rnd( x, Decimal['precision'], Decimal['rounding'] )
+          : rnd( x, d | 0, checkRM( x, rm, 'toSD' ) );
+    };
+
+
+    /*
      * Return a string representing the value of this Decimal in base #b, or base 10 if #b is
      * omitted. If a base is specified, including base 10, round to #precision significant digits
      * using rounding mode #rounding.
@@ -1791,20 +1775,12 @@
 
 
     /*
-     * Return a new Decimal whose value is the value of this Decimal truncated to a maximum of #d
-     * significant digits, or to an integer if #d is omitted, using rounding mode ROUND_DOWN, i.e.
-     * towards zero.
-     *
-     * [d] {number} Significant digits. Integer, 1 to MAX_DIGITS inclusive.
-     *
-     * 'trunc() digits out of range: {d}'
-     * 'trunc() digits not an integer: {d}'
+     * Return a new Decimal whose value is the value of this Decimal truncated to a whole number.
      *
      */
-    P['truncated'] = P['trunc'] = function (d) {
+    P['truncated'] = P['trunc'] = function () {
 
-        return rnd( new this['constructor'](this), d == null ||
-          !checkArg( this, d, 'trunc', 1 ) ? this['e'] + 1 : d | 0, 1 );
+        return rnd( new this['constructor'](this), this['e'] + 1, 1 );
     };
 
 
@@ -2725,8 +2701,8 @@
                 c = 'config',
                 parse = Decimal['errors'] ? parseInt : parseFloat;
 
-            if ( obj == u || typeof obj != 'object' ) {
-                ifExceptionsThrow( Decimal, 'object expected', obj, c );
+            if ( obj == u || typeof obj != 'object' &&
+              !ifExceptionsThrow( Decimal, 'object expected', obj, c ) ) {
 
                 return Decimal;
             }
@@ -3287,7 +3263,7 @@
                     str = rand( c[0] + 1 ) + rand();
 
                     do {
-                        ld = c[i];               // ##limit digit
+                        ld = c[i];               // #limit digit
                         rd = str.charAt(i++);    // random digit
                     } while ( ld == rd );
                 } while ( rd > ld || i > n || rd == '' );
@@ -3466,9 +3442,7 @@
                         return;
                     } else if ( b == 10 ) {
 
-                        return rnd(
-                            new Decimal(n), Decimal['precision'], Decimal['rounding']
-                        );
+                        return rnd( new Decimal(n), Decimal['precision'], Decimal['rounding'] );
                     } else {
                         n += '';
                     }
@@ -3548,7 +3522,6 @@
             Decimal['maxE'] = EXP_LIMIT;                     // 1 to EXP_LIMIT
 
             // Whether Decimal Errors are ever thrown.
-            // Change #parseInt to #parseFloat if changing #errors to false.
             Decimal['errors'] = true;                         // true/false
 
             // Whether to use cryptographically-secure random number generation, if available.

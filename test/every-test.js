@@ -38,10 +38,10 @@ console.log( '\n STARTING TESTS...\n' );
   'toFixed',
   'toFormat',
   'toFraction',
-  'toInt',
   'toNearest',
   'toNumber',
   'toPrecision',
+  'toSD',
   'toStringEtc',
   'trunc'
 ]

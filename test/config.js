@@ -91,10 +91,11 @@ var count = (function config(Decimal) {
         modulo: 4
     });
 
-    // Throw if no object is passed.
-    assertException(function () {Decimal.config()}, "config()");
-    assertException(function () {Decimal.config(undefined)}, "config(undefined)");
-    assertException(function () {Decimal.config(null)}, "config(null)");
+    assert(true, Decimal.config() === Decimal);
+    assert(true, Decimal.config(undefined) === Decimal);
+    assert(true, Decimal.config(null) === Decimal);
+
+    // Throw if not an object object.
     assertException(function () {Decimal.config('')}, "config('')");
     assertException(function () {Decimal.config('hi')}, "config('hi')");
     assertException(function () {Decimal.config(4)}, "config(4)");

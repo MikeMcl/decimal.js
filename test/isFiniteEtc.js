@@ -320,7 +320,6 @@ var count = (function others(Decimal) {
     assert(true, new Decimal(0).lessThanOrEqualTo('Infinity', 36));
     assert(false, new Decimal(0).greaterThanOrEqualTo('Infinity', 36));
     assert(false, new Decimal(10).lessThanOrEqualTo(20, 4));
-    assert(true, new Decimal(10).lessThanOrEqualTo(20, 5));
     assert(false, new Decimal(10).greaterThanOrEqualTo(20, 6));
 
     assert(false, new Decimal(1.23001e-2).lessThan(1.23e-2));

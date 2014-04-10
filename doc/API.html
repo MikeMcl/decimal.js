@@ -82,7 +82,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
     <a href="#constructor-properties">Properties</a>
     <ul>
       <li><a href="#one"      >ONE</a></li>
-      <li class='spacer'         >&nbsp;</li>
+      <li class='spacer'>&nbsp;</li>
       <li><a href="#precision">precision</a></li>
       <li><a href="#rounding" >rounding</a></li>
       <li><a href="#minE"     >minE</a></li>
@@ -92,7 +92,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#errors"   >errors</a></li>
       <li><a href="#modulo"   >modulo</a></li>
       <li><a href="#crypto"   >crypto</a></li>
-      <li class='spacer'         >&nbsp;</li>
+      <li class='spacer'>&nbsp;</li>
       <li><a href="#modes">ROUND_UP</a></li>
       <li><a href="#modes">ROUND_DOWN</a></li>
       <li><a href="#modes">ROUND_CEIL</a></li>
@@ -142,12 +142,12 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#toFi"   >toFixed             </a>                     </li>
       <li><a href="#toFo"   >toFormat            </a>                     </li>
       <li><a href="#toFr"   >toFraction          </a>                     </li>
-      <li><a href="#toInt"  >toInteger           </a><span>toInt</span>   </li>
       <li><a href="#toJSON" >toJSON              </a>                     </li>
       <li><a href="#toNear" >toNearest           </a>                     </li>
       <li><a href="#toNum"  >toNumber            </a>                     </li>
       <li><a href="#pow"    >toPower             </a><span>pow</span>     </li>
       <li><a href="#toP"    >toPrecision         </a>                     </li>
+      <li><a href="#toSD"   >toSignificantDigits </a><span>toSD</span>    </li>
       <li><a href="#toS"    >toString            </a>                     </li>
       <li><a href="#trunc"  >truncated           </a><span>trunc</span>   </li>
       <li><a href="#valueOf">valueOf             </a>                     </li>
@@ -307,8 +307,7 @@ new Decimal('ff.8', 16)                  // '255.5'</pre>
     </p>
     <pre>Decimal.config({ precision: 5 })
 new Decimal(1.23456789)                  // '1.23456789'
-new Decimal(1.23456789, 10)              // '1.2346'
-new Decimal(1.23456789).round()          // '1.2346'</pre>
+new Decimal(1.23456789, 10)              // '1.2346'</pre>
 
 
 
@@ -380,14 +379,14 @@ y.div(3)                           // 0.333333333
 D9 = Decimal.constructor()
 D9.config({ precision: 9 })</pre>
     <p>
+      It is not inefficient in terms of memory usage to use multiple Decimal constructors as
+      functions are shared between them.
+    </p>
+    <p>
       <code>constructor</code> is a factory method so it is not necessary or desirable to use
       <code>new</code> but it will do no harm.
     </p>
     <pre>D = new Decimal.constructor()</pre>
-    <p>
-      It is not inefficient in terms of memory usage to use multiple Decimal constructors as
-      functions are shared between them.
-    </p>
 
 
 
@@ -616,12 +615,12 @@ Decimal.precision = 0
       conversion.
     </p>
     <p>
-      All methods which return a Decimal will round the value to be returned to
-      <code>precision</code> significant digits except
-      <a href='#abs'><code>absoluteValue</code></a>, <a href='#ceil'><code>ceil</code></a>,
-      <a href='#floor'><code>floor</code></a>, <a href='#neg'><code>negated</code></a>,
-      <a href='#toDP'><code>toDecimalPlaces</code></a> and
-      <a href='#toNear'><code>toNearest</code></a>.
+      All methods which return a Decimal will round the return value to <code>precision</code>
+      significant digits except <a href='#abs'><code>absoluteValue</code></a>,
+      <a href='#ceil'><code>ceil</code></a>, <a href='#floor'><code>floor</code></a>,
+      <a href='#neg'><code>negated</code></a>, <a href='#round'><code>round</code></a>,
+      <a href='#toDP'><code>toDecimalPlaces</code></a>, <a href='#toNear'><code>toNearest</code></a>
+      and <a href='#trunc'><code>truncated</code></a>.
     </p>
     <p>
       A Decimal constructor will also not round to <code>precision</code> unless a base is
@@ -638,11 +637,14 @@ Decimal.precision                  // 5</pre>
       Default value: <code>4</code> <a href="#h-up">(<code>ROUND_HALF_UP</code>)</a>
     </p>
     <p>
-      The default rounding mode used when rounding to
-      <code><a href='#precision'>precision</a></code> and when rounding
-      <a href='#round'><code>round</code></a>, <a href='#toDP'><code>toDecimalPlaces</code></a>,
+      The default rounding mode used when rounding the result of a calculation or base conversion to
+      <code><a href='#precision'>precision</a></code> significant digits, and when rounding the
+      return value of the <a href='#round'><code>round</code></a>,
+      <a href='#toDP'><code>toDecimalPlaces</code></a>,
       <a href='#toE'><code>toExponential</code></a>, <a href='#toFi'><code>toFixed</code></a>,
-      <a href='#toFo'><code>toFormat</code></a>, and <a href='#toP'><code>toPrecision</code></a>.
+      <a href='#toFo'><code>toFormat</code></a>, <a href='#toNear'><code>toNearest</code></a>,
+      <a href='#toP'><code>toPrecision</code></a> and
+      <a href='#toSD'><code>toSignificantDigits</code></a> methods.
     </p>
     <p>
       The <a href='#modes'>rounding modes</a> are available as enumerated properties of the
@@ -959,15 +961,10 @@ z = y.abs()                   // '0.8'</pre>
 
 
 
-    <h5 id="ceil">ceil<code class='inset'>.ceil([sd]) <i>&rArr; Decimal</i></code></h5>
-    <p><code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive.</p>
+    <h5 id="ceil">ceil<code class='inset'>.ceil() <i>&rArr; Decimal</i></code></h5>
     <p>
-      Returns a new Decimal whose value is the value of this Decimal rounded to <code>sd</code>
-      significant digits in the direction of positive <code>Infinity</code>.
-    </p>
-    <p>
-      If <code>sd</code> is omitted or is <code>null</code> or undefined, the return value is
-      the value of this Decimal rounded to a whole number.
+      Returns a new Decimal whose value is the value of this Decimal rounded to a whole number in
+      the direction of positive <code>Infinity</code>.
     </p>
     <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
     <pre>
@@ -1113,15 +1110,10 @@ y.exp()                     // '7.3890560989306502272'</pre>
 
 
 
-    <h5 id="floor">floor<code class='inset'>.floor([sd]) <i>&rArr; Decimal</i></code></h5>
-    <p><code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive.</p>
+    <h5 id="floor">floor<code class='inset'>.floor() <i>&rArr; Decimal</i></code></h5>
     <p>
-      Returns a new Decimal whose value is the value of this Decimal rounded to <code>sd</code>
-      significant digits in the direction of negative <code>Infinity</code>.
-    </p>
-    <p>
-      If <code>sd</code> is omitted or is <code>null</code> or undefined, the return value is
-      the value of this Decimal rounded to a whole number.
+      Returns a new Decimal whose value is the value of this Decimal rounded to a whole number in
+      the direction of negative <code>Infinity</code>.
     </p>
     <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
     <pre>
@@ -1455,41 +1447,23 @@ y.sd(true)                      // '6'</pre>
 
 
 
-    <h5 id="round">round<code class='inset'>.round([sd [, rm]]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="round">round<code class='inset'>.round() <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive.<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive.
+      Returns a new Decimal whose value is the value of this Decimal rounded to a whole number using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <p>
-      Returns a new Decimal whose value is the value of this Decimal rounded to <code>sd</code>
-      significant digits using rounding mode <code>rm</code>.
-    </p>
-    <p>
-      If <code>sd</code> is omitted or is <code>null</code> or undefined, the return value will
-      be rounded to <a href='#precision'><code>precision</code></a> significant digits.
-    </p>
-    <p>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> will be used.
-    </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>sd</code> or <code>rm</code> values.
-    </p>
-    <p>
-      This method differs completely from <code>Math.round</code>, which rounds to
-      an integer. See <a href='#toInt'><code>toInteger</code></a>.
+      To emulate <code>Math.round</code>, set <a href='#rounding'><code>rounding</code></a> to
+      <code>7</code>, i.e. <a href='#modes'><code>ROUND_HALF_CEIL</code></a>.
     </p>
     <pre>
-Decimal.config({ precision: 5, rounding: 4 })
-x = new Decimal(9876.54321)
+Decimal.config({ rounding: 4 })
+x = 1234.5
+x.round()                                  // '1235'
 
-x.round()                                 // '9876.5'
-x.round(6)                                // '9876.54'
-x.round(6, Decimal.ROUND_UP)              // '9876.55'
-x.round(2)                                // '9900'
-x.round(2, 1)                             // '9800'
-x                                         // '9876.54321'</pre>
+Decimal.rounding = Decimal.ROUND_DOWN
+x.round()                                  // '1234'
+x                                          // '1234.5'</pre>
 
 
 
@@ -1561,12 +1535,13 @@ x.times('-a', 16)                   // '-6'</pre>
     </p>
     <pre>
 x = new Decimal(12.24567)
-x.toDecimalPlaces(0)           // '12'
-x.toDecimalPlaces(1, 0)        // '12.3'
+x.toDecimalPlaces(0)                // '12'
+x.toDecimalPlaces(1, 0)             // '12.3'
+
 y = new Decimal(9876.54321)
-y.toDP(3)                      // '9876.543'
-y.toDP(1, 0)                   // '9876.6'
-y.toDP(1, 1)                   // '9876.5'</pre>
+y.toDP(3)                           // '9876.543'
+y.toDP(1, 0)                        // '9876.6'
+y.toDP(1, Decimal.ROUND_DOWN)       // '9876.5'</pre>
 
 
 
@@ -1742,31 +1717,6 @@ pi.toFraction(1)                     // '3, 1'</pre>
 
 
 
-    <h5 id="toInt">toInteger<code class='inset'>.toInt([rm]) <i>&rArr; Decimal</i></code></h5>
-    <p><code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive.</p>
-    <p>
-      Returns a new Decimal whose value is the value of this Decimal rounded to a whole number using
-      rounding mode <code>rm</code>, or <a href='#rounding'><code>rounding</code></a>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined.
-    </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>rm</code> values.
-    </p>
-    <pre>
-Decimal.config({ rounding: 4 })
-x = 1234.5
-x.toInteger()                              // '1235'
-
-Decimal.config({ rounding: 1 })
-x.toInt()                                  // '1234'
-
-x.toInteger(Decimal.ROUND_HALF_CEIL)       // '1235'
-x.toInt(6)                                 // '1234'
-x                                          // '1234.56'</pre>
-
-
-
     <h5 id="toJSON">toJSON<code class='inset'>.toJSON() <i>&rArr; string</i></code></h5>
     <p>As <code>valueOf</code>.</p>
     <pre>
@@ -1812,7 +1762,7 @@ JSON.parse(str, function (key, val) {
     <p>
       In this context, rounding mode <a href='#rounding'><code>ROUND_HALF_UP</code></a> is
       interpreted the same as rounding mode <a href='#rounding'><code>ROUND_UP</code></a>, and so
-      on. The rounding is either up, down, to ceil, to floor or to even.
+      on. I.e. the rounding is either up, down, to ceil, to floor or to even.
     </p>
     <p>
       The return value will always have the same sign as this Decimal, unless either this Decimal
@@ -1868,7 +1818,7 @@ z = new Decimal(-0)
     </p>
     <pre>
 Math.pow(0.7, 2)               // 0.48999999999999994
-x = new Decimal(0.7)           
+x = new Decimal(0.7)
 x.toPower(2)                   // '0.49'
 new Decimal(3).pow(-2)         // '0.11111111111111111111'
 
@@ -1959,6 +1909,42 @@ y.toPrecision(5)               // '45.600'</pre>
 
 
 
+    <h5 id="toSD">
+      toSignificantDigits<code class='inset'>.toSD([sd [, rm]]) <i>&rArr; Decimal</i></code>
+    </h5>
+    <p>
+      <code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive.<br />
+      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive.
+    </p>
+    <p>
+      Returns a new Decimal whose value is the value of this Decimal rounded to <code>sd</code>
+      significant digits using rounding mode <code>rm</code>.
+    </p>
+    <p>
+      If <code>sd</code> is omitted or is <code>null</code> or undefined, the return value will
+      be rounded to <a href='#precision'><code>precision</code></a> significant digits.
+    </p>
+    <p>
+      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
+      <a href='#rounding'><code>rounding</code></a> will be used.
+    </p>
+    <p>
+      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
+      <code>sd</code> or <code>rm</code> values.
+    </p>
+    <pre>
+Decimal.config({ precision: 5, rounding: 4 })
+x = new Decimal(9876.54321)
+
+x.toSignificantDigits()                          // '9876.5'
+x.toSignificantDigits(6)                         // '9876.54'
+x.toSignificantDigits(6, Decimal.ROUND_UP)       // '9876.55'
+x.toSD(2)                                        // '9900'
+x.toSD(2, 1)                                     // '9800'
+x                                                // '9876.54321'</pre>
+
+
+
     <h5 id="toS">toString<code class='inset'>.toString([base]) <i>&rArr; string</i></code></h5>
     <p><code>base</code>: <i>number</i>: integer, 2 to 64 inclusive</p>
     <p>
@@ -2003,14 +1989,9 @@ z.toString(10)                  // '1.2346'</pre>
 
 
 
-    <h5 id="trunc">truncated<code class='inset'>.trunc([sd]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="trunc">truncated<code class='inset'>.trunc() <i>&rArr; Decimal</i></code></h5>
     <p>
-      Returns a new Decimal whose value is the value of this Decimal truncated to to <code>sd</code>
-      significant digits.
-    </p>
-    <p>
-      If <code>sd</code> is omitted or is <code>null</code> or undefined, the return value is
-      the value of this Decimal truncated to a whole number.
+      Returns a new Decimal whose value is the value of this Decimal truncated to a whole number.
     </p>
     <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
     <pre>
@@ -2147,7 +2128,7 @@ x                                     // '0.00001234'</pre>
     <pre>
 x = new Number(-0)             // 0
 1 / x == -Infinity             // true
-                               
+
 y = new Decimal(-0)            // '0'
 y.c                            // '0' ( [0].toString() )
 y.e                            //  0
@@ -2169,21 +2150,6 @@ y.s                            // -1</pre>
         <th>Method(s)</th>
         <th>errors: true<br />Throw Decimal Error</th>
         <th>errors: false<br />Action on invalid argument</th>
-      </tr>
-      <tr>
-        <td rowspan=2>
-          <code>
-            ceil<br />
-            floor<br />
-            truncated
-          </code>
-        </td>
-        <td>argument not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td>argument out of range</td>
-        <td>Ignore</td>
       </tr>
       <tr>
         <td rowspan=5>
@@ -2226,11 +2192,7 @@ y.s                            // -1</pre>
         <td>Substitute <code>NaN</code></td>
       </tr>
       <tr>
-        <td rowspan=17><code>config</code></td>
-        <td>object expected</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
+        <td rowspan=16><code>config</code></td>
         <td><code>precision</code> not an integer</td>
         <td>Truncate to integer.<br />Ignore if not a number</td>
       </tr>
@@ -2279,11 +2241,11 @@ y.s                            // -1</pre>
         <td>Ignore</td>
       </tr>
       <tr>
-        <td><code>errors</code> not a boolean<br />or binary digit</td>
+        <td><code>errors</code> not a boolean or binary digit</td>
         <td>Ignore</td>
       </tr>
       <tr>
-        <td><code>crypto</code> not a boolean<br />or binary digit</td>
+        <td><code>crypto</code> not a boolean or binary digit</td>
         <td>Ignore</td>
       </tr>
       <tr>
@@ -2301,17 +2263,17 @@ y.s                            // -1</pre>
       </tr>
       <tr>
         <td><code>precision</code></td>
-        <td>argument not a boolean<br />or binary digit</td>
+        <td>argument not a boolean or binary digit</td>
         <td>Ignore</td>
       </tr>
       <tr>
         <td rowspan=4>
           <code>
-            round<br />
             toDecimalPlaces<br />
             toExponential<br />
             toFixed<br />
-            toPrecision
+            toPrecision<br />
+            toSignificantDigits
           </code>
         </td>
         <td>argument not an integer</td>
@@ -2340,11 +2302,6 @@ y.s                            // -1</pre>
       </tr>
       <tr>
         <td>max denominator out of range</td>
-        <td>Ignore</td>
-      </tr>
-       <tr>
-        <td><code>toInteger</code></td>
-        <td>rounding mode out of range</td>
         <td>Ignore</td>
       </tr>
       <tr>
