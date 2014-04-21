@@ -1,0 +1,14 @@
+{
+  "name": "decimal.js",
+  "repo": "MikeMcl/decimal.js",
+  "description": "An arbitrary-precision Decimal type for JavaScript.",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "decimal.js",
+  "scripts": [
+    "decimal.js"
+  ]
+}
