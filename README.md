@@ -117,8 +117,6 @@ of the Decimal constructor and rounded using the rounding mode specified by the 
 As mentioned above, multiple Decimal constructors can be created, each with their own independent
  configuration which applies to all Decimal numbers created from it.
 
-
-
     Decimal.config({ precision: 5, rounding: 4 })
 
     // constructor is a factory method and it can also accept a configuration object
@@ -199,6 +197,9 @@ MIT Expat.
 See LICENCE.
 
 ## Change Log
+
+####2.0.2
+* 30/04/2014 Correct doc links
 
 ####2.0.1
 * 10/04/2014 Update npmignore
