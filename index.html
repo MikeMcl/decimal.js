@@ -102,7 +102,7 @@ Decimal.random(-0.0125, 16)             // '-0.0001963482803540358'
 // A value in the range [0, 0.9) with 1 significant digit
 Decimal.random(0.9, 1)                  // '0.2'</pre><h5 id=Dsqrt>sqrt<code class=inset>.sqrt() <i>&rArr; Decimal</i></code></h5><p>See <a href=#sqrt>squareRoot</a>.</p><pre>x = Decimal.sqrt('987654321.123456789')
 y = new Decimal('987654321.123456789').sqrt()
-x.equals(y)                    // true</pre><h4 id=constructor-properties>Properties</h4><p>The static properties of a Decimal constructor.</p><h5 id=one>ONE</h5><p>A Decimal instance with value one.</p><pre>new Decimal(3).times(Decimal.ONE)    // '3'</pre><h6 id=configProps>Configuration properties</h6><p>The values of the configuration properties <a href=#precision><code>precision</code></a>, <a href=#rounding><code>rounding</code></a>, <a href=#minE><code>minE</code></a>, <a href=#maxE><code>maxE</code></a>, <a href=#toExpNeg><code>toExpNeg</code></a>, <a href=#toExpPos><code>toExpPos</code></a>, <a href=#errors><code>errors</code></a>, <a href=#mod><code>modulo</code></a> and <a href=#crypto><code>crypto</code></a> are set using the <a href=#Dconfig><code>config</code></a> method.</p><p>As simple object properties they can be set directly without using <a href=#Dconfig><code>config</code></a>, and it is fine to do so, but the values assigned will not then be checked for validity. For example:</p><pre>Decimal.config({ precision: 0 })
+x.equals(y)                    // true</pre><h4 id=constructor-properties>Properties</h4><p>The static properties of a Decimal constructor.</p><h5 id=one>ONE</h5><p>A Decimal instance with value one.</p><pre>new Decimal(3).times(Decimal.ONE)    // '3'</pre><h6 id=configProps>Configuration properties</h6><p>The values of the configuration properties <a href=#precision><code>precision</code></a>, <a href=#rounding><code>rounding</code></a>, <a href=#minE><code>minE</code></a>, <a href=#maxE><code>maxE</code></a>, <a href=#toExpNeg><code>toExpNeg</code></a>, <a href=#toExpPos><code>toExpPos</code></a>, <a href=#errors><code>errors</code></a>, <a href=#modulo><code>modulo</code></a> and <a href=#crypto><code>crypto</code></a> are set using the <a href=#Dconfig><code>config</code></a> method.</p><p>As simple object properties they can be set directly without using <a href=#Dconfig><code>config</code></a>, and it is fine to do so, but the values assigned will not then be checked for validity. For example:</p><pre>Decimal.config({ precision: 0 })
 // 'Decimal Error: config() precision out of range: 0'
 
 Decimal.precision = 0
@@ -233,12 +233,20 @@ y.log(2)                  // '8'</pre><p>The return value will <i>almost always<
 0.3 - 0.1                  // 0.19999999999999998
 x = new Decimal(0.3)
 x.minus(0.1)               // '0.2'
-x.minus(0.6, 20)           // '0'</pre><h5 id=mod>modulo<code class=inset>.mod(n [, base]) <i>&rArr; Decimal</i></code></h5><p><code>n</code>: <i>number|string|Decimal</i><br><code>base</code>: <i>number</i><br><i>See <code><a href=#decimal>Decimal</a></code> for further parameter details.</i></p><p>Returns a new Decimal whose value is the value of this Decimal modulo <code>n</code>, rounded to <a href=#precision><code>precision</code></a> significant digits using rounding mode <a href=#rounding><code>rounding</code></a>.</p><p>The value returned, and in particular its sign, is dependent on the value of the <a href=#mod><code>modulo</code></a> property. If it is <code>1</code> (default value), the result will have the same sign as this Decimal, and it will match that of Javascript's <code>%</code> operator (within the limits of double precision) and BigDecimal's <code>remainder</code> method.</p><p>See <a href=#mod><code>modulo</code></a> for a description of the other modulo modes.</p><pre>
+x.minus(0.6, 20)           // '0'</pre><h5 id=mod>modulo<code class=inset>.mod(n [, base]) <i>&rArr; Decimal</i></code></h5><p><code>n</code>: <i>number|string|Decimal</i><br><code>base</code>: <i>number</i><br><i>See <code><a href=#decimal>Decimal</a></code> for further parameter details.</i></p><p>Returns a new Decimal whose value is the value of this Decimal modulo <code>n</code>, rounded to <a href=#precision><code>precision</code></a> significant digits using rounding mode <a href=#rounding><code>rounding</code></a>.</p><p>The value returned, and in particular its sign, is dependent on the value of the <a href=#modulo><code>modulo</code></a> property of this Decimal's constructor. If it is <code>1</code> (default value), the result will have the same sign as this Decimal, and it will match that of Javascript's <code>%</code> operator (within the limits of double precision) and BigDecimal's <code>remainder</code> method.</p><p>See <a href=#modulo><code>modulo</code></a> for a description of the other modulo modes.</p><pre>
 1 % 0.9                    // 0.09999999999999998
 x = new Decimal(1)
 x.modulo(0.9)              // '0.1'
+
 y = new Decimal(33)
-y.mod('a', 33)             // '3'</pre><h5 id=ln>naturalLogarithm<code class=inset>.ln() <i>&rArr; Decimal</i></code></h5><p>Returns a new Decimal whose value is the natural logarithm of the value of this Decimal, rounded to <a href=#precision><code>precision</code></a> significant digits using rounding mode <a href=#rounding><code>rounding</code></a>.</p><p>The natual logarithm is the inverse of the <code><a href=#exp>exponential</a></code> function.</p><pre>
+y.mod('a', 33)             // '3'
+
+x = new Decimal(8)
+y = new Decimal(-3)
+Decimal.modulo = 1
+x.mod(y)                   // '2'
+Decimal.modulo = 3
+x.mod(y)                   // '-1'</pre><h5 id=ln>naturalLogarithm<code class=inset>.ln() <i>&rArr; Decimal</i></code></h5><p>Returns a new Decimal whose value is the natural logarithm of the value of this Decimal, rounded to <a href=#precision><code>precision</code></a> significant digits using rounding mode <a href=#rounding><code>rounding</code></a>.</p><p>The natual logarithm is the inverse of the <code><a href=#exp>exponential</a></code> function.</p><pre>
 x = new Decimal(10)
 x.naturalLogarithm()            // '2.3026'
 y = new Decimal('1.23e+30')
