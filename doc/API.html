@@ -589,8 +589,8 @@ x.equals(y)                    // true</pre>
       <a href='#rounding'><code>rounding</code></a>, <a href='#minE'><code>minE</code></a>,
       <a href='#maxE'><code>maxE</code></a>, <a href='#toExpNeg'><code>toExpNeg</code></a>,
       <a href='#toExpPos'><code>toExpPos</code></a>, <a href='#errors'><code>errors</code></a>,
-      <a href='#mod'><code>modulo</code></a> and <a href='#crypto'><code>crypto</code></a> are set
-      using the <a href='#Dconfig'><code>config</code></a> method.
+      <a href='#modulo'><code>modulo</code></a> and <a href='#crypto'><code>crypto</code></a> are
+      set using the <a href='#Dconfig'><code>config</code></a> method.
     </p>
     <p>
       As simple object properties they can be set directly without using
@@ -1348,18 +1348,28 @@ x.minus(0.6, 20)           // '0'</pre>
     </p>
     <p>
       The value returned, and in particular its sign, is dependent on the value of the
-      <a href='#mod'><code>modulo</code></a> property. If it is <code>1</code> (default value), the
-      result will have the same sign as this Decimal, and it will match that of Javascript's
-      <code>%</code> operator (within the limits of double precision) and BigDecimal's
-      <code>remainder</code> method.
+      <a href='#modulo'><code>modulo</code></a> property of this Decimal's constructor. If it is
+      <code>1</code> (default value), the result will have the same sign as this Decimal, and it
+      will match that of Javascript's <code>%</code> operator (within the limits of double
+      precision) and BigDecimal's <code>remainder</code> method.
     </p>
-    <p>See <a href='#mod'><code>modulo</code></a> for a description of the other modulo modes.</p>
+    <p>
+      See <a href='#modulo'><code>modulo</code></a> for a description of the other modulo modes.
+    </p>
     <pre>
 1 % 0.9                    // 0.09999999999999998
 x = new Decimal(1)
 x.modulo(0.9)              // '0.1'
+
 y = new Decimal(33)
-y.mod('a', 33)             // '3'</pre>
+y.mod('a', 33)             // '3'
+
+x = new Decimal(8)
+y = new Decimal(-3)
+Decimal.modulo = 1
+x.mod(y)                   // '2'
+Decimal.modulo = 3
+x.mod(y)                   // '-1'</pre>
 
 
 
