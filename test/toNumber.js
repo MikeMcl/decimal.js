@@ -19,14 +19,14 @@ var count = (function toNumber(Decimal) {
 
     function assert(expected, actual) {
         total++;
-        if (expected !== actual) {
+        if (expected === actual || isNaN(expected) && isNaN(actual)) {
+            passed++;
+            //log('\n Expected and actual: ' + actual);
+        } else {
            error('\n Test number: ' + total + ' failed');
            error(' Expected: ' + expected);
            error(' Actual:   ' + actual);
            //process.exit();
-        } else {
-            passed++;
-            //log('\n Expected and actual: ' + actual);
         }
     }
 
@@ -35,7 +35,7 @@ var count = (function toNumber(Decimal) {
     }
 
     function T(value, n) {
-        assert(new Decimal(value).toNumber(), n);
+        assert(n, new Decimal(value).toNumber());
     }
 
     log('\n Testing toNumber...');
@@ -80,6 +80,8 @@ var count = (function toNumber(Decimal) {
     T('Infinity', 1 / 0);
     T(-Infinity, -1 / 0);
     T('-Infinity', -1 / 0);
+    T(NaN, NaN);
+    T('NaN', NaN);
 
     T('9.999999e+9000000000000000', 1 / 0);
     T('-9.999999e+9000000000000000', -1 / 0);

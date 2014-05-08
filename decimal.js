@@ -1452,7 +1452,7 @@
         var x = this;
 
         // Ensure zero has correct sign.
-        return +x || ( x | 0 ) * x['s'];
+        return +x || ( x['s'] ? 0 * x['s'] : NaN );
     };
 
 
@@ -2545,7 +2545,7 @@
                 return x;
             }
 
-            // Remove any digits after the required decimal places.
+            // Truncate excess digits.
             if ( xc.length > sd ) {
                 xc.length = sd;
             }
