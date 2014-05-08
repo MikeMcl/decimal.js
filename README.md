@@ -198,6 +198,9 @@ See LICENCE.
 
 ## Change Log
 
+####2.0.3
+* 8/05/2014 Fix NaN toNumber
+
 ####2.0.2
 * 30/04/2014 Correct doc links
 
