@@ -1,6 +1,6 @@
 var count = (function random(Decimal) {
     var start = +new Date(),
-        error, i, j, limit, log, pr, u,
+        dp, error, i, j, k, log, m, r,
         passed = 0,
         total = 0;
 
@@ -14,20 +14,7 @@ var count = (function random(Decimal) {
     }
 
     if (!Decimal && typeof require === 'function') {
-        Decimal = require('../decimal');
-    }
-
-    function assert(result, r, message) {
-        total++;
-        if (result === true) {
-            passed++;
-            //log('\n r: ' + r);
-        } else {
-           error('\n Test number: ' + total + ' failed');
-           error(' r: ' + r);
-           error(' ' + message);
-           //process.exit();
-        }
+        Decimal = require('../decimal.js');
     }
 
     function assertException(func, message) {
@@ -49,74 +36,65 @@ var count = (function random(Decimal) {
         }
     }
 
-    function T(limit, pr){
-        var i, r, d;
-
-        if ( !limit ) {
-            limit = new Decimal(1);
-            pr = Decimal.precision;
-        }
-
-        for ( i = 0; i < 17; i++ ) {
-            r = Decimal.random(limit, pr);
-            //log(r.toString());
-            d = r.c.length;
-
-            if ( pr == null ) {
-                d = Math.max(d, r.e + 1) - r.e - 1;
-                assert(d === 0, r, 'dp is not 0: ' + d);
-            } else {
-                assert(d <= pr, r, 'sd: ' + d + ' > pr: ' + pr);
-            }
-
-            assert(r.gte(0), r, 'r < 0');
-            assert(r.lt(limit), r, 'r >= limit: ' + limit);
-        }
-    }
-
     log('\n Testing random...');
 
-    // First iteration crypto: false, second iteration crypto: true.
-    Decimal.config({ crypto: false, errors: true });
+    Decimal.config({ errors: true, crypto: false });
 
-    for ( i = 0; i < 2; i++ ) {
-        //log( '\n crypto: ' + Decimal.crypto );
+    for ( i = 0; i < 9996; i++ ) {
 
-        Decimal.precision = Math.random() * 100 + 1 | 0;
-        //log( Decimal.precision );
+        //Decimal.crypto = false;
+        //Decimal.crypto = true;
+        // 50% chance that Decimal.crypto is true.
+        //Decimal.crypto = Math.random() > 0.5;
 
-        for ( j = 0; j < 10; j++ ) {
-
-            T();
-            T(u);
-            T(null);
-            T(1);
-            T(1, u);
-            T(1, null);
-            T(10);
-            T(1000);
-
-            // limit will have 1 - 17 integer digits and 1 - 17 fraction digits.
-            limit = +(Math.random() + '').slice(2, Math.random() * 17 + 3 | 0) +
-                     (Math.random() + '').slice(1, Math.random() * 17 + 3 | 0);
-
-            if ( +limit == 0 ) {
-                limit = 1;
-            }
-
-            //log(' limit: ' + limit);
-
-            T(limit);
-
-            // Precision. Integer 1 - 80.
-            pr = Math.random() * 80 + 1 | 0;
-
-            //log(' pr: ' + pr);
-
-            T(limit, pr);
+        if ( Math.random() > 0.5 ) {
+            dp = Decimal.precision = Math.random() * 10 + 1 | 0;
+            r = Decimal.random();
+        } else {
+            dp = Math.random() * 10 | 0;
+            r = Decimal.random(dp);
         }
 
-        Decimal.config({ crypto: true });
+        //log(r.toString());
+
+        if ( r.c[0] ) {
+            j = r.c.length;
+            k = r.c[j - 1];
+            j *= 7;
+
+            // Decrement for trailing zeros in last element of r.c.
+            for ( ; k % 10 === 0; k /= 10, j-- );
+        } else {
+            j = 0;
+        }
+
+        // Check number of decimal places (j is actual dp).
+        if ( j > dp ) {
+            m = ' r.c.length - r.e - 1 > dp';
+
+        // Check 0 <= r < 1
+        } else if ( r.lt(0) || r.gte(1) ) {
+            m = ' r.lt(0) || r.gte(1)';
+
+        // Check that the attributes of r are formed correctly.
+        } else if ( !r.eq( new Decimal(r) ) || !r.eq( new Decimal( r.toString() ) ) ) {
+            m = ' !r.eq( new Decimal(r) ) || !r.eq( new Decimal( r.toString() ) )';
+        }
+
+        total++;
+
+        if (m) {
+            error('\n Test number: ' + total + ' failed');
+            error(m);
+            error(' r: ' + r);
+            error(' r.c: ' + r.c);
+            error(' r.e: ' + r.e);
+            error(' r.s: ' + r.s);
+            error(' dp: ' + dp);
+            m = null;
+        } else {
+            passed++;
+        }
     }
 
     assertException(function () { Decimal.random(Infinity) }, 'Infinity');

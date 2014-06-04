@@ -9,7 +9,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - Simple API but full-featured
   - Replicates the `toExponential`, `toFixed`, `toPrecision` and `toString` methods of JavaScript's Number type
   - Includes a `toFraction` and correctly-rounded `exp`, `ln`, `log` and `sqrt` functions
-  - Supports non-integer powers (although performance is limited)
+  - Supports non-integer powers
   - Works with numbers with or without fraction digits in bases from 2 to 64 inclusive
   - Stores values in an accessible decimal floating-point format
   - No dependencies
@@ -136,12 +136,12 @@ Many of the methods of JavaScript's Math object are also replicated
     Decimal.sqrt('6.98372465832e+9823')      // '8.3568682281821340204e+4911'
     Decimal.pow(2, 0.0979843)                // '1.0702770511687781839'
 
-The value of a Decimal is stored in a decimal floating point format in terms of a coefficient, exponent and sign.
+The value of a Decimal is stored in a floating point format in terms of a coefficient, exponent and sign.
 
-    x = new Decimal(-123.456);
-    x.c                                 // '1,2,3,4,5,6'    coefficient (i.e. significand)
-    x.e                                 // 2                exponent
-    x.s                                 // -1               sign
+    x = new Decimal(-12345.67);
+    x.c                            // [ 12345, 6700000 ]    coefficient (base 10000)
+    x.e                            // 4                     exponent (base 10)
+    x.s                            // -1                    sign
 
 For further information see the [API](http://mikemcl.github.io/decimal.js/) reference in the *doc* directory.
 
@@ -197,6 +197,9 @@ MIT Expat.
 See LICENCE.
 
 ## Change Log
+
+####3.0.0
+* 4/06/2014 `random` simplified. Major internal changes mean the properties of a Decimal must now be considered read-only.
 
 ####2.1.0
 * 4/06/2014 Amend UMD

@@ -492,31 +492,17 @@ x.equals(y)                    // true</pre>
 
 
     <h5 id="Drand">
-      random<code class='inset'>.random([limit [, sd]]) <i>&rArr; Decimal</i></code>
+      random<code class='inset'>.random([dp]) <i>&rArr; Decimal</i></code>
     </h5>
+    <p><code>dp</code>: <i>number</i>: integer, 0 to 1e+9 inclusive</p>
     <p>
-      <code>limit</code>: <i>number|string|Decimal</i><br /> Default value: <code>1</code><br />
-      <code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive<br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      Returns a new Decimal with a pseudo-random value equal to or greater than <code>0</code> and
+      less than <code>1</code>.
     </p>
     <p>
-      Returns a new Decimal with a pseudo-random value equal to or greater in magnitude than
-      <code>0</code> and lower in magnitude than <code>limit</code>, and with the same sign as
-      <code>limit</code>.
-    </p>
-    <p>
-      If <code>limit</code> is omitted then it will be <code>1</code> and the return value will
-      have <a href='#precision'><code>precision</code></a> significant digits (or less if there are
-      trailing zeros produced).
-    </p>
-    <p>
-      If <code>limit</code> is included and <code>sd</code> is omitted then the return value
-      will be an integer. If <code>sd</code> is included, the return value will have
-      <code>sd</code> significant digits (or less if there are trailing zeros produced).
-    </p>
-    <p>
-      If <code>limit</code> is a high value be sure to include a precision, otherwise this method
-      may be slow to return because all integer digits will be generated.
+      The return value will have <code>dp</code></a> decimal places (or less if trailing zeros are
+      produced). If <code>dp</code> is omitted then the number of decimal places will
+      default to the current <a href='#precision'><code>precision</code></a> setting.
     </p>
     <p>
       Depending on the value of a Decimal constructor's <a href='#crypto'><code>crypto</code></a>
@@ -530,33 +516,11 @@ x.equals(y)                    // true</pre>
       <code>crypto</code> methods is to be used, the value of a returned Decimal should be
       cryptographically-secure and statistically indistinguishable from a random value.
     </p>
-    <pre>// A value in the range [0, 1) with precision significant digits
-Decimal.config({ precision: 10 })
-Decimal.random()                        // '0.4117936847'
+    <pre>Decimal.config({ precision: 10 })
+Decimal.random()                    // '0.4117936847'
 
-// A value in the range [0, 1) with 20 significant digits
-Decimal.random(1, 20)                   // '0.48193327636914089007'
+Decimal.random(20)                  // '0.78193327636914089009'</pre>
 
-// An integer in the range [0, 1)
-Decimal.random(1)                       // '0' (always zero)
-
-// An integer in the range [0, 10)
-Decimal.random(10)                      // '6'
-
-// An integer in the range (-100, 0]
-Decimal.random(-100)                    // '-82'
-
-// An integer in the range [0, 9e9999999999)
-Decimal.random('9e99999999999')         // A browser will hang
-
-// A value in the range [0, 9e9999999999) with 10 significant digits
-Decimal.random('9e99999999999', 25)     // '1.508652055e+99999999999'
-
-// A value in the range (-0.0125, 0] with 16 significant digits
-Decimal.random(-0.0125, 16)             // '-0.0001963482803540358'
-
-// A value in the range [0, 0.9) with 1 significant digit
-Decimal.random(0.9, 1)                  // '0.2'</pre>
 
 
 
@@ -564,7 +528,7 @@ Decimal.random(0.9, 1)                  // '0.2'</pre>
     <p>See <a href='#sqrt'>squareRoot</a>.</p>
     <pre>x = Decimal.sqrt('987654321.123456789')
 y = new Decimal('987654321.123456789').sqrt()
-x.equals(y)                    // true</pre>
+x.equals(y)                         // true</pre>
 
 
 
@@ -723,7 +687,7 @@ new Decimal(100000)                // 'Infinity'</pre>
       returns exponential notation.
     </p>
     <pre>Decimal.config({ toExpNeg: -7 })
-Decimal.toExpNeg                 // -7
+Decimal.toExpNeg                   // -7
 new Decimal(0.00000123)            // '0.00000123'       e is -6
 new Decimal(0.000000123)           // '1.23e-7'
 
@@ -869,7 +833,12 @@ Decimal.modulo                     // 9</pre>
     </p>
     <p>
       If neither function is supported by the host environment or if <code>crypto</code> is falsey
-      then the source of randomness will be <code>Math.random</code>.
+      then the source of randomness will be <code>Math.random</code>. If the <code>crypto</code>
+      property is set directly (i.e. without using <code>config</code>) to <code>true</code>, then
+      at the time the <code>random</code> method is called, if
+      <a href='#errors'><code>errors</code></a> is <code>true</code>, an error will be thrown if the
+      <code>crypto</code> methods are unavailable.
+    </p>
     </p>
     <pre>
 Decimal.crypto                     // false
@@ -1746,9 +1715,9 @@ JSON.parse(str, function (key, val) {
     would be serialized, rather then the string returned by <code>valueOf</code>:</p>
     <pre>JSON.stringify( [x, y, z] )
 /*
-"[{"s":1,"e":459,"c":[1,7,7,7]},
-  {"s":1,"e":2,"c":[2,3,5,4,3,2,5]},
-  {"s":1,"e":-3,"c":[9,8,0,7,4]}]"
+"[{"s":1,"e":459,"c":[17770]},
+  {"s":1,"e":2,"c":[235,4325000]},
+  {"s":1,"e":-3,"c":[98074]}]"
  */</pre>
 
 
@@ -1823,8 +1792,7 @@ z = new Decimal(-0)
     </p>
     <p>
       The performance of this method degrades exponentially with increasing digits. For
-      non-integer exponents in particular, even when only quite a small number of significant
-      digits is required, the performance of this method may not be adequate.
+      non-integer exponents in particular, the performance of this method may not be adequate.
     </p>
     <pre>
 Math.pow(0.7, 2)               // 0.48999999999999994
@@ -2038,7 +2006,7 @@ x.valueOf()                     // '1.777e+457'</pre>
         <td class='centre' id='coefficient'><b>c</b></td>
         <td>coefficient<sup>*</sup></td>
         <td><i>number</i><code style='color:#000'>[]</code></td>
-        <td> Array of single digits</td>
+        <td> Array of integers, each 0 - 1e7</td>
       </tr>
       <tr>
         <td class='centre' id='exponent'><b>e</b></td>
@@ -2058,19 +2026,23 @@ x.valueOf()                     // '1.777e+457'</pre>
       The value of any of the three properties may also be <code>null</code>.
     </p>
     <p>
-      The value of a Decimal is stored in a normalised decimal floating point
-      format which corresponds to the value's <code><a href='#toE'>toExponential</a></code> form,
-      with the decimal point to be positioned after the most significant
-      (left-most) digit of the coefficient.
+      The properties are best considered to be read-only.
     </p>
     <p>
-      Note that, as with JavaScript numbers, the original exponent and
-      fractional trailing zeros are not preserved.
+      From version 3 of this library, the value of a Decimal is stored in a normalised base
+      <code>10000</code> floating point format. While previously it was acceptable to change the
+      exponent of a Decimal by writing to its exponent property directly, this is no longer
+      recommended (as the number of digits in the first element of the coefficient array is
+      dependent on the exponent, so the coefficient would also need to be altered).
+    </p>
+    <p>
+      As with JavaScript numbers, the original exponent and fractional trailing zeros of a number
+      are not preserved.
     </p>
     <pre>
 x = new Decimal(0.123)                // '0.123'
 x.toExponential()                     // '1.23e-1'
-x.c                                   // '1,2,3'
+x.c                                   // [ 1230000 ]
 x.e                                   // -1
 x.s                                   // 1
 
@@ -2078,29 +2050,9 @@ y = new Number(-123.4567000e+2)       // '-12345.67'
 y.toExponential()                     // '-1.234567e+4'
 z = new Decimal('-123.4567000e+2')    // '-12345.67'
 z.toExponential()                     // '-1.234567e+4'
-z.c                                   // '1,2,3,4,5,6,7'
+z.c                                   // [ 12345, 6700000 ]
 z.e                                   // 4
 z.s                                   // -1</pre>
-
-
-    <p>
-      A Decimal is mutable in the sense that the value of its properties can
-      be changed.<br />
-      For example, to rapidly shift a value by a power of 10:
-    </p>
-    <pre>
-x = new Decimal('1234.000')           // '1234'
-x.toExponential()                     // '1.234e+3'
-x.c                                   // '1,2,3,4'
-x.e                                   // 3
-
-x.e = -5
-x                                     // '0.00001234'</pre>
-    <p>
-      If changing the coefficient array directly, which is not recommended, be
-      careful to avoid leading or trailing zeros (unless zero itself is being
-      represented).
-    </p>
 
 
 
@@ -2275,6 +2227,11 @@ y.s                            // -1</pre>
         <td><code>precision</code></td>
         <td>argument not a boolean or binary digit</td>
         <td>Ignore</td>
+      </tr>
+      <tr>
+        <td><code>random</code></td>
+        <td><code>crypto</code> unavailable</td>
+        <td>Use <code>Math.random</code></td>
       </tr>
       <tr>
         <td rowspan=4>
