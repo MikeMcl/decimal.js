@@ -1,10 +1,10 @@
-/*! decimal.js v2.0.3 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v2.1.0 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (global) {
     'use strict';
 
 
     /*
-     *  decimal.js v2.0.3
+     *  decimal.js v2.1.0
      *  An arbitrary-precision Decimal type for JavaScript.
      *  https://github.com/MikeMcl/decimal.js
      *  Copyright (c) 2014 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -767,7 +767,7 @@
             a = x['s'];
 
         id = 10;
-        y = new Decimal( y, b ) ;
+        y = new Decimal( y, b );
         b = y['s'];
 
         // Either NaN?
@@ -846,7 +846,7 @@
 
         // Only start adding at yc.length - 1 as the further digits of #xc can be left as they are.
         for ( a = yc.length, b = 0; a; xc[a] %= 10 ) {
-             b = ( xc[--a] = xc[a] + yc[a] + b ) / 10 | 0;
+            b = ( xc[--a] = xc[a] + yc[a] + b ) / 10 | 0;
         }
 
         if (b) {
@@ -3594,30 +3594,34 @@
     // Export.
 
 
+    // AMD.
+    if ( typeof define == 'function' && define.amd ) {
+        crypto = global['crypto'];
+
+        define(function () {
+
+            return DecimalConstructor;
+        });
+
     // Node and other CommonJS-like environments that support module.exports.
-    if ( typeof module != 'undefined' && module && module.exports ) {
+    } else if ( typeof module != 'undefined' && module && module.exports ) {
         module.exports = DecimalConstructor;
 
         if ( typeof require == 'function' ) {
             crypto = require('crypto');
         }
+
+    // Browser.
     } else {
         crypto = global['crypto'];
+        noConflict = global['Decimal'];
 
-        //AMD.
-        if ( typeof define == 'function' && define.amd ) {
-            define( function () { return DecimalConstructor } );
+        DecimalConstructor['noConflict'] = function () {
+            global['Decimal'] = noConflict;
 
-        //Browser.
-        } else {
-            noConflict = global['Decimal'];
+            return DecimalConstructor;
+        };
 
-            DecimalConstructor['noConflict'] = function () {
-                global['Decimal'] = noConflict;
-
-                return DecimalConstructor;
-            };
-            global['Decimal'] = DecimalConstructor;
-        }
+        global['Decimal'] = DecimalConstructor;
     }
 })(this);

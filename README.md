@@ -198,6 +198,9 @@ See LICENCE.
 
 ## Change Log
 
+####2.1.0
+* 4/06/2014 Amend UMD
+
 ####2.0.3
 * 8/05/2014 Fix NaN toNumber
 
