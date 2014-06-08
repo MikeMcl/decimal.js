@@ -198,8 +198,11 @@ See LICENCE.
 
 ## Change Log
 
+####3.0.1
+* 8/06/2014 Surround crypto require in try catch. See issue #5
+
 ####3.0.0
-* 4/06/2014 `random` simplified. Major internal changes mean the properties of a Decimal must now be considered read-only.
+* 4/06/2014 `random` simplified. Major internal changes mean the properties of a Decimal must now be considered read-only
 
 ####2.1.0
 * 4/06/2014 Amend UMD
