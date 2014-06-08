@@ -12,13 +12,14 @@
      */
 
 
-    var convertBase, crypto, DecimalConstructor, noConflict,
-        toString = Object.prototype.toString,
-        outOfRange,
-        id = 0,
+    var convertBase, DecimalConstructor, noConflict,
+        crypto = global['crypto'],
         external = true,
+        id = 0,
         mathfloor = Math.floor,
         mathpow = Math.pow,
+        outOfRange,
+        toString = Object.prototype.toString,
         BASE = 1e7,
         LOGBASE = 7,
         NUMERALS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_',
@@ -3950,24 +3951,24 @@
 
     // AMD.
     if ( typeof define == 'function' && define.amd ) {
-        crypto = global['crypto'];
 
         define(function () {
-
             return DecimalConstructor;
         });
 
-    // Node and other CommonJS-like environments that support module.exports.
-    } else if ( typeof module != 'undefined' && module && module.exports ) {
+    // Node and other environments that support module.exports.
+    } else if ( typeof module != 'undefined' && module.exports ) {
         module.exports = DecimalConstructor;
 
-        if ( typeof require == 'function' ) {
-            crypto = require('crypto');
+        if ( !crypto ) {
+
+            try {
+                crypto = require('crypto');
+            } catch (e) {}
         }
 
     // Browser.
     } else {
-        crypto = global['crypto'];
         noConflict = global['Decimal'];
 
         DecimalConstructor['noConflict'] = function () {
