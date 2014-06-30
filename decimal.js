@@ -1461,15 +1461,15 @@
      * ECMAScript compliant.
      *
      *   x is any value, including NaN.
-     *   n is any number, including ±Infinity unless stated.
+     *   n is any number, including +-Infinity unless stated.
      *
      *   pow( x, NaN )                           = NaN
-     *   pow( x, ±0 )                            = 1
+     *   pow( x, +-0 )                           = 1
 
      *   pow( NaN, nonzero )                     = NaN
      *   pow( abs(n) > 1, +Infinity )            = +Infinity
      *   pow( abs(n) > 1, -Infinity )            = +0
-     *   pow( abs(n) == 1, ±Infinity )           = NaN
+     *   pow( abs(n) == 1, +-Infinity )          = NaN
      *   pow( abs(n) < 1, +Infinity )            = +0
      *   pow( abs(n) < 1, -Infinity )            = +Infinity
      *   pow( +Infinity, n > 0 )                 = +Infinity
