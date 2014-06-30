@@ -1268,17 +1268,18 @@
      * [sep1] {string} The grouping separator of the integer part of the number.
      * [sep2] {string} The grouping separator of the fraction part of the number.
      * [dp] {number} Decimal places. Integer, -MAX_DIGITS to MAX_DIGITS inclusive.
+     * [dsep] {string} Decimal separator, if left undefined it defaults to '.'.
      *
      * Non-breaking thin-space: \u202f
      *
      * If dp is invalid the error message will incorrectly give the method as toFixed.
      *
      */
-    P['toFormat'] = function ( sep1, dp, sep2 ) {
+    P['toFormat'] = function ( sep1, dp, sep2, dsep ) {
         var arr = this.toFixed(dp).split('.');
 
         return arr[0].replace( /\B(?=(\d{3})+$)/g, sep1 == null ? ',' : sep1 + '' ) +
-            ( arr[1] ? '.' + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
+            ( arr[1] ? (dsep == null ? '.' : dsep) + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
     };
 
 
