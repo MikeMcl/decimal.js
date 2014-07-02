@@ -1268,17 +1268,18 @@
      * [sep1] {string} The grouping separator of the integer part of the number.
      * [sep2] {string} The grouping separator of the fraction part of the number.
      * [dp] {number} Decimal places. Integer, -MAX_DIGITS to MAX_DIGITS inclusive.
+     * [dsep] {string} Decimal separator, if left undefined it defaults to '.'.
      *
      * Non-breaking thin-space: \u202f
      *
      * If dp is invalid the error message will incorrectly give the method as toFixed.
      *
      */
-    P['toFormat'] = function ( sep1, dp, sep2 ) {
+    P['toFormat'] = function ( sep1, dp, sep2, dsep ) {
         var arr = this.toFixed(dp).split('.');
 
         return arr[0].replace( /\B(?=(\d{3})+$)/g, sep1 == null ? ',' : sep1 + '' ) +
-            ( arr[1] ? '.' + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
+            ( arr[1] ? ( dsep == null ? '.' : dsep ) + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
     };
 
 
@@ -1461,15 +1462,15 @@
      * ECMAScript compliant.
      *
      *   x is any value, including NaN.
-     *   n is any number, including ±Infinity unless stated.
+     *   n is any number, including +-Infinity unless stated.
      *
      *   pow( x, NaN )                           = NaN
-     *   pow( x, ±0 )                            = 1
+     *   pow( x, +-0 )                           = 1
 
      *   pow( NaN, nonzero )                     = NaN
      *   pow( abs(n) > 1, +Infinity )            = +Infinity
      *   pow( abs(n) > 1, -Infinity )            = +0
-     *   pow( abs(n) == 1, ±Infinity )           = NaN
+     *   pow( abs(n) == 1, +-Infinity )          = NaN
      *   pow( abs(n) < 1, +Infinity )            = +0
      *   pow( abs(n) < 1, -Infinity )            = +Infinity
      *   pow( +Infinity, n > 0 )                 = +Infinity
