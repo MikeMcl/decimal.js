@@ -1279,7 +1279,7 @@
         var arr = this.toFixed(dp).split('.');
 
         return arr[0].replace( /\B(?=(\d{3})+$)/g, sep1 == null ? ',' : sep1 + '' ) +
-            ( arr[1] ? (dsep == null ? '.' : dsep) + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
+            ( arr[1] ? ( dsep == null ? '.' : dsep ) + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
     };
 
 
