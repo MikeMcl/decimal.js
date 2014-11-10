@@ -11,7 +11,6 @@ An arbitrary-precision Decimal type for JavaScript.
   - Includes a `toFraction` and correctly-rounded `exp`, `ln`, `log` and `sqrt` functions
   - Supports non-integer powers
   - Works with numbers with or without fraction digits in bases from 2 to 64 inclusive
-  - Stores values in an accessible decimal floating-point format
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
   - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
@@ -27,8 +26,8 @@ those involving division.
 This library also adds `exp`, `ln` and `log` functions, among others, and supports non-integer powers.
 
 Another major difference is that this library enables multiple Decimal constructors to be created
- each with their own configuration (e.g. precision and range). This is, however, a significantly
- larger library than *bignumber.js* and the even smaller [big.js](https://github.com/MikeMcl/big.js/).
+ each with their own configuration. This is, however, a significantly larger library than
+ *bignumber.js* and the even smaller [big.js](https://github.com/MikeMcl/big.js/).
 
 ## Load
 
@@ -96,12 +95,17 @@ Like JavaScript's Number type, there are `toExponential`, `toFixed` and `toPreci
 
  and a base can be specified for `toString`.
 
-    x.toString(16)        // 'ff.8'
+    x.toString(16)                  // 'ff.8'
     
-There is a `toFraction` method with an optional *maximum denominator* argument
+There is a `toFormat` method,
 
-    y = new Decimal(355)
-    pi = y.dividedBy(113)        // '3.1415929204'
+    y = new Decimal(1e6)
+    y.toFormat(2)                // '1,000,000.00'
+    
+a `toFraction` method with an optional *maximum denominator* argument
+
+    z = new Decimal(355)
+    pi = z.dividedBy(113)        // '3.1415929204'
     pi.toFraction()              // [ '7853982301', '2500000000' ]
     pi.toFraction(1000)          // [ '355', '113' ]
 
@@ -111,15 +115,16 @@ and `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` 
     y = new Decimal(Infinity)                                      // 'Infinity'
     x.isNaN() && !y.isNaN() && !x.isFinite() && !y.isFinite()      // true
 
-All calculations are rounded to the number of significant digits specified by the `precision` property
-of the Decimal constructor and rounded using the rounding mode specified by the `rounding` property.
+All calculations are rounded according to the number of significant digits and rounding mode
+ specified by the `precision` and `rounding` properties of the Decimal constructor.
 
 As mentioned above, multiple Decimal constructors can be created, each with their own independent
  configuration which applies to all Decimal numbers created from it.
 
+    // Set the precision and rounding of the default Decimal constructor
     Decimal.config({ precision: 5, rounding: 4 })
 
-    // constructor is a factory method and it can also accept a configuration object
+    // Create another Decimal constructor, optionally passing in a configuration object
     Decimal10 = Decimal.constructor({ precision: 10, rounding: 1 })    
 
     x = new Decimal(5)
@@ -178,7 +183,7 @@ then
 
 will create *decimal.min.js*.
 
-The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.8*.
+The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.11*.
 
 ## Feedback
 
@@ -197,6 +202,9 @@ MIT Expat.
 See LICENCE.
 
 ## Change Log
+
+####4.0.0
+* 10/11/2014 `toFormat` amended to use `Decimal.format` object for more flexible configuration.
 
 ####3.0.1
 * 8/06/2014 Surround crypto require in try catch. See issue #5

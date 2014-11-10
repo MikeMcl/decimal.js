@@ -1,10 +1,10 @@
-/*! decimal.js v3.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v4.0.0 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (global) {
     'use strict';
 
 
     /*
-     *  decimal.js v3.0.1
+     *  decimal.js v4.0.0
      *  An arbitrary-precision Decimal type for JavaScript.
      *  https://github.com/MikeMcl/decimal.js
      *  Copyright (c) 2014 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -1260,25 +1260,74 @@
 
 
     /*
-     * Return a string representing the value of this Decimal in normal notation rounded using
-     * rounding mode rounding to dp fixed decimal places, with the integer part of the number
-     * separated into thousands by string sep1 or ',' if sep1 is null or undefined, and the
-     * fraction part separated into groups of five digits by string sep2.
+     * Return a string representing the value of this Decimal in fixed-point notation to dp decimal
+     * places, rounded using rounding mode rm or Decimal.rounding if rm is omitted, and formatted
+     * according to the following properties of the Decimal.format object.
      *
-     * [sep1] {string} The grouping separator of the integer part of the number.
-     * [sep2] {string} The grouping separator of the fraction part of the number.
+     *  Decimal.format = {
+     *      decimalSeparator : '.',
+     *      groupSeparator : ',',
+     *      groupSize : 3,
+     *      secondaryGroupSize : 0,
+     *      fractionGroupSeparator : '\xA0',    // non-breaking space
+     *      fractionGroupSize : 0
+     *  };
+     *
+     *  If groupFractionDigits is truthy, fraction digits will be separated into 5-digit groupings
+     *  using the space character as separator.
+     *
      * [dp] {number} Decimal places. Integer, -MAX_DIGITS to MAX_DIGITS inclusive.
+     * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive
      *
-     * Non-breaking thin-space: \u202f
-     *
-     * If dp is invalid the error message will incorrectly give the method as toFixed.
+     * (If dp or rm are invalid the error message will give the offending method call as toFixed.)
      *
      */
-    P['toFormat'] = function ( sep1, dp, sep2 ) {
-        var arr = this.toFixed(dp).split('.');
+    P['toFormat'] = function( dp, rm ) {
+        var x = this;
 
-        return arr[0].replace( /\B(?=(\d{3})+$)/g, sep1 == null ? ',' : sep1 + '' ) +
-            ( arr[1] ? '.' + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
+        if ( !x['c'] ) {
+            return x.toString();
+        }
+
+        var i,
+            isNeg = x['s'] < 0,
+            format = x['constructor']['format'],
+            groupSeparator = format['groupSeparator'],
+            g1 = +format['groupSize'],
+            g2 = +format['secondaryGroupSize'],
+            arr = x.toFixed( dp, rm ).split('.'),
+            intPart = arr[0],
+            fractionPart = arr[1],
+            intDigits = isNeg ? intPart.slice(1) : intPart,
+            len = intDigits.length;
+
+        if (g2) {
+            len -= ( i = g1, g1 = g2, g2 = i );
+        }
+
+        if ( g1 > 0 && len > 0 ) {
+            i = len % g1 || g1;
+            intPart = intDigits.substr( 0, i );
+
+            for ( ; i < len; i += g1 ) {
+                intPart += groupSeparator + intDigits.substr( i, g1 );
+            }
+
+            if ( g2 > 0 ) {
+                intPart += groupSeparator + intDigits.slice(i);
+            }
+
+            if (isNeg) {
+                intPart = '-' + intPart;
+            }
+        }
+
+        return fractionPart
+          ? intPart + format['decimalSeparator'] + ( ( g2 = +format['fractionGroupSize'] )
+            ? fractionPart.replace( new RegExp( '\\d{' + g2 + '}\\B', 'g' ),
+              '$&' + format['fractionGroupSeparator'] )
+            : fractionPart )
+          : intPart;
     };
 
 
@@ -1566,8 +1615,8 @@
                      log10(x_significand) = ln(x_significand) / ln(10)
                      */
                     e = b == 0 || !isFinite(b)
-                      ? mathfloor( yN * (
-                        Math.log( '0.' + coefficientToString( x['c'] ) ) / Math.LN10 + x['e'] + 1 ) )
+                      ? mathfloor( yN * ( Math.log( '0.' + coefficientToString( x['c'] ) ) /
+                        Math.LN10 + x['e'] + 1 ) )
                       : new Decimal( b + '' )['e'];
 
                     // Estimate may be incorrect e.g.: x: 0.999999999999999999, y: 2.29, e: 0, r.e:-1
@@ -1875,7 +1924,7 @@
             n %= LOGBASE;
         }
 
-        k =mathpow( 10, LOGBASE - n );
+        k = mathpow( 10, LOGBASE - n );
         rd = c[ci] % k | 0;
 
         if ( repeating == null ) {
@@ -2816,7 +2865,7 @@
                  been repeated previously) and the first 4 rounding digits 9999?
 
                  If so, restart the summation with a higher precision, otherwise
-                 E.g. with precision: 12, rounding: 1
+                 e.g. with precision: 12, rounding: 1
                  ln(135520028.6126091714265381533) = 18.7246299999 when it should be 18.72463.
 
                  sd - guard is the index of first rounding digit.
@@ -2853,7 +2902,7 @@
             Decimal = x['constructor'];
 
         // Don't round if sd is null or undefined.
-        r: if ( sd != i ) {
+        r: if ( sd != null ) {
 
             // Infinity/NaN.
             if ( !( xc = x['c'] ) ) {
@@ -2978,7 +3027,7 @@
 
                 for ( ; ; ) {
 
-                    // Is the digit to be rounded up in the first element of xc.
+                    // Is the digit to be rounded up in the first element of xc?
                     if ( xci == 0 ) {
 
                         // i will be the length of xc[0] before k is added.
@@ -3132,6 +3181,16 @@
          *   crypto     {boolean|number}
          *   modulo     {number}
          *
+         *   format     {object}     See Decimal.prototype.toFormat
+         *      decimalSeparator     {string}
+         *      groupSeparator       {string}
+         *      groupSize            {number}
+         *      secondaryGroupSize   {number}
+         *      groupFractionDigits  {boolean|number}
+         *
+         *   A format object will replace the existing Decimal.format object without any property
+         *   checking.
+         *
          * E.g.
          *   Decimal.config({ precision: 20, rounding: 4 })
          *
@@ -3143,12 +3202,13 @@
                 parse = Decimal['errors'] ? parseInt : parseFloat;
 
             if ( obj == u || typeof obj != 'object' &&
+              // 'config() object expected: {obj}'
               !ifExceptionsThrow( Decimal, 'object expected', obj, c ) ) {
 
                 return Decimal;
             }
 
-            // precision {number|number[]} Integer, 1 to MAX_DIGITS inclusive.
+            // precision {number} Integer, 1 to MAX_DIGITS inclusive.
             if ( ( v = obj[ p = 'precision' ] ) != u ) {
 
                 if ( !( outOfRange = v < 1 || v > MAX_DIGITS ) && parse(v) == v ) {
@@ -3264,6 +3324,18 @@
                 }
             }
 
+            // format {object}
+            if ( ( obj = obj[ p = 'format' ] ) != u ) {
+
+                if ( typeof obj == 'object' ) {
+                    Decimal[p] = obj;
+                } else {
+
+                    // 'config() format object expected: {obj}'
+                    ifExceptionsThrow( Decimal, 'format object expected', obj, c );
+                }
+            }
+
             return Decimal;
         }
 
@@ -3376,14 +3448,13 @@
 
                 if ( typeof n != 'string' ) {
 
-                    // TODO: modify so regex test below is avoided if type is number.
                     // If n is a number, check if minus zero.
                     n = ( isNum = typeof n == 'number' || toString.call(n) == '[object Number]' ) &&
                         n === 0 && 1 / n < 0 ? '-0' : n + '';
                 }
                 orig = n;
 
-                if ( b == e && isValid.test(n) ) {
+                if ( b == null && isValid.test(n) ) {
 
                     // Determine sign.
                     x['s'] = n.charAt(0) == '-' ? ( n = n.slice(1), -1 ) : 1;
@@ -3404,7 +3475,7 @@
 
                     x['s'] = n.charAt(0) == '-' ? ( n = n.replace( /^-(?!-)/, '' ), -1 ) : 1;
 
-                    if ( b != e ) {
+                    if ( b != null ) {
 
                         if ( ( b == (b | 0) || !Decimal['errors'] ) &&
                           !( outOfRange = !( b >= 2 && b < 65 ) ) ) {
@@ -3415,8 +3486,7 @@
 
                             // Any number in exponential form will fail due to the e+/-.
                             if ( valid = new RegExp(
-                              '^' + d + '(?:\\.' + d + ')?$', b < 37 ? 'i' : '' ).test(n)
-                            ) {
+                              '^' + d + '(?:\\.' + d + ')?$', b < 37 ? 'i' : '' ).test(n) ) {
 
                                 if (isNum) {
 
@@ -3478,7 +3548,7 @@
                 }
 
                 // Exponential form?
-                if ( ( i = n.search( /e/i ) ) > 0 ) {
+                if ( ( i = n.search(/e/i) ) > 0 ) {
 
                     // Determine exponent.
                     if ( e < 0 ) {
@@ -3863,25 +3933,35 @@
 
             // The exponent value at and beneath which toString returns exponential notation.
             // Number type: -7
-            Decimal['toExpNeg'] = -7;                       // 0 to -EXP_LIMIT
+            Decimal['toExpNeg'] = -7;                         // 0 to -EXP_LIMIT
 
             // The exponent value at and above which toString returns exponential notation.
             // Number type: 21
-            Decimal['toExpPos'] = 21;                       // 0 to EXP_LIMIT
+            Decimal['toExpPos'] = 21;                         // 0 to EXP_LIMIT
 
             // The minimum exponent value, beneath which underflow to zero occurs.
             // Number type: -324  (5e-324)
-            Decimal['minE'] = -EXP_LIMIT;                    // -1 to -EXP_LIMIT
+            Decimal['minE'] = -EXP_LIMIT;                     // -1 to -EXP_LIMIT
 
             // The maximum exponent value, above which overflow to Infinity occurs.
             // Number type:  308  (1.7976931348623157e+308)
-            Decimal['maxE'] = EXP_LIMIT;                     // 1 to EXP_LIMIT
+            Decimal['maxE'] = EXP_LIMIT;                      // 1 to EXP_LIMIT
 
             // Whether Decimal Errors are ever thrown.
             Decimal['errors'] = true;                         // true/false
 
             // Whether to use cryptographically-secure random number generation, if available.
             Decimal['crypto'] = false;                        // true/false
+
+            // Format specification for the Decimal.prototype.toFormat method
+            Decimal.format = {
+                decimalSeparator : '.',
+                groupSeparator : ',',
+                groupSize : 3,
+                secondaryGroupSize : 0,
+                fractionGroupSeparator : '\xA0',              // non-breaking space
+                fractionGroupSize : 0
+            };
 
 
             /* ********************** END OF CONSTRUCTOR DEFAULT PROPERTIES ********************* */
