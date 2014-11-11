@@ -1,7 +1,8 @@
 ![decimal.js](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/decimaljs.png)
 
 An arbitrary-precision Decimal type for JavaScript.
-<br>
+<br>   
+[![Build Status](https://travis-ci.org/MikeMcl/decimal.js.svg)](https://travis-ci.org/MikeMcl/decimal.js)
 
 ## Features
 
@@ -190,7 +191,7 @@ The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5
 Open an issue, or email
 Michael <a href='mailto:M8ch88l@gmail.com'>M8ch88l@gmail.com</a>
 
-[Bitcoin](https://bitcoin.org/en/getting-started) donations gratefully received:
+[Bitcoin](https://bitcoin.org/en/getting-started) donation gratefully received:
 **1PjzRBjGJycti49AXTiKsdC4PRCnTbyUyf**
 
 Thank you
