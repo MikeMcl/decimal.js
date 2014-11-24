@@ -67,6 +67,36 @@
 
 
     /*
+     *  n & n = n
+     *  n & 0 = 0
+     *  N & n = N
+     *  I & n = n
+     *  I & I = I
+     *  I & -I = 0
+     *  -I & n = 0
+     *  -I & -I = -I
+     *
+     * Return a new Decimal whose value is the value of this Decimal & Decimal(n).
+     *
+     */
+    P['and'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (this && n && (!this['c'] || !n['c'])) {
+            if (!this['c'] && !n['c']) {
+                return new Decimal((this['s'] == n['s']) ? this : 0);
+            }
+            if (this['s'] < 0 || n['s'] < 0) {
+                return new Decimal(0);
+            }
+            return new Decimal(this['c'] ? c['trunc']() : n['trunc']());
+        }
+        return bitwise(this, n, function (a, b) { return a & b });
+    };
+
+
+    /*
      * Return a new Decimal whose value is the value of this Decimal rounded to a whole number in
      * the direction of positive Infinity.
      *
@@ -318,6 +348,25 @@
     P['isZero'] = function () {
 
         return !!this['c'] && this['c'][0] == 0;
+    };
+
+
+    /*
+     * Return a new Decimal whose value is this Decimal << n, rounded to precision
+     * significant digits using rounding mode rounding.
+     *
+     */
+    P['leftShift'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (n['s'] < 0) {
+            return new Decimal(NaN);
+        }
+        if (n['isZero']()) {
+            return new Decimal(this);
+        }
+        return this['trunc']()['times'](new Decimal(2)['pow'](n));
     };
 
 
@@ -759,6 +808,46 @@
 
 
     /*
+     * Return a new Decimal whose value is the value of ~(this Decimal).
+     * The final digit adjustment may get lost out the precision bound.
+     *
+     */
+    P['not'] = function () {
+        var x = new this['constructor'](this['trunc']());
+        
+        x = x['plus'](x['constructor']['ONE']);
+        x['s'] = -x['s'] || null;
+        return x;
+    };
+
+
+    /*
+     *  n | 0 = n
+     *  n | n = n
+     *  I | n = I
+     *  I | I = I
+     *  -I | n = -I
+     *  -I | -I = -I
+     *  -I | I = -1
+     *
+     * Return a new Decimal whose value is the value of this Decimal | Decimal(n).
+     *
+     */
+    P['or'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (this && n && (!this['c'] || !n['c'])) {
+            if (!this['c'] && !n['c']) {
+                return new Decimal(-1);
+            }
+            return new Decimal(this['c'] ? n : this);
+        }
+        return bitwise(this, n, function (a, b) { return a | b });
+    };
+
+
+    /*
      *  n + 0 = n
      *  n + N = N
      *  n + I = I
@@ -915,6 +1004,25 @@
         }
 
         return n;
+    };
+
+
+    /*
+     * Return a new Decimal whose value is this Decimal >> n, rounded to precision
+     * significant digits using rounding mode rounding.
+     *
+     */
+    P['rightShift'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (n['s'] < 0) {
+            return new Decimal(NaN);
+        }
+        if (n['isZero']()) {
+            return new Decimal(this);
+        }
+        return this['trunc']()['divToInt'](new Decimal(2)['pow'](n));
     };
 
 
@@ -1839,6 +1947,31 @@
 
 
     /*
+     *  n ^ n = 0
+     *  n ^ 0 = n
+     *  N ^ n = N
+     *  I ^ -I = -1
+     *  I ^ n = I
+     *  -I ^ n = -I
+     *
+     * Return a new Decimal whose value is the value of this Decimal ^ Decimal(n).
+     *
+     */
+    P['xor'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (this && n && (!this['c'] || !n['c'])) {
+            if (!this['c'] && !n['c']) {
+                return new Decimal((this['s'] == n['s']) ? 0 : -1);
+            }
+            return new Decimal(this['c'] ? n : this);
+        }
+        return bitwise(this, n, function (a, b) { return a ^ b });
+    };
+
+
+    /*
     // Add aliases to match BigDecimal method names.
     P['add'] = P['plus'];
     P['subtract'] = P['minus'];
@@ -1854,6 +1987,7 @@
 
 
     /*
+     *  bitwise
      *  coefficientToString
      *  checkRoundingDigits
      *  checkRM
@@ -1869,6 +2003,61 @@
      *  rnd
      */
 
+
+    String.prototype.padLeft = function(padString, length) {
+        var str = this;
+        while (str.length < length) {
+            str = padString + str;
+        }
+        return str;
+    }
+
+
+    function bitwise(x, y, func) {
+        var Decimal = x['constructor'];
+
+        // Either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        var x_bits, y_bits, tmp_external = external;
+        external = false;
+        if (x['s'] < 0) {
+            x_bits = '1' + x['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+        } else {
+            x_bits = '0' + x['trunc']()['toString'](2);
+        }
+        
+        if (y['s'] < 0) {
+            y_bits = '1' + y['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+        } else {
+            y_bits = '0' + y['trunc']()['toString'](2);
+        }
+        external = tmp_external;
+
+        if (x_bits.length > y_bits.length) {
+            y_bits = y_bits.padLeft((y['s'] < 0) ? '1' : '0', x_bits.length);
+        } else if (x_bits.length < y_bits.length) {
+            x_bits = x_bits.padLeft((x['s'] < 0) ? '1' : '0', y_bits.length);
+        }
+
+
+        var out_str = "";
+        for (var i = 0; i < x_bits.length; ++i) {
+            out_str += "" + func(x_bits[i], y_bits[i]);
+        }
+
+        if (out_str[0] == '0') {
+            return new Decimal(out_str, 2);
+        }
+
+        var comp_str = "";
+        for (var i = 1; i < out_str.length; ++i) {
+            comp_str += (out_str[i] == '0') ? '1' : '0';
+        }
+        return new Decimal(comp_str, 2)['plus'](Decimal['ONE'])['neg']();
+    }
 
     function coefficientToString(a) {
         var s, z,
@@ -2063,9 +2252,12 @@
 
             // Convert the number as integer.
             xc = toBaseOut( str, baseIn, baseOut );
-            e = j = xc.length;
+            if (i < 0 && baseOut == 2 && !external) {
+                return xc.join('');
+            }
 
             // Remove trailing zeros.
+            e = j = xc.length;
             for ( ; xc[--j] == 0; xc.pop() );
 
             if ( !xc[0] ) {
