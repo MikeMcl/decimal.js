@@ -1,10 +1,10 @@
-/*! decimal.js v4.0.0 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v3.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (global) {
     'use strict';
 
 
     /*
-     *  decimal.js v4.0.0
+     *  decimal.js v3.0.1
      *  An arbitrary-precision Decimal type for JavaScript.
      *  https://github.com/MikeMcl/decimal.js
      *  Copyright (c) 2014 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -63,6 +63,36 @@
         }
 
         return rnd(x);
+    };
+
+
+    /*
+     *  n & n = n
+     *  n & 0 = 0
+     *  N & n = N
+     *  I & n = n
+     *  I & I = I
+     *  I & -I = 0
+     *  -I & n = 0
+     *  -I & -I = -I
+     *
+     * Return a new Decimal whose value is the value of this Decimal & Decimal(n).
+     *
+     */
+    P['and'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (this && n && (!this['c'] || !n['c'])) {
+            if (!this['c'] && !n['c']) {
+                return new Decimal((this['s'] == n['s']) ? this : 0);
+            }
+            if (this['s'] < 0 || n['s'] < 0) {
+                return new Decimal(0);
+            }
+            return new Decimal(this['c'] ? c['trunc']() : n['trunc']());
+        }
+        return bitwise(this, n, function (a, b) { return a & b });
     };
 
 
@@ -318,6 +348,26 @@
     P['isZero'] = function () {
 
         return !!this['c'] && this['c'][0] == 0;
+    };
+
+
+    /*
+     * Return a new Decimal whose value is this Decimal << n, rounded to precision
+     * significant digits using rounding mode rounding.
+     *
+     */
+    P['leftShift'] = function (n) {
+        var Decimal = this['constructor'],
+            x = this['trunc'](),
+            n = new Decimal(n);
+
+        if (n['s'] < 0) {
+            return new Decimal(NaN);
+        }
+        if (n['isZero']()) {
+            return new Decimal(x);
+        }
+        return x['times'](new Decimal(2)['pow'](n));
     };
 
 
@@ -759,6 +809,46 @@
 
 
     /*
+     * Return a new Decimal whose value is the value of ~(this Decimal).
+     * The final digit adjustment may get lost out the precision bound.
+     *
+     */
+    P['not'] = function () {
+        var x = new this['constructor'](this['trunc']());
+        
+        x = x['plus'](x['constructor']['ONE']);
+        x['s'] = -x['s'] || null;
+        return x;
+    };
+
+
+    /*
+     *  n | 0 = n
+     *  n | n = n
+     *  I | n = I
+     *  I | I = I
+     *  -I | n = -I
+     *  -I | -I = -I
+     *  -I | I = -1
+     *
+     * Return a new Decimal whose value is the value of this Decimal | Decimal(n).
+     *
+     */
+    P['or'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (this && n && (!this['c'] || !n['c'])) {
+            if (!this['c'] && !n['c']) {
+                return new Decimal(-1);
+            }
+            return new Decimal(this['c'] ? n : this);
+        }
+        return bitwise(this, n, function (a, b) { return a | b });
+    };
+
+
+    /*
      *  n + 0 = n
      *  n + N = N
      *  n + I = I
@@ -915,6 +1005,25 @@
         }
 
         return n;
+    };
+
+
+    /*
+     * Return a new Decimal whose value is this Decimal >> n, rounded to precision
+     * significant digits using rounding mode rounding.
+     *
+     */
+    P['rightShift'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (n['s'] < 0) {
+            return new Decimal(NaN);
+        }
+        if (n['isZero']()) {
+            return new Decimal(this);
+        }
+        return this['divToInt'](new Decimal(2)['pow'](n));
     };
 
 
@@ -1260,74 +1369,25 @@
 
 
     /*
-     * Return a string representing the value of this Decimal in fixed-point notation to dp decimal
-     * places, rounded using rounding mode rm or Decimal.rounding if rm is omitted, and formatted
-     * according to the following properties of the Decimal.format object.
+     * Return a string representing the value of this Decimal in normal notation rounded using
+     * rounding mode rounding to dp fixed decimal places, with the integer part of the number
+     * separated into thousands by string sep1 or ',' if sep1 is null or undefined, and the
+     * fraction part separated into groups of five digits by string sep2.
      *
-     *  Decimal.format = {
-     *      decimalSeparator : '.',
-     *      groupSeparator : ',',
-     *      groupSize : 3,
-     *      secondaryGroupSize : 0,
-     *      fractionGroupSeparator : '\xA0',    // non-breaking space
-     *      fractionGroupSize : 0
-     *  };
-     *
-     *  If groupFractionDigits is truthy, fraction digits will be separated into 5-digit groupings
-     *  using the space character as separator.
-     *
+     * [sep1] {string} The grouping separator of the integer part of the number.
+     * [sep2] {string} The grouping separator of the fraction part of the number.
      * [dp] {number} Decimal places. Integer, -MAX_DIGITS to MAX_DIGITS inclusive.
-     * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive
      *
-     * (If dp or rm are invalid the error message will give the offending method call as toFixed.)
+     * Non-breaking thin-space: \u202f
+     *
+     * If dp is invalid the error message will incorrectly give the method as toFixed.
      *
      */
-    P['toFormat'] = function( dp, rm ) {
-        var x = this;
+    P['toFormat'] = function ( sep1, dp, sep2 ) {
+        var arr = this.toFixed(dp).split('.');
 
-        if ( !x['c'] ) {
-            return x.toString();
-        }
-
-        var i,
-            isNeg = x['s'] < 0,
-            format = x['constructor']['format'],
-            groupSeparator = format['groupSeparator'],
-            g1 = +format['groupSize'],
-            g2 = +format['secondaryGroupSize'],
-            arr = x.toFixed( dp, rm ).split('.'),
-            intPart = arr[0],
-            fractionPart = arr[1],
-            intDigits = isNeg ? intPart.slice(1) : intPart,
-            len = intDigits.length;
-
-        if (g2) {
-            len -= ( i = g1, g1 = g2, g2 = i );
-        }
-
-        if ( g1 > 0 && len > 0 ) {
-            i = len % g1 || g1;
-            intPart = intDigits.substr( 0, i );
-
-            for ( ; i < len; i += g1 ) {
-                intPart += groupSeparator + intDigits.substr( i, g1 );
-            }
-
-            if ( g2 > 0 ) {
-                intPart += groupSeparator + intDigits.slice(i);
-            }
-
-            if (isNeg) {
-                intPart = '-' + intPart;
-            }
-        }
-
-        return fractionPart
-          ? intPart + format['decimalSeparator'] + ( ( g2 = +format['fractionGroupSize'] )
-            ? fractionPart.replace( new RegExp( '\\d{' + g2 + '}\\B', 'g' ),
-              '$&' + format['fractionGroupSeparator'] )
-            : fractionPart )
-          : intPart;
+        return arr[0].replace( /\B(?=(\d{3})+$)/g, sep1 == null ? ',' : sep1 + '' ) +
+            ( arr[1] ? '.' + ( sep2 ? arr[1].replace( /\d{5}\B/g, '$&' + sep2 ) : arr[1] ) : '' );
     };
 
 
@@ -1615,8 +1675,8 @@
                      log10(x_significand) = ln(x_significand) / ln(10)
                      */
                     e = b == 0 || !isFinite(b)
-                      ? mathfloor( yN * ( Math.log( '0.' + coefficientToString( x['c'] ) ) /
-                        Math.LN10 + x['e'] + 1 ) )
+                      ? mathfloor( yN * (
+                        Math.log( '0.' + coefficientToString( x['c'] ) ) / Math.LN10 + x['e'] + 1 ) )
                       : new Decimal( b + '' )['e'];
 
                     // Estimate may be incorrect e.g.: x: 0.999999999999999999, y: 2.29, e: 0, r.e:-1
@@ -1758,7 +1818,6 @@
             return format( x, null, Decimal['rounding'], 1 );
         } else {
             str = coefficientToString( x['c'] );
-
             // Negative exponent?
             if ( xe < 0 ) {
 
@@ -1839,6 +1898,31 @@
 
 
     /*
+     *  n ^ n = 0
+     *  n ^ 0 = n
+     *  N ^ n = N
+     *  I ^ -I = -1
+     *  I ^ n = I
+     *  -I ^ n = -I
+     *
+     * Return a new Decimal whose value is the value of this Decimal ^ Decimal(n).
+     *
+     */
+    P['xor'] = function (n) {
+        var Decimal = this['constructor'],
+            n = new Decimal(n);
+
+        if (this && n && (!this['c'] || !n['c'])) {
+            if (!this['c'] && !n['c']) {
+                return new Decimal((this['s'] == n['s']) ? 0 : -1);
+            }
+            return new Decimal(this['c'] ? n : this);
+        }
+        return bitwise(this, n, function (a, b) { return a ^ b });
+    };
+
+
+    /*
     // Add aliases to match BigDecimal method names.
     P['add'] = P['plus'];
     P['subtract'] = P['minus'];
@@ -1868,6 +1952,62 @@
      *  ln
      *  rnd
      */
+
+
+    String.prototype.padLeft = function(padString, length) {
+        var str = this;
+        while (str.length < length) {
+            str = padString + str;
+        }
+        return str;
+    }
+
+
+    function bitwise(x, y, func) {
+        var Decimal = x['constructor'];
+
+        // Either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        var x_bits, y_bits, tmp_external = external;
+        external = false;
+        if (x['s'] < 0) {
+            x_bits = '1' + x['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+        } else {
+            x_bits = '0' + x['trunc']()['toString'](2);
+        }
+        
+        if (y['s'] < 0) {
+            y_bits = '1' + y['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+        } else {
+            y_bits = '0' + y['trunc']()['toString'](2);
+        }
+        external = tmp_external;
+
+        if (x_bits.length > y_bits.length) {
+            y_bits = y_bits.padLeft((y['s'] < 0) ? '1' : '0', x_bits.length);
+        } else if (x_bits.length < y_bits.length) {
+            x_bits = x_bits.padLeft((x['s'] < 0) ? '1' : '0', y_bits.length);
+        }
+
+
+        var out_str = "";
+        for (var i = 0; i < x_bits.length; ++i) {
+            out_str += "" + func(x_bits[i], y_bits[i]);
+        }
+
+        if (out_str[0] == '0') {
+            return new Decimal(out_str, 2);
+        }
+
+        var comp_str = "";
+        for (var i = 1; i < out_str.length; ++i) {
+            comp_str += (out_str[i] == '0') ? '1' : '0';
+        }
+        return new Decimal(comp_str, 2)['plus'](Decimal['ONE'])['neg']();
+    }
 
 
     function coefficientToString(a) {
@@ -1924,7 +2064,7 @@
             n %= LOGBASE;
         }
 
-        k = mathpow( 10, LOGBASE - n );
+        k =mathpow( 10, LOGBASE - n );
         rd = c[ci] % k | 0;
 
         if ( repeating == null ) {
@@ -2064,6 +2204,10 @@
             // Convert the number as integer.
             xc = toBaseOut( str, baseIn, baseOut );
             e = j = xc.length;
+            
+            if (i < 0 && baseOut == 2 && !external) {
+                return xc.join('');
+            }
 
             // Remove trailing zeros.
             for ( ; xc[--j] == 0; xc.pop() );
@@ -2865,7 +3009,7 @@
                  been repeated previously) and the first 4 rounding digits 9999?
 
                  If so, restart the summation with a higher precision, otherwise
-                 e.g. with precision: 12, rounding: 1
+                 E.g. with precision: 12, rounding: 1
                  ln(135520028.6126091714265381533) = 18.7246299999 when it should be 18.72463.
 
                  sd - guard is the index of first rounding digit.
@@ -2902,7 +3046,7 @@
             Decimal = x['constructor'];
 
         // Don't round if sd is null or undefined.
-        r: if ( sd != null ) {
+        r: if ( sd != i ) {
 
             // Infinity/NaN.
             if ( !( xc = x['c'] ) ) {
@@ -3027,7 +3171,7 @@
 
                 for ( ; ; ) {
 
-                    // Is the digit to be rounded up in the first element of xc?
+                    // Is the digit to be rounded up in the first element of xc.
                     if ( xci == 0 ) {
 
                         // i will be the length of xc[0] before k is added.
@@ -3181,16 +3325,6 @@
          *   crypto     {boolean|number}
          *   modulo     {number}
          *
-         *   format     {object}     See Decimal.prototype.toFormat
-         *      decimalSeparator     {string}
-         *      groupSeparator       {string}
-         *      groupSize            {number}
-         *      secondaryGroupSize   {number}
-         *      groupFractionDigits  {boolean|number}
-         *
-         *   A format object will replace the existing Decimal.format object without any property
-         *   checking.
-         *
          * E.g.
          *   Decimal.config({ precision: 20, rounding: 4 })
          *
@@ -3202,13 +3336,12 @@
                 parse = Decimal['errors'] ? parseInt : parseFloat;
 
             if ( obj == u || typeof obj != 'object' &&
-              // 'config() object expected: {obj}'
               !ifExceptionsThrow( Decimal, 'object expected', obj, c ) ) {
 
                 return Decimal;
             }
 
-            // precision {number} Integer, 1 to MAX_DIGITS inclusive.
+            // precision {number|number[]} Integer, 1 to MAX_DIGITS inclusive.
             if ( ( v = obj[ p = 'precision' ] ) != u ) {
 
                 if ( !( outOfRange = v < 1 || v > MAX_DIGITS ) && parse(v) == v ) {
@@ -3324,18 +3457,6 @@
                 }
             }
 
-            // format {object}
-            if ( ( obj = obj[ p = 'format' ] ) != u ) {
-
-                if ( typeof obj == 'object' ) {
-                    Decimal[p] = obj;
-                } else {
-
-                    // 'config() format object expected: {obj}'
-                    ifExceptionsThrow( Decimal, 'format object expected', obj, c );
-                }
-            }
-
             return Decimal;
         }
 
@@ -3448,13 +3569,14 @@
 
                 if ( typeof n != 'string' ) {
 
+                    // TODO: modify so regex test below is avoided if type is number.
                     // If n is a number, check if minus zero.
                     n = ( isNum = typeof n == 'number' || toString.call(n) == '[object Number]' ) &&
                         n === 0 && 1 / n < 0 ? '-0' : n + '';
                 }
                 orig = n;
 
-                if ( b == null && isValid.test(n) ) {
+                if ( b == e && isValid.test(n) ) {
 
                     // Determine sign.
                     x['s'] = n.charAt(0) == '-' ? ( n = n.slice(1), -1 ) : 1;
@@ -3475,7 +3597,7 @@
 
                     x['s'] = n.charAt(0) == '-' ? ( n = n.replace( /^-(?!-)/, '' ), -1 ) : 1;
 
-                    if ( b != null ) {
+                    if ( b != e ) {
 
                         if ( ( b == (b | 0) || !Decimal['errors'] ) &&
                           !( outOfRange = !( b >= 2 && b < 65 ) ) ) {
@@ -3486,7 +3608,8 @@
 
                             // Any number in exponential form will fail due to the e+/-.
                             if ( valid = new RegExp(
-                              '^' + d + '(?:\\.' + d + ')?$', b < 37 ? 'i' : '' ).test(n) ) {
+                              '^' + d + '(?:\\.' + d + ')?$', b < 37 ? 'i' : '' ).test(n)
+                            ) {
 
                                 if (isNum) {
 
@@ -3548,7 +3671,7 @@
                 }
 
                 // Exponential form?
-                if ( ( i = n.search(/e/i) ) > 0 ) {
+                if ( ( i = n.search( /e/i ) ) > 0 ) {
 
                     // Determine exponent.
                     if ( e < 0 ) {
@@ -3933,35 +4056,25 @@
 
             // The exponent value at and beneath which toString returns exponential notation.
             // Number type: -7
-            Decimal['toExpNeg'] = -7;                         // 0 to -EXP_LIMIT
+            Decimal['toExpNeg'] = -7;                       // 0 to -EXP_LIMIT
 
             // The exponent value at and above which toString returns exponential notation.
             // Number type: 21
-            Decimal['toExpPos'] = 21;                         // 0 to EXP_LIMIT
+            Decimal['toExpPos'] = 21;                       // 0 to EXP_LIMIT
 
             // The minimum exponent value, beneath which underflow to zero occurs.
             // Number type: -324  (5e-324)
-            Decimal['minE'] = -EXP_LIMIT;                     // -1 to -EXP_LIMIT
+            Decimal['minE'] = -EXP_LIMIT;                    // -1 to -EXP_LIMIT
 
             // The maximum exponent value, above which overflow to Infinity occurs.
             // Number type:  308  (1.7976931348623157e+308)
-            Decimal['maxE'] = EXP_LIMIT;                      // 1 to EXP_LIMIT
+            Decimal['maxE'] = EXP_LIMIT;                     // 1 to EXP_LIMIT
 
             // Whether Decimal Errors are ever thrown.
             Decimal['errors'] = true;                         // true/false
 
             // Whether to use cryptographically-secure random number generation, if available.
             Decimal['crypto'] = false;                        // true/false
-
-            // Format specification for the Decimal.prototype.toFormat method
-            Decimal.format = {
-                decimalSeparator : '.',
-                groupSeparator : ',',
-                groupSize : 3,
-                secondaryGroupSize : 0,
-                fractionGroupSeparator : '\xA0',              // non-breaking space
-                fractionGroupSize : 0
-            };
 
 
             /* ********************** END OF CONSTRUCTOR DEFAULT PROPERTIES ********************* */
