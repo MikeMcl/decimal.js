@@ -1273,9 +1273,6 @@
      *      fractionGroupSize : 0
      *  };
      *
-     *  If groupFractionDigits is truthy, fraction digits will be separated into 5-digit groupings
-     *  using the space character as separator.
-     *
      * [dp] {number} Decimal places. Integer, -MAX_DIGITS to MAX_DIGITS inclusive.
      * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive
      *
@@ -3182,11 +3179,12 @@
          *   modulo     {number}
          *
          *   format     {object}     See Decimal.prototype.toFormat
-         *      decimalSeparator     {string}
-         *      groupSeparator       {string}
-         *      groupSize            {number}
-         *      secondaryGroupSize   {number}
-         *      groupFractionDigits  {boolean|number}
+         *      decimalSeparator       {string}
+         *      groupSeparator         {string}
+         *      groupSize              {number}
+         *      secondaryGroupSize     {number}
+         *      fractionGroupSeparator {string}
+         *      fractionGroupSize      {number}
          *
          *   A format object will replace the existing Decimal.format object without any property
          *   checking.
