@@ -352,6 +352,12 @@
 
 
     /*
+     *  n << -n = N
+     *  n << N = N
+     *  0 << n = N
+     *  N << n = N
+     *  I << n = I <-- Strange concept
+     *
      * Return a new Decimal whose value is this Decimal << n, rounded to precision
      * significant digits using rounding mode rounding.
      *
@@ -2012,6 +2018,28 @@
         return str;
     }
 
+    /* Want to test the speed of this in comparison after testing.
+    // Reference: http://en.wikipedia.org/wiki/Bitwise_operation#Mathematical_equivalents
+    function posBitwise(x, y, fn) {
+        var tmp_external = external,
+            n = 0,
+            cap = max(x, y),
+            Decimal = x['constructor'],
+            sum = new Decimal(0),
+            twoPower = Decimal['ONE'];
+
+        external = false;
+        while (twoPower['lte'](cap)) {
+            var xMod = div( x, twoPower, 0, 1, 1 )['mod'](2)['toNumber']();
+            var yMod = div( y, twoPower, 0, 1, 1 )['mod'](2)['toNumber']();
+            sum = sum['plus'](twoPower['times'](fn(xMod, yMod)));
+            twoPower = twoPower['times'](2);
+        }
+
+        external = tmp_external;
+        return sum;
+    }*/
+
 
     function bitwise(x, y, func) {
         var Decimal = x['constructor'];
@@ -2285,7 +2313,7 @@
             r = r || xc[pr + 1] != null;
 
             if ( rm < 4
-              ? ( i != null || r ) && ( rm == 0 || rm == ( x['s'] < 0 ? 3 : 2 ) )
+              ? ( i != null || r ) && ( rm == 0 || rm == ( sign < 0 ? 3 : 2 ) )
               : i > j || i == j && ( rm == 4 || r || rm == 6 && xc[pr - 1] & 1 ||
                 rm == ( x['s'] < 0 ? 8 : 7 ) ) ) {
 
