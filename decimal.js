@@ -2049,42 +2049,47 @@
             return new Decimal(NaN);
         }
 
-        var x_bits, y_bits, tmp_external = external;
+        var xBits, yBits, tmpExternal = external;
         external = false;
         if (x['s'] < 0) {
-            x_bits = '1' + x['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+            xBits = '1' + x['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
         } else {
-            x_bits = '0' + x['trunc']()['toString'](2);
+            xBits = '0' + x['trunc']()['toString'](2);
         }
-        
+
         if (y['s'] < 0) {
-            y_bits = '1' + y['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+            yBits = '1' + y['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
         } else {
-            y_bits = '0' + y['trunc']()['toString'](2);
+            yBits = '0' + y['trunc']()['toString'](2);
         }
-        external = tmp_external;
+        external = tmpExternal;
 
-        if (x_bits.length > y_bits.length) {
-            y_bits = y_bits.padLeft((y['s'] < 0) ? '1' : '0', x_bits.length);
-        } else if (x_bits.length < y_bits.length) {
-            x_bits = x_bits.padLeft((x['s'] < 0) ? '1' : '0', y_bits.length);
-        }
-
-
-        var out_str = "";
-        for (var i = 0; i < x_bits.length; ++i) {
-            out_str += "" + func(x_bits[i], y_bits[i]);
+        if (xBits.length > yBits.length) {
+            yBits = yBits.padLeft((y['s'] < 0) ? '1' : '0', xBits.length);
+        } else if (xBits.length < yBits.length) {
+            xBits = xBits.padLeft((x['s'] < 0) ? '1' : '0', yBits.length);
         }
 
-        if (out_str[0] == '0') {
-            return new Decimal(out_str, 2);
+
+        var outVal = new Decimal(0);
+        var twoPower = Decimal['ONE'];
+        if (func(xBits[0], yBits[0]) == 0) {
+            for (var i = xBits.length - 1; i > 0; --i) {
+                if (func(xBits[i], yBits[i])) {
+                    outVal = outVal['plus'](twoPower);
+                }
+                twoPower = twoPower['times'](2);
+            }
+            return outVal;
         }
 
-        var comp_str = "";
-        for (var i = 1; i < out_str.length; ++i) {
-            comp_str += (out_str[i] == '0') ? '1' : '0';
+        for (var i = xBits.length - 1; i > 0; --i) {
+            if (func(xBits[i], yBits[i]) == 0) {
+                outVal = outVal['plus'](twoPower['plus'](Decimal['ONE']));
+            }
+            twoPower = twoPower['times'](2);
         }
-        return new Decimal(comp_str, 2)['plus'](Decimal['ONE'])['neg']();
+        return outVal['plus'](Decimal['ONE'])['neg']();
     }
 
     function coefficientToString(a) {
@@ -2313,7 +2318,7 @@
             r = r || xc[pr + 1] != null;
 
             if ( rm < 4
-              ? ( i != null || r ) && ( rm == 0 || rm == ( sign < 0 ? 3 : 2 ) )
+              ? ( i != null || r ) && ( rm == 0 || rm == ( x['s'] < 0 ? 3 : 2 ) )
               : i > j || i == j && ( rm == 4 || r || rm == 6 && xc[pr - 1] & 1 ||
                 rm == ( x['s'] < 0 ? 8 : 7 ) ) ) {
 
