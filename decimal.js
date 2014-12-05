@@ -69,8 +69,10 @@
     /*
      *  n & n = n
      *  n & 0 = 0
+     *  n & -1 = n
      *  N & n = N
      *  I & n = n
+     *  I & -n = I
      *  I & I = I
      *  I & -I = 0
      *  -I & n = 0
@@ -81,18 +83,36 @@
      */
     P['and'] = function (n) {
         var Decimal = this['constructor'],
-            n = new Decimal(n);
+            x = this['trunc'](),
+            y = new Decimal(n)['trunc']();
 
-        if (this && n && (!this['c'] || !n['c'])) {
-            if (!this['c'] && !n['c']) {
-                return new Decimal((this['s'] == n['s']) ? this : 0);
-            }
-            if (this['s'] < 0 || n['s'] < 0) {
-                return new Decimal(0);
-            }
-            return new Decimal(this['c'] ? c['trunc']() : n['trunc']());
+        // Is either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
         }
-        return bitwise(this, n, function (a, b) { return a & b });
+
+        // Is either 0 or -1?
+        if (x['isZero']() || y['eq'](-1)) {
+            return x;
+        }
+        if (y['isZero']() || x['eq'](-1)) {
+            return y;
+        }
+
+        // Is either Infinity?
+        if (!x['c'] || !y['c']) {
+            if (!x['c'] && !y['c']) {
+                return new Decimal((x['s'] == y['s']) ? x : 0);
+            }
+            if (x['s'] < 0) {
+                return new Decimal((x['c'] && !y['c'] && y['s'] > 0) ? y : 0);
+            }
+            if (y['s'] < 0) {
+                return new Decimal((y['c'] && !x['c'] && x['s'] > 0) ? x : 0);
+            }
+            return new Decimal(x['c'] ? x : y);
+        }
+        return bitwise(x, y, function (a, b) { return a & b });
     };
 
 
@@ -815,20 +835,27 @@
 
     /*
      * Return a new Decimal whose value is the value of ~(this Decimal).
-     * The final digit adjustment may get lost out the precision bound.
      *
      */
     P['not'] = function () {
-        var x = new this['constructor'](this['trunc']());
-        
-        x = x['plus'](x['constructor']['ONE']);
+        var tmpExternal = external,
+            Decimal = this['constructor'],
+            prevPrec = Decimal['precision'];
+        external = false;
+        Decimal['precision'] = MAX_DIGITS;
+
+        var x = this['plus'](Decimal['ONE']);
         x['s'] = -x['s'] || null;
+
+        Decimal['precision'] = prevPrec;
+        external = tmpExternal;
         return x;
     };
 
 
     /*
      *  n | 0 = n
+     *  n | -1 = -1
      *  n | n = n
      *  I | n = I
      *  I | -n = -1
@@ -842,16 +869,30 @@
      */
     P['or'] = function (n) {
         var Decimal = this['constructor'],
-            n = new Decimal(n);
+            x = this['trunc'](),
+            y = new Decimal(n)['trunc']();
 
-        if (this && n && this['s'] && n['s'] && (!this['c'] || !n['c'])) {
-            if ((!this['c'] && this['s'] > 0 && n['lt'](0)) || (this['lt'](0) && n['s'] > 0 && !n['c']) ||
-                    this['eq'](-1) || n['eq'](-1)) {
+        // Is either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        // Is either 0 or -1?
+        if (x['isZero']() || y['eq'](-1)) {
+            return y;
+        }
+        if (y['isZero']() || x['eq'](-1)) {
+            return x;
+        }
+
+        // Is either Infinity?
+        if (x['s'] && y['s'] && (!x['c'] || !y['c'])) {
+            if ((!x['c'] && x['s'] > 0 && y['lt'](0)) || (x['lt'](0) && y['s'] > 0 && !y['c'])) {
                 return new Decimal(-1);
             }
-            return new Decimal(this['c'] ? n : this);
+            return new Decimal(x['c'] ? y : x);
         }
-        return bitwise(this, n, function (a, b) { return a | b });
+        return bitwise(x, y, function (a, b) { return a | b });
     };
 
 
@@ -1957,6 +1998,7 @@
     /*
      *  n ^ n = 0
      *  n ^ 0 = n
+     *  n ^ -1 = ~n
      *  N ^ n = N
      *  I ^ -I = -1
      *  I ^ n = I
@@ -1967,15 +2009,46 @@
      */
     P['xor'] = function (n) {
         var Decimal = this['constructor'],
-            n = new Decimal(n);
+            x = this['trunc'](),
+            y = new Decimal(n)['trunc']();
 
-        if (this && n && (!this['c'] || !n['c'])) {
-            if (!this['c'] && !n['c']) {
-                return new Decimal((this['s'] == n['s']) ? 0 : -1);
-            }
-            return new Decimal(this['c'] ? n : this);
+        // Is either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
         }
-        return bitwise(this, n, function (a, b) { return a ^ b });
+
+        // Is either 0?
+        if (x['isZero']()) {
+            return y;
+        }
+        if (y['isZero']()) {
+            return x;
+        }
+
+        // Are they equal?
+        if (x['eq'](y)) {
+            return new Decimal(0);
+        }
+
+        // Is either -1?
+        if (x['eq'](-1)) {
+            return y['not']();
+        }
+        if (y['eq'](-1)) {
+            return x['not']();
+        }
+
+        // Is either Infinity?
+        if (!x['c'] || !y['c']) {
+            if (!x['c'] && !y['c']) {
+                return new Decimal(-1);
+            }
+            if (x['s'] != y['s']) {
+                return new Decimal(-Infinity);
+            }
+            return new Decimal(x['c'] ? y : x);
+        }
+        return bitwise(x, y, function (a, b) { return a ^ b });
     };
 
 
@@ -2020,28 +2093,6 @@
         return str;
     }
 
-    /* Want to test the speed of this in comparison after testing.
-    // Reference: http://en.wikipedia.org/wiki/Bitwise_operation#Mathematical_equivalents
-    function posBitwise(x, y, fn) {
-        var tmp_external = external,
-            n = 0,
-            cap = max(x, y),
-            Decimal = x['constructor'],
-            sum = new Decimal(0),
-            twoPower = Decimal['ONE'];
-
-        external = false;
-        while (twoPower['lte'](cap)) {
-            var xMod = div( x, twoPower, 0, 1, 1 )['mod'](2)['toNumber']();
-            var yMod = div( y, twoPower, 0, 1, 1 )['mod'](2)['toNumber']();
-            sum = sum['plus'](twoPower['times'](fn(xMod, yMod)));
-            twoPower = twoPower['times'](2);
-        }
-
-        external = tmp_external;
-        return sum;
-    }*/
-
 
     function bitwise(x, y, func) {
         var Decimal = x['constructor'];
@@ -2055,21 +2106,18 @@
         external = false;
 
         var xBits, yBits,
-            xTrunc = x['trunc'](),
-            yTrunc = y['trunc'](),
-            xLtZero = xTrunc['lt'](0),
-            yLtZero = yTrunc['lt'](0);
+            xLtZero = x['lt'](0),
+            yLtZero = y['lt'](0);
 
         if (xLtZero) {
-            xBits = '1' + xTrunc['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+            xBits = '1' + x['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
         } else {
-            xBits = '0' + xTrunc['toString'](2);
+            xBits = '0' + x['toString'](2);
         }
-
         if (yLtZero) {
-            yBits = '1' + yTrunc['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+            yBits = '1' + y['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
         } else {
-            yBits = '0' + yTrunc['toString'](2);
+            yBits = '0' + y['toString'](2);
         }
 
         if (xBits.length > yBits.length) {
@@ -2090,6 +2138,7 @@
         if (expFuncVal == 0) {
             outVal = outVal['plus'](Decimal['ONE'])['neg']();
         }
+
         external = tmpExternal;
         return outVal;
     }
