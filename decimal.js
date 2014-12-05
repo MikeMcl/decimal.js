@@ -844,7 +844,7 @@
         external = false;
         Decimal['precision'] = MAX_DIGITS;
 
-        var x = this['plus'](Decimal['ONE']);
+        var x = this['trunc']()['plus'](Decimal['ONE']);
         x['s'] = -x['s'] || null;
 
         Decimal['precision'] = prevPrec;

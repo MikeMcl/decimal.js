@@ -272,6 +272,8 @@ while i < 200000:
 
     if x > biggest:
         biggest = x
+    if y > biggest:
+        biggest = y
 
     if i % 100 == 0:
         print(i)
