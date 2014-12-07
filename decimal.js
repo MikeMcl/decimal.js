@@ -12,7 +12,7 @@
      */
 
 
-    var convertBase, DecimalConstructor, noConflict,
+    var bitwise, convertBase, DecimalConstructor, noConflict,
         crypto = global['crypto'],
         external = true,
         id = 0,
@@ -71,12 +71,13 @@
      *  n & 0 = 0
      *  n & -1 = n
      *  N & n = N
+     *  I & I = I
+     *  -I & -I = -I
+     *  I & -I = 0
      *  I & n = n
      *  I & -n = I
-     *  I & I = I
-     *  I & -I = 0
      *  -I & n = 0
-     *  -I & -I = -I
+     *  -I & -n = -I
      *
      * Return a new Decimal whose value is the value of this Decimal & Decimal(n).
      *
@@ -91,8 +92,8 @@
             return new Decimal(NaN);
         }
 
-        // Is either 0 or -1?
-        if (x['isZero']() || y['eq'](-1)) {
+        // Is either 0 or -1, or are they equal?
+        if (x['isZero']() || y['eq'](-1) || x['eq'](y)) {
             return x;
         }
         if (y['isZero']() || x['eq'](-1)) {
@@ -104,13 +105,18 @@
             if (!x['c'] && !y['c']) {
                 return new Decimal((x['s'] == y['s']) ? x : 0);
             }
-            if (x['s'] < 0) {
-                return new Decimal((x['c'] && !y['c'] && y['s'] > 0) ? y : 0);
+            if (!x['c']) {
+                if (y['s'] < 0) {
+                    return x;
+                }
+                return new Decimal((x['s'] > 0) ? y : 0);
             }
-            if (y['s'] < 0) {
-                return new Decimal((y['c'] && !x['c'] && x['s'] > 0) ? x : 0);
+            if (!y['c']) {
+                if (x['s'] < 0) {
+                    return y;
+                }
+                return new Decimal((y['s'] > 0) ? x : 0);
             }
-            return new Decimal(x['c'] ? x : y);
         }
         return bitwise(x, y, function (a, b) { return a & b });
     };
@@ -374,25 +380,39 @@
     /*
      *  n << -n = N
      *  n << N = N
-     *  0 << n = N
      *  N << n = N
-     *  I << n = I <-- Strange concept
+     *  I << I = N
+     *  n << 0 = n
+     *  I << n = I
+     *  n << I = I
+     *  0 << n = 0
      *
-     * Return a new Decimal whose value is this Decimal << n, rounded to precision
-     * significant digits using rounding mode rounding.
+     * Return a new Decimal whose value is this Decimal << n.
      *
      */
     P['leftShift'] = function (n) {
         var Decimal = this['constructor'],
-            n = new Decimal(n);
+            x = this['trunc'](),
+            n = new Decimal(n)['trunc']();
 
-        if (n['s'] < 0) {
+        // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
+        if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) ||
+                (!this['c'] && !n['c']) || (this['s'] < 0 && !n['c'])) {
             return new Decimal(NaN);
         }
-        if (n['isZero']()) {
-            return new Decimal(this);
+        if (x['isZero']() || n['isZero']()) {
+            return x;
         }
-        return this['trunc']()['times'](new Decimal(2)['pow'](n));
+
+        var prevPrec = Decimal['precision'];
+        external = false;
+        Decimal['precision'] = MAX_DIGITS;
+
+        var outVal = x['times'](new Decimal(2)['pow'](n));
+
+        external = true;
+        Decimal['precision'] = prevPrec;
+        return outVal;
     };
 
 
@@ -854,15 +874,17 @@
 
 
     /*
+     *  N | n = N
      *  n | 0 = n
      *  n | -1 = -1
      *  n | n = n
-     *  I | n = I
-     *  I | -n = -1
      *  I | I = I
-     *  -I | n = -I
      *  -I | -I = -I
-     *  -I | I = -1
+     *  I | -n = -1
+     *  I | -I = -1
+     *  I | n = I
+     *  -I | n = -I
+     *  -I | -n = -n
      *
      * Return a new Decimal whose value is the value of this Decimal | Decimal(n).
      *
@@ -877,8 +899,8 @@
             return new Decimal(NaN);
         }
 
-        // Is either 0 or -1?
-        if (x['isZero']() || y['eq'](-1)) {
+        // Is either 0 or -1, or are they equal?
+        if (x['isZero']() || y['eq'](-1) || x['eq'](y)) {
             return y;
         }
         if (y['isZero']() || x['eq'](-1)) {
@@ -886,9 +908,12 @@
         }
 
         // Is either Infinity?
-        if (x['s'] && y['s'] && (!x['c'] || !y['c'])) {
+        if (!x['c'] || !y['c']) {
             if ((!x['c'] && x['s'] > 0 && y['lt'](0)) || (x['lt'](0) && y['s'] > 0 && !y['c'])) {
                 return new Decimal(-1);
+            }
+            if (x['s'] < 0 && y['s'] < 0) {
+                return new Decimal(x['c'] ? x : y);
             }
             return new Decimal(x['c'] ? y : x);
         }
@@ -1057,21 +1082,46 @@
 
 
     /*
+     *  n >> -n = N
+     *  n >> N = N
+     *  N >> n = N
+     *  I >> I = N
+     *  n >> 0 = n
+     *  I >> n = I
+     *  -I >> n = -I
+     *  -I >> I = -I
+     *  n >> I = I
+     *  0 >> n = 0
+     *
      * Return a new Decimal whose value is this Decimal >> n, rounded to precision
      * significant digits using rounding mode rounding.
      *
      */
     P['rightShift'] = function (n) {
         var Decimal = this['constructor'],
-            n = new Decimal(n);
+            x = this['trunc'](),
+            n = new Decimal(n)['trunc']();
 
-        if (n['s'] < 0) {
+        // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
+        if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) ||
+                (!x['c'] && !n['c'])) {
             return new Decimal(NaN);
         }
-        if (n['isZero']()) {
-            return new Decimal(this);
+        if (x['isZero']() || n['isZero']() || x['eq'](-1)) {
+            return x;
         }
-        return this['trunc']()['divToInt'](new Decimal(2)['pow'](n));
+        if (x['s'] < 0 && !n['c']) {
+            return new Decimal(-1);
+        }
+        var prevPrec = Decimal['precision'];
+        external = false;
+        Decimal['precision'] = MAX_DIGITS;
+
+        var outVal = x['div'](new Decimal(2)['pow'](n))['floor']();
+
+        external = true;
+        Decimal['precision'] = prevPrec;
+        return outVal;
     };
 
 
@@ -1996,13 +2046,15 @@
 
 
     /*
-     *  n ^ n = 0
-     *  n ^ 0 = n
-     *  n ^ -1 = ~n
      *  N ^ n = N
-     *  I ^ -I = -1
+     *  n ^ 0 = n
+     *  n ^ n = 0
+     *  n ^ -1 = ~n
      *  I ^ n = I
+     *  I ^ -n = -I
+     *  I ^ -I = -1
      *  -I ^ n = -I
+     *  -I ^ -n = I
      *
      * Return a new Decimal whose value is the value of this Decimal ^ Decimal(n).
      *
@@ -2043,10 +2095,7 @@
             if (!x['c'] && !y['c']) {
                 return new Decimal(-1);
             }
-            if (x['s'] != y['s']) {
-                return new Decimal(-Infinity);
-            }
-            return new Decimal(x['c'] ? y : x);
+            return new Decimal((x['s'] == y['s']) ? Infinity : -Infinity);
         }
         return bitwise(x, y, function (a, b) { return a ^ b });
     };
@@ -2085,15 +2134,6 @@
      */
 
 
-    String.prototype.padLeft = function(padString, length) {
-        var str = this;
-        while (str.length < length) {
-            str = padString + str;
-        }
-        return str;
-    }
-
-
     function bitwise(x, y, func) {
         var Decimal = x['constructor'];
 
@@ -2106,42 +2146,64 @@
         external = false;
 
         var xBits, yBits,
-            xLtZero = x['lt'](0),
-            yLtZero = y['lt'](0);
+            xSign = +(x['s'] < 0),
+            ySign = +(y['s'] < 0);
 
-        if (xLtZero) {
-            xBits = '1' + x['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+        if (xSign) {
+            xBits = x['not']()['toString'](2);
+            for (var i = 0; i < xBits.length; ++i) {
+                xBits[i] = (xBits[i] == 0) ? 1 : 0;
+            }
         } else {
-            xBits = '0' + x['toString'](2);
+            xBits = x['toString'](2);
         }
-        if (yLtZero) {
-            yBits = '1' + y['not']()['toString'](2).replace(/[01]/g, function (d) { return +!+d });
+        if (ySign) {
+            yBits = y['not']()['toString'](2);
+            for (var i = 0; i < yBits.length; ++i) {
+                yBits[i] = (yBits[i] == 0) ? 1 : 0;
+            }
         } else {
-            yBits = '0' + y['toString'](2);
+            yBits = y['toString'](2);
         }
 
-        if (xBits.length > yBits.length) {
-            yBits = yBits.padLeft(yLtZero ? '1' : '0', xBits.length);
-        } else if (xBits.length < yBits.length) {
-            xBits = xBits.padLeft(xLtZero ? '1' : '0', yBits.length);
+        var minBits, maxBits, minSign;
+        if (xBits.length <= yBits.length) {
+            minBits = xBits;
+            maxBits = yBits;
+            minSign = xSign;
+        } else {
+            minBits = yBits;
+            maxBits = xBits;
+            minSign = ySign;
         }
 
-        var outVal = new Decimal(0);
-        var twoPower = Decimal['ONE'];
-        var expFuncVal = func(xBits[0], yBits[0]) ^ 1;
-        for (var i = xBits.length - 1; i > 0; --i) {
-            if (func(xBits[i], yBits[i]) == expFuncVal) {
+        var shortLen = minBits.length,
+            longLen = maxBits.length,
+            expFuncVal = func(xSign, ySign) ^ 1,
+            outVal = new Decimal(expFuncVal ? 0 : 1),
+            twoPower = Decimal['ONE'],
+            two = new Decimal(2);
+
+        while (shortLen > 0) {
+            if (func(minBits[--shortLen], maxBits[--longLen]) == expFuncVal) {
                 outVal = outVal['plus'](twoPower);
             }
-            twoPower = twoPower['times'](2);
+            twoPower = twoPower['times'](two);
+        }
+        while (longLen > 0) {
+            if (func(minSign, maxBits[--longLen]) == expFuncVal) {
+                outVal = outVal['plus'](twoPower);
+            }
+            twoPower = twoPower['times'](two);
         }
         if (expFuncVal == 0) {
-            outVal = outVal['plus'](Decimal['ONE'])['neg']();
+            outVal['s'] = -outVal['s'];
         }
 
         external = tmpExternal;
         return outVal;
     }
+
 
     function coefficientToString(a) {
         var s, z,
@@ -2337,7 +2399,7 @@
             // Convert the number as integer.
             xc = toBaseOut( str, baseIn, baseOut );
             if (i < 0 && baseOut == 2 && !external) {
-                return xc.join('');
+                return xc;
             }
 
             // Remove trailing zeros.
