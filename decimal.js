@@ -45,7 +45,10 @@
         INT_POW_LIMIT = 3000,                  // 0 to 5000
 
         // The natural logarithm of 10 (1025 digits).
-        LN10 = '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058';
+        LN10 = '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058',
+
+        // Array to memoize powers of 2
+        POWERS_OF_TWO = [1];
 
 
     // Decimal prototype methods
@@ -397,6 +400,9 @@
         var twoPowN = null;
         if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
             n = new Decimal(n)['trunc']();
+            if (POWERS_OF_TWO[n['toNumber']()] !== undefined) {
+                twoPowN = POWERS_OF_TWO[n['toNumber']()];
+            }
         } else {
             if (isNaN(parseInt(n))) {
                 return new Decimal(NaN);
@@ -419,7 +425,8 @@
         Decimal['precision'] = MAX_DIGITS;
 
         if (!twoPowN) {
-           twoPowN = new Decimal(2)['pow'](n);
+            twoPowN = new Decimal(2)['pow'](n);
+            POWERS_OF_TWO[n['toNumber']()] = twoPowN;
         }
         var outVal = x['times'](twoPowN);
 
@@ -1115,15 +1122,20 @@
         var Decimal = this['constructor'],
             x = this['trunc']();
 
-        var twoPowN = null;
+        var twoPowN, nNum;
         if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
             n = new Decimal(n)['trunc']();
+            nNum = n['toNumber']();
+            if (POWERS_OF_TWO[nNum] !== undefined) {
+                twoPowN = POWERS_OF_TWO[nNum];
+            }
         } else {
             if (isNaN(parseInt(n))) {
                 return new Decimal(NaN);
             }
-            twoPowN = new Decimal(mathpow(2, n | 0));
-            n = new Decimal(n | 0);
+            nNum = n | 0;
+            twoPowN = new Decimal(mathpow(2, nNum));
+            n = new Decimal(nNum);
         }
 
         // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
@@ -1141,7 +1153,8 @@
         Decimal['precision'] = MAX_DIGITS;
 
         if (!twoPowN) {
-           twoPowN = new Decimal(2)['pow'](n);
+            twoPowN = new Decimal(2)['pow'](n);
+            POWERS_OF_TWO[nNum] = twoPowN;
         }
         var outVal = x['div'](twoPowN)['floor']();
 
@@ -2208,19 +2221,30 @@
             expFuncVal = func(xSign, ySign) ^ 1,
             outVal = new Decimal(expFuncVal ? 0 : 1),
             twoPower = Decimal['ONE'],
-            two = new Decimal(2);
+            two = new Decimal(2)
+            i = 0;
 
         while (shortLen > 0) {
             if (func(minBits[--shortLen], maxBits[--longLen]) == expFuncVal) {
                 outVal = outVal['plus'](twoPower);
             }
-            twoPower = twoPower['times'](two);
+            if (POWERS_OF_TWO[++i] !== undefined) {
+                twoPower = POWERS_OF_TWO[i];
+            } else {
+                twoPower = twoPower['times'](two);
+                POWERS_OF_TWO[i] = twoPower;
+            }
         }
         while (longLen > 0) {
             if (func(minSign, maxBits[--longLen]) == expFuncVal) {
                 outVal = outVal['plus'](twoPower);
             }
-            twoPower = twoPower['times'](two);
+            if (POWERS_OF_TWO[++i] !== undefined) {
+                twoPower = POWERS_OF_TWO[i];
+            } else {
+                twoPower = twoPower['times'](two);
+                POWERS_OF_TWO[i] = twoPower;
+            }
         }
         if (expFuncVal == 0) {
             outVal['s'] = -outVal['s'];
