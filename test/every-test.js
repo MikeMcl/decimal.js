@@ -7,6 +7,7 @@ console.log( '\n STARTING TESTS...\n' );
 
 [
   'abs',
+  'and',
   'baseIn',
   'baseOut',
   'ceil',
@@ -20,6 +21,7 @@ console.log( '\n STARTING TESTS...\n' );
   'floor',
   'intPow',
   'isFiniteEtc',
+  'leftShift',
   'ln',
   'log',
   'log10',
@@ -27,9 +29,12 @@ console.log( '\n STARTING TESTS...\n' );
   'minus',
   'mod',
   'neg',
+  'not',
+  'or',
   'plus',
   'pow',
   'random',
+  'rightShift',
   'round',
   'sqrt',
   'times',
@@ -43,7 +48,8 @@ console.log( '\n STARTING TESTS...\n' );
   'toPrecision',
   'toSD',
   'toStringEtc',
-  'trunc'
+  'trunc',
+  'xor'
 ]
 .forEach( function (method) {
     arr = require('./' + method);
@@ -53,50 +59,3 @@ console.log( '\n STARTING TESTS...\n' );
 
 console.log( '\n IN TOTAL: ' + passed + ' of ' + total + ' tests passed in ' +
     ( (+new Date() - start) / 1000 ) + ' secs.\n' );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

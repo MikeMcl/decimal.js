@@ -45,7 +45,10 @@
         INT_POW_LIMIT = 3000,                  // 0 to 5000
 
         // The natural logarithm of 10 (1025 digits).
-        LN10 = '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058';
+        LN10 = '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058',
+
+        // Array to memoize powers of 2
+        POWERS_OF_TWO = [1];
 
 
     // Decimal prototype methods
@@ -63,6 +66,62 @@
         }
 
         return rnd(x);
+    };
+
+
+    /*
+     *  n & n = n
+     *  n & 0 = 0
+     *  n & -1 = n
+     *  N & n = N
+     *  I & I = I
+     *  -I & -I = -I
+     *  I & -I = 0
+     *  I & n = n
+     *  I & -n = I
+     *  -I & n = 0
+     *  -I & -n = -I
+     *
+     * Return a new Decimal whose value is the value of this Decimal & Decimal(n).
+     *
+     */
+    P['and'] = function (n) {
+        var Decimal = this['constructor'],
+            x = this['trunc'](),
+            y = new Decimal(n)['trunc']();
+
+        // Is either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        // Is either 0 or -1, or are they equal?
+        if (x['isZero']() || y['eq'](-1) || x['eq'](y)) {
+            return x;
+        }
+        if (y['isZero']() || x['eq'](-1)) {
+            return y;
+        }
+
+        // Is either Infinity?
+        if (!x['c'] || !y['c']) {
+            if (!x['c'] && !y['c']) {
+                return new Decimal((x['s'] == y['s']) ? x : 0);
+            }
+            if (!x['c']) {
+                if (y['s'] < 0) {
+                    return x;
+                }
+                return new Decimal((x['s'] > 0) ? y : 0);
+            }
+            if (!y['c']) {
+                if (x['s'] < 0) {
+                    return y;
+                }
+                return new Decimal((y['s'] > 0) ? x : 0);
+            }
+        }
+        return bitwise(x, y, function (a, b) { return a & b });
     };
 
 
@@ -318,6 +377,64 @@
     P['isZero'] = function () {
 
         return !!this['c'] && this['c'][0] == 0;
+    };
+
+
+    /*
+     *  n << -n = N
+     *  n << N = N
+     *  N << n = N
+     *  I << I = N
+     *  n << 0 = n
+     *  I << n = I
+     *  n << I = I
+     *  0 << n = 0
+     *
+     * Return a new Decimal whose value is this Decimal << n.
+     *
+     */
+    P['leftShift'] = function (n) {
+        var Decimal = this['constructor'],
+            x = this['trunc']();
+        
+        var twoPowN, nNum;
+        if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
+            n = new Decimal(n)['trunc']();
+            nNum = n['toNumber']();
+            if (POWERS_OF_TWO[nNum] !== undefined) {
+                twoPowN = POWERS_OF_TWO[nNum];
+            }
+        } else {
+            if (isNaN(parseInt(n))) {
+                return new Decimal(NaN);
+            }
+            nNum = n | 0;
+            twoPowN = new Decimal(mathpow(2, nNum));
+            n = new Decimal(nNum);
+        }
+
+        // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
+        if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) ||
+                (!x['c'] && !n['c']) || (x['s'] < 0 && !n['c'])) {
+            return new Decimal(NaN);
+        }
+        if (x['isZero']() || n['isZero']()) {
+            return x;
+        }
+
+        var prevPrec = Decimal['precision'];
+        external = false;
+        Decimal['precision'] = MAX_DIGITS;
+
+        if (!twoPowN) {
+            twoPowN = new Decimal(2)['pow'](n);
+            POWERS_OF_TWO[nNum] = twoPowN;
+        }
+        var outVal = x['times'](twoPowN);
+
+        external = true;
+        Decimal['precision'] = prevPrec;
+        return outVal;
     };
 
 
@@ -759,6 +876,74 @@
 
 
     /*
+     * Return a new Decimal whose value is the value of ~(this Decimal).
+     *
+     */
+    P['not'] = function () {
+        var tmpExternal = external,
+            Decimal = this['constructor'],
+            prevPrec = Decimal['precision'];
+        external = false;
+        Decimal['precision'] = MAX_DIGITS;
+
+        var x = this['trunc']()['plus'](Decimal['ONE']);
+        x['s'] = -x['s'] || null;
+
+        Decimal['precision'] = prevPrec;
+        external = tmpExternal;
+        return x;
+    };
+
+
+    /*
+     *  N | n = N
+     *  n | 0 = n
+     *  n | -1 = -1
+     *  n | n = n
+     *  I | I = I
+     *  -I | -I = -I
+     *  I | -n = -1
+     *  I | -I = -1
+     *  I | n = I
+     *  -I | n = -I
+     *  -I | -n = -n
+     *
+     * Return a new Decimal whose value is the value of this Decimal | Decimal(n).
+     *
+     */
+    P['or'] = function (n) {
+        var Decimal = this['constructor'],
+            x = this['trunc'](),
+            y = new Decimal(n)['trunc']();
+
+        // Is either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        // Is either 0 or -1, or are they equal?
+        if (x['isZero']() || y['eq'](-1) || x['eq'](y)) {
+            return y;
+        }
+        if (y['isZero']() || x['eq'](-1)) {
+            return x;
+        }
+
+        // Is either Infinity?
+        if (!x['c'] || !y['c']) {
+            if ((!x['c'] && x['s'] > 0 && y['lt'](0)) || (x['lt'](0) && y['s'] > 0 && !y['c'])) {
+                return new Decimal(-1);
+            }
+            if (x['s'] < 0 && y['s'] < 0) {
+                return new Decimal(x['c'] ? x : y);
+            }
+            return new Decimal(x['c'] ? y : x);
+        }
+        return bitwise(x, y, function (a, b) { return a | b });
+    };
+
+
+    /*
      *  n + 0 = n
      *  n + N = N
      *  n + I = I
@@ -915,6 +1100,69 @@
         }
 
         return n;
+    };
+
+
+    /*
+     *  n >> -n = N
+     *  n >> N = N
+     *  N >> n = N
+     *  I >> I = N
+     *  n >> 0 = n
+     *  I >> n = I
+     *  -I >> n = -I
+     *  -I >> I = -I
+     *  n >> I = I
+     *  -n >> I = -1
+     *  0 >> n = 0
+     *
+     * Return a new Decimal whose value is this Decimal >> n, rounded to precision
+     * significant digits using rounding mode rounding.
+     *
+     */
+    P['rightShift'] = function (n) {
+        var Decimal = this['constructor'],
+            x = this['trunc']();
+
+        var twoPowN, nNum;
+        if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
+            n = new Decimal(n)['trunc']();
+            nNum = n['toNumber']();
+            if (POWERS_OF_TWO[nNum] !== undefined) {
+                twoPowN = POWERS_OF_TWO[nNum];
+            }
+        } else {
+            if (isNaN(parseInt(n))) {
+                return new Decimal(NaN);
+            }
+            nNum = n | 0;
+            twoPowN = new Decimal(mathpow(2, nNum));
+            n = new Decimal(nNum);
+        }
+
+        // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
+        if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) || (!x['c'] && !n['c'])) {
+            return new Decimal(NaN);
+        }
+        if (x['isZero']() || n['isZero']() || x['eq'](-1)) {
+            return x;
+        }
+        if (x['s'] < 0 && !n['c']) {
+            return new Decimal(-1);
+        }
+        var prevPrec = Decimal['precision'];
+        external = false;
+        Decimal['precision'] = MAX_DIGITS;
+
+        if (!twoPowN) {
+            twoPowN = new Decimal(2)['pow'](n);
+            POWERS_OF_TWO[nNum] = twoPowN;
+        }
+        var outVal = x['div'](twoPowN)['floor']();
+
+        external = true;
+        Decimal['precision'] = prevPrec;
+        return outVal;
     };
 
 
@@ -1839,6 +2087,62 @@
 
 
     /*
+     *  N ^ n = N
+     *  n ^ 0 = n
+     *  n ^ n = 0
+     *  n ^ -1 = ~n
+     *  I ^ n = I
+     *  I ^ -n = -I
+     *  I ^ -I = -1
+     *  -I ^ n = -I
+     *  -I ^ -n = I
+     *
+     * Return a new Decimal whose value is the value of this Decimal ^ Decimal(n).
+     *
+     */
+    P['xor'] = function (n) {
+        var Decimal = this['constructor'],
+            x = this['trunc'](),
+            y = new Decimal(n)['trunc']();
+
+        // Is either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        // Is either 0?
+        if (x['isZero']()) {
+            return y;
+        }
+        if (y['isZero']()) {
+            return x;
+        }
+
+        // Are they equal?
+        if (x['eq'](y)) {
+            return new Decimal(0);
+        }
+
+        // Is either -1?
+        if (x['eq'](-1)) {
+            return y['not']();
+        }
+        if (y['eq'](-1)) {
+            return x['not']();
+        }
+
+        // Is either Infinity?
+        if (!x['c'] || !y['c']) {
+            if (!x['c'] && !y['c']) {
+                return new Decimal(-1);
+            }
+            return new Decimal((x['s'] == y['s']) ? Infinity : -Infinity);
+        }
+        return bitwise(x, y, function (a, b) { return a ^ b });
+    };
+
+
+    /*
     // Add aliases to match BigDecimal method names.
     P['add'] = P['plus'];
     P['subtract'] = P['minus'];
@@ -1854,6 +2158,7 @@
 
 
     /*
+     *  bitwise
      *  coefficientToString
      *  checkRoundingDigits
      *  checkRM
@@ -1868,6 +2173,88 @@
      *  ln
      *  rnd
      */
+
+
+    function bitwise(x, y, func) {
+        var Decimal = x['constructor'];
+
+        // Either NaN?
+        if (!x['s'] || !y['s']) {
+            return new Decimal(NaN);
+        }
+
+        var tmpExternal = external;
+        external = false;
+
+        var xBits, yBits,
+            xSign = +(x['s'] < 0),
+            ySign = +(y['s'] < 0);
+
+        if (xSign) {
+            xBits = x['not']()['toString'](2);
+            for (var i = 0; i < xBits.length; ++i) {
+                xBits[i] = (xBits[i] == 0) ? 1 : 0;
+            }
+        } else {
+            xBits = x['toString'](2);
+        }
+        if (ySign) {
+            yBits = y['not']()['toString'](2);
+            for (var i = 0; i < yBits.length; ++i) {
+                yBits[i] = (yBits[i] == 0) ? 1 : 0;
+            }
+        } else {
+            yBits = y['toString'](2);
+        }
+
+        var minBits, maxBits, minSign;
+        if (xBits.length <= yBits.length) {
+            minBits = xBits;
+            maxBits = yBits;
+            minSign = xSign;
+        } else {
+            minBits = yBits;
+            maxBits = xBits;
+            minSign = ySign;
+        }
+
+        var shortLen = minBits.length,
+            longLen = maxBits.length,
+            expFuncVal = func(xSign, ySign) ^ 1,
+            outVal = new Decimal(expFuncVal ? 0 : 1),
+            twoPower = Decimal['ONE'],
+            two = new Decimal(2)
+            i = 0;
+
+        while (shortLen > 0) {
+            if (func(minBits[--shortLen], maxBits[--longLen]) == expFuncVal) {
+                outVal = outVal['plus'](twoPower);
+            }
+            if (POWERS_OF_TWO[++i] !== undefined) {
+                twoPower = POWERS_OF_TWO[i];
+            } else {
+                twoPower = twoPower['times'](two);
+                POWERS_OF_TWO[i] = twoPower;
+            }
+        }
+        while (longLen > 0) {
+            if (func(minSign, maxBits[--longLen]) == expFuncVal) {
+                outVal = outVal['plus'](twoPower);
+            }
+            if (POWERS_OF_TWO[++i] !== undefined) {
+                twoPower = POWERS_OF_TWO[i];
+            } else {
+                twoPower = twoPower['times'](two);
+                POWERS_OF_TWO[i] = twoPower;
+            }
+        }
+        if (expFuncVal == 0) {
+            outVal['s'] = -outVal['s'];
+        }
+
+        external = tmpExternal;
+        return outVal;
+    }
 
 
     function coefficientToString(a) {
@@ -2063,9 +2450,12 @@
 
             // Convert the number as integer.
             xc = toBaseOut( str, baseIn, baseOut );
-            e = j = xc.length;
+            if (i < 0 && baseOut == 2 && !external) {
+                return xc;
+            }
 
             // Remove trailing zeros.
+            e = j = xc.length;
             for ( ; xc[--j] == 0; xc.pop() );
 
             if ( !xc[0] ) {
