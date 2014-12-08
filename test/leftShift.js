@@ -42,7 +42,7 @@ var count = (function leftShift(Decimal) {
         assert(String(expected), String(new Decimal(leftShiftendA).leftShift(leftShiftendB)));
     }
 
-    log('\n Testing left shift...');
+    log('\n Testing leftShift...');
 
     Decimal.config({
         precision: 20,

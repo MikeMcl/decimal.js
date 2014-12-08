@@ -12,7 +12,7 @@
      */
 
 
-    var bitwise, convertBase, DecimalConstructor, noConflict,
+    var convertBase, DecimalConstructor, noConflict,
         crypto = global['crypto'],
         external = true,
         id = 0,
@@ -392,12 +392,22 @@
      */
     P['leftShift'] = function (n) {
         var Decimal = this['constructor'],
-            x = this['trunc'](),
+            x = this['trunc']();
+        
+        var twoPowN = null;
+        if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
             n = new Decimal(n)['trunc']();
+        } else {
+            if (isNaN(parseInt(n))) {
+                return new Decimal(NaN);
+            }
+            twoPowN = new Decimal(mathpow(2, n | 0));
+            n = new Decimal(n | 0);
+        }
 
         // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
         if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) ||
-                (!this['c'] && !n['c']) || (this['s'] < 0 && !n['c'])) {
+                (!x['c'] && !n['c']) || (x['s'] < 0 && !n['c'])) {
             return new Decimal(NaN);
         }
         if (x['isZero']() || n['isZero']()) {
@@ -408,7 +418,10 @@
         external = false;
         Decimal['precision'] = MAX_DIGITS;
 
-        var outVal = x['times'](new Decimal(2)['pow'](n));
+        if (!twoPowN) {
+           twoPowN = new Decimal(2)['pow'](n);
+        }
+        var outVal = x['times'](twoPowN);
 
         external = true;
         Decimal['precision'] = prevPrec;
@@ -1091,6 +1104,7 @@
      *  -I >> n = -I
      *  -I >> I = -I
      *  n >> I = I
+     *  -n >> I = -1
      *  0 >> n = 0
      *
      * Return a new Decimal whose value is this Decimal >> n, rounded to precision
@@ -1099,12 +1113,21 @@
      */
     P['rightShift'] = function (n) {
         var Decimal = this['constructor'],
-            x = this['trunc'](),
+            x = this['trunc']();
+
+        var twoPowN = null;
+        if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
             n = new Decimal(n)['trunc']();
+        } else {
+            if (isNaN(parseInt(n))) {
+                return new Decimal(NaN);
+            }
+            twoPowN = new Decimal(mathpow(2, n | 0));
+            n = new Decimal(n | 0);
+        }
 
         // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
-        if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) ||
-                (!x['c'] && !n['c'])) {
+        if (!x['s'] || !n['s'] || (n['s'] < 0 && !n['isZero']()) || (!x['c'] && !n['c'])) {
             return new Decimal(NaN);
         }
         if (x['isZero']() || n['isZero']() || x['eq'](-1)) {
@@ -1117,7 +1140,10 @@
         external = false;
         Decimal['precision'] = MAX_DIGITS;
 
-        var outVal = x['div'](new Decimal(2)['pow'](n))['floor']();
+        if (!twoPowN) {
+           twoPowN = new Decimal(2)['pow'](n);
+        }
+        var outVal = x['div'](twoPowN)['floor']();
 
         external = true;
         Decimal['precision'] = prevPrec;
