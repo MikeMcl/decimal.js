@@ -397,18 +397,20 @@
         var Decimal = this['constructor'],
             x = this['trunc']();
         
-        var twoPowN = null;
+        var twoPowN, nNum;
         if (typeof n === 'object' || !isFinite(n) || +n >= 50) {
             n = new Decimal(n)['trunc']();
-            if (POWERS_OF_TWO[n['toNumber']()] !== undefined) {
-                twoPowN = POWERS_OF_TWO[n['toNumber']()];
+            nNum = n['toNumber']();
+            if (POWERS_OF_TWO[nNum] !== undefined) {
+                twoPowN = POWERS_OF_TWO[nNum];
             }
         } else {
             if (isNaN(parseInt(n))) {
                 return new Decimal(NaN);
             }
-            twoPowN = new Decimal(mathpow(2, n | 0));
-            n = new Decimal(n | 0);
+            nNum = n | 0;
+            twoPowN = new Decimal(mathpow(2, nNum));
+            n = new Decimal(nNum);
         }
 
         // Are both infinity or is shift amount negative or amount is negative and shift is infinite?
@@ -426,7 +428,7 @@
 
         if (!twoPowN) {
             twoPowN = new Decimal(2)['pow'](n);
-            POWERS_OF_TWO[n['toNumber']()] = twoPowN;
+            POWERS_OF_TWO[nNum] = twoPowN;
         }
         var outVal = x['times'](twoPowN);
 
