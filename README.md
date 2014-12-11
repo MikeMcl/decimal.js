@@ -204,6 +204,9 @@ See LICENCE.
 
 ## Change Log
 
+####4.0.1
+* 11/12/2014 Assign correct constructor when duplicating a Decimal.
+
 ####4.0.0
 * 10/11/2014 `toFormat` amended to use `Decimal.format` object for more flexible configuration.
 
