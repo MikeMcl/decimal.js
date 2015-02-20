@@ -1,10 +1,10 @@
-/*! decimal.js v4.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v4.0.2 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (global) {
     'use strict';
 
 
     /*
-     *  decimal.js v4.0.1
+     *  decimal.js v4.0.2
      *  An arbitrary-precision Decimal type for JavaScript.
      *  https://github.com/MikeMcl/decimal.js
      *  Copyright (c) 2014 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -891,20 +891,17 @@
     /*
      * Return the number of significant digits of this Decimal.
      *
-     * z {boolean|number} Whether to count integer-part trailing zeros: true, false, 1 or 0.
+     * [z] {boolean|number} Whether to count integer-part trailing zeros: true, false, 1 or 0.
      *
      */
     P['precision'] = P['sd'] = function (z) {
         var n = null,
             x = this;
 
-        if ( z != n ) {
+        if ( z != n && z !== !!z && z !== 1 && z !== 0 ) {
 
-            if ( z !== !!z && z !== 1 && z !== 0 ) {
-
-                // 'precision() argument not a boolean or binary digit: {z}'
-                ifExceptionsThrow( x['constructor'], 'argument', z, 'precision', 1 );
-            }
+            // 'precision() argument not a boolean or binary digit: {z}'
+            ifExceptionsThrow( x['constructor'], 'argument', z, 'precision', 1 );
         }
 
         if ( x['c'] ) {
@@ -3682,7 +3679,7 @@
                     for ( ; i < n; ) {
                         v = a[i];
 
-                        // 0 >= v < 4294967296
+                        // 0 <= v < 4294967296
                         // Probability that v >= 4.29e9, is 4967296 / 4294967296 = 0.00116 (1 in 865).
                         if ( v >= 4.29e9 ) {
 
@@ -3712,7 +3709,7 @@
                             crypto['randomBytes'](4).copy( a, i );
                         } else {
 
-                            // 0 <= v <= 4289999999
+                            // 0 <= v <= 2139999999
                             // 0 <= ( v % 1e7 ) <= 9999999
                             r.push( v % 1e7 );
                             i += 4;

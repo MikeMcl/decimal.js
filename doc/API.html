@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="Author" content="MMclaughlin">
   <title>decimal.js API</title>
   <style>
@@ -761,7 +761,7 @@ Decimal.config({ toExpPos: 0 })</pre>
     </p>
     <p>
       The value that determines whether Decimal Errors are thrown.<br />
-      If <code>errors</code> is false, this library will not throw errors.
+      If <code>errors</code> is false, no erros will be thrown.
     </p>
     <p>See <a href='#Errors'>Errors</a>.</p>
     <pre>Decimal.config({ errors: false })
@@ -851,7 +851,6 @@ Decimal.modulo                     // 9</pre>
       <a href='#errors'><code>errors</code></a> is <code>true</code>, an error will be thrown if the
       <code>crypto</code> methods are unavailable.
     </p>
-    </p>
     <pre>
 Decimal.crypto                     // false
 Decimal.config({ crypto: true })</pre>
@@ -864,7 +863,7 @@ Decimal.config({ crypto: true })</pre>
 
 
     <h5 id="format">format</h5>
-    <p><i>object</i>
+    <p><i>object</i></p>
     <p>
       The <code>format</code> object configures the format of the string returned by the
       <a href='#toFo'><code>toFormat</code></a> method.
@@ -1558,7 +1557,7 @@ x.times('-a', 16)                   // '-6'</pre>
       have the same value as this Decimal.
     </p>
     <p>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
+      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
       <a href='#rounding'><code>rounding</code></a> is used.
     </p>
     <p>
@@ -1648,7 +1647,7 @@ y.toExponential(3)             // '4.560e+1'</pre>
       returns exponential notation.
     </p>
     <p>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
+      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
       <a href='#rounding'><code>rounding</code></a> is used.
     </p>
     <p>
@@ -1691,7 +1690,7 @@ y.toFixed(5)             // '3.45600'</pre>
       not rounded to a fixed number of decimal places.
     </p>
      <p>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
+      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
       <a href='#rounding'><code>rounding</code></a> is used.
     </p>
     <pre>
@@ -1933,7 +1932,7 @@ new Decimal(28).pow('6.166675020000903537297764507632802193308677149')
       the same as <code><a href='#toS'>toString</a></code>.
     </p>
     <p>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
+      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
       <a href='#rounding'><code>rounding</code></a> is used.
     </p>
     <p>
@@ -1970,7 +1969,7 @@ y.toPrecision(5)               // '45.600'</pre>
       be rounded to <a href='#precision'><code>precision</code></a> significant digits.
     </p>
     <p>
-      if <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
+      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
       <a href='#rounding'><code>rounding</code></a> will be used.
     </p>
     <p>

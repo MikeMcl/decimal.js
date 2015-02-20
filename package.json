@@ -1,7 +1,7 @@
 {
   "name": "decimal.js",
   "description": "An arbitrary-precision Decimal type for JavaScript.",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "keywords": [
     "arbitrary",
     "precision",
@@ -31,6 +31,6 @@
   "license": "MIT",
   "scripts": {
     "test": "node ./test/every-test.js",
-    "build": "uglifyjs decimal.js -c -m -o decimal.min.js --preamble '/* decimal.js v4.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */'"
+    "build": "uglifyjs decimal.js --source-map doc/decimal.js.map -c -m -o decimal.min.js --preamble \"/* decimal.js v4.0.2 https://github.com/MikeMcl/decimal.js/LICENCE */\""
   }
 }

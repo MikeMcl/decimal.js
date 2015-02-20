@@ -184,7 +184,7 @@ then
 
 will create *decimal.min.js*.
 
-The *decimal.min.js* already present was created with *Microsoft Ajax Minifier 5.11*.
+A source map will also be created in the *doc* directory.
 
 ## Feedback
 
@@ -203,6 +203,9 @@ MIT Expat.
 See LICENCE.
 
 ## Change Log
+
+####4.0.2
+* 20/02/2015 Add bower.json. Add source map. Amend travis CI. Amend doc/comments.
 
 ####4.0.1
 * 11/12/2014 Assign correct constructor when duplicating a Decimal.
