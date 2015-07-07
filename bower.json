@@ -27,9 +27,8 @@
   "license": "MIT",
   "ignore": [
     ".*",
-    "doc",
-    "test",
-    "package.json"
+    "*.json",
+    "test"
   ]
 }
 
