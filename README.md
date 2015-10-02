@@ -204,6 +204,9 @@ See LICENCE.
 
 ## Change Log
 
+####4.0.3
+* 2/10/2015 Internal round function bugfix.
+
 ####4.0.2
 * 20/02/2015 Add bower.json. Add source map. Amend travis CI. Amend doc/comments.
 
