@@ -1735,7 +1735,7 @@
      * [b] {number} Base. Integer, 2 to 64 inclusive.
      *
      */
-     P['toString'] = function (b) {
+    P['toString'] = function (b) {
         var u, str, strL,
             x = this,
             Decimal = x['constructor'],
@@ -2085,9 +2085,9 @@
             r = r || xc[pr + 1] != null;
 
             if ( rm < 4
-              ? ( i != null || r ) && ( rm == 0 || rm == ( x['s'] < 0 ? 3 : 2 ) )
+              ? ( i != null || r ) && ( rm == 0 || rm == ( sign < 0 ? 3 : 2 ) )
               : i > j || i == j && ( rm == 4 || r || rm == 6 && xc[pr - 1] & 1 ||
-                rm == ( x['s'] < 0 ? 8 : 7 ) ) ) {
+                rm == ( sign < 0 ? 8 : 7 ) ) ) {
 
                 xc.length = pr;
 
@@ -2136,6 +2136,7 @@
             return str;
         };
     })();
+
 
 
     /*
@@ -2695,6 +2696,8 @@
     }
 
 
+
+
     /*
      * Use 'exponentiation by squaring' for small integers. Called by convertBase and pow.
      */
@@ -2988,7 +2991,7 @@
                     sd -= x['e'] + 1;
 
                     // 1, 0.1, 0.01, 0.001, 0.0001 etc.
-                    xc[0] = mathpow( 10, sd % LOGBASE );
+                    xc[0] = mathpow( 10, ( LOGBASE - sd % LOGBASE ) % LOGBASE );
                     x['e'] = -sd || 0;
                 } else {
 
@@ -3358,6 +3361,8 @@
          *
         function floor(n) { return new this(n)['floor']() }
          */
+
+
 
 
         /*
