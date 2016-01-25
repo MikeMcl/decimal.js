@@ -14,7 +14,6 @@ An arbitrary-precision Decimal type for JavaScript.
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
   - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
-  - 8 KB minified and gzipped
 
 ![API](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/API.png)
 
