@@ -10,7 +10,7 @@ html{font-size:100%}
 body{background:#fff;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;
   line-height:1.65em;min-height:100%;margin:0}
 body,i{color:#000}
-.nav{background:#fff;position:fixed;top:0;bottom:0;left:0;width:200px;overflow-y:auto;
+.nav{background:#fff;position:fixed;top:0;bottom:0;left:0;width:210px;overflow-y:auto;
   padding:15px 0 30px 15px}
 div.container{width:600px;margin:50px 0 50px 240px}
 p{margin:0 0 1em;width:600px}
@@ -47,7 +47,6 @@ pre{background:#f5f5f5;white-space:pre-wrap;word-wrap:break-word;border-left:5px
 code,.nav-title{color:#f00}
 .end{margin-bottom:25px}
 .centre{text-align:center}
-.error-table{font-size:13px;width:100%}
 #modes,#configProps{color:#f00}
 .spacer{line-height:0px}
 #faq{margin:3em 0 0}
@@ -66,33 +65,58 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
 
     <a href="#methods">Methods</a>
     <ul>
-      <li><a href="#Dconfig">config</a></li>
-      <li><a href="#Dconstr">constructor</a></li>
-      <li><a href="#Dexp">   exp</a></li>
-      <li><a href="#Dln">    ln</a></li>
-      <li><a href="#Dlog">   log</a></li>
-      <li><a href="#Dmax">   max</a></li>
-      <li><a href="#Dmin">   min</a></li>
-      <li><a href="#DnoCon"> noConflict</a></li>
-      <li><a href="#Dpow">   pow</a></li>
-      <li><a href="#Drand">  random</a></li>
-      <li><a href="#Dsqrt">  sqrt</a></li>
+      <li><a href="#Dabs"       >abs</a></li>
+      <li><a href="#Dacos"      >acos</a></li>
+      <li><a href="#Dacosh"     >acosh</a></li>
+      <li><a href="#Dadd"       >add</a></li>
+      <li><a href="#Dasin"      >asin</a></li>
+      <li><a href="#Dasinh"     >asinh</a></li>
+      <li><a href="#Datan"      >atan</a></li>
+      <li><a href="#Datanh"     >atanh</a></li>
+      <li><a href="#Datan2"     >atan2</a></li>
+      <li><a href="#Dcbrt"      >cbrt</a></li>
+      <li><a href="#Dceil"      >ceil</a></li>
+      <li><a href="#Dclone"     >clone</a></li>
+      <li><a href="#Dconfig"    >config</a></li>
+      <li><a href="#Dcos"       >cos</a></li>
+      <li><a href="#Dcosh"      >cosh</a></li>
+      <li><a href="#Ddiv"       >div</a></li>
+      <li><a href="#Dexp"       >exp</a></li>
+      <li><a href="#Dfloor"     >floor</a></li>
+      <li><a href="#DfromJSON"  >fromJSON</a></li>
+      <li><a href="#Dhypot"     >hypot</a></li>
+      <li><a href="#Dln"        >ln</a></li>
+      <li><a href="#Dlog"       >log</a></li>
+      <li><a href="#Dlog2"      >log2</a></li>
+      <li><a href="#Dlog10"     >log10</a></li>
+      <li><a href="#Dmax"       >max</a></li>
+      <li><a href="#Dmin"       >min</a></li>
+      <li><a href="#Dmod"       >mod</a></li>
+      <li><a href="#Dmul"       >mul</a></li>
+      <li><a href="#DnoConflict">noConflict</a></li>
+      <li><a href="#Dpow"       >pow</a></li>
+      <li><a href="#Drandom"    >random</a></li>
+      <li><a href="#Dround"     >round</a></li>
+      <li><a href="#Dsign"      >sign</a></li>
+      <li><a href="#Dsin"       >sin</a></li>
+      <li><a href="#Dsinh"      >sinh</a></li>
+      <li><a href="#Dsqrt"      >sqrt</a></li>
+      <li><a href="#Dsub"       >sub</a></li>
+      <li><a href="#Dtan"       >tan</a></li>
+      <li><a href="#Dtanh"      >tanh</a></li>
+      <li><a href="#Dtrunc"     >trunc</a></li>
     </ul>
 
     <a href="#constructor-properties">Properties</a>
     <ul>
-      <li><a href="#one"      >ONE</a></li>
-      <li class='spacer'>&nbsp;</li>
       <li><a href="#precision">precision</a></li>
       <li><a href="#rounding" >rounding</a></li>
       <li><a href="#minE"     >minE</a></li>
       <li><a href="#maxE"     >maxE</a></li>
       <li><a href="#toExpNeg" >toExpNeg</a></li>
       <li><a href="#toExpPos" >toExpPos</a></li>
-      <li><a href="#errors"   >errors</a></li>
       <li><a href="#modulo"   >modulo</a></li>
       <li><a href="#crypto"   >crypto</a></li>
-      <li><a href="#format"   >format</a></li>
       <li class='spacer'>&nbsp;</li>
       <li><a href="#modes">ROUND_UP</a></li>
       <li><a href="#modes">ROUND_DOWN</a></li>
@@ -110,59 +134,76 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
 
     <a href="#prototype-methods">Methods</a>
     <ul>
-      <li><a href="#abs"    >absoluteValue       </a><span>abs</span>     </li>
-      <li><a href="#ceil"   >ceil                </a>                     </li>
-      <li><a href="#cmp"    >comparedTo          </a><span>cmp</span>     </li>
-      <li><a href="#dp"     >decimalPlaces       </a><span>dp</span>      </li>
-      <li><a href="#div"    >dividedBy           </a><span>div</span>     </li>
-      <li><a href="#divInt" >dividedToIntegerBy  </a><span>divToInt</span></li>
-      <li><a href="#eq"     >equals              </a><span>eq</span>      </li>
-      <li><a href="#exp"    >exponential         </a><span>exp</span>     </li>
-      <li><a href="#floor"  >floor               </a>                     </li>
-      <li><a href="#gt"     >greaterThan         </a><span>gt</span>      </li>
-      <li><a href="#gte"    >greaterThanOrEqualTo</a><span>gte</span>     </li>
-      <li><a href="#isF"    >isFinite            </a>                     </li>
-      <li><a href="#isInt"  >isInteger           </a><span>isInt</span>   </li>
-      <li><a href="#isNaN"  >isNaN               </a>                     </li>
-      <li><a href="#isNeg"  >isNegative          </a><span>isNeg</span>   </li>
-      <li><a href="#isZ"    >isZero              </a>                     </li>
-      <li><a href="#lt"     >lessThan            </a><span>lt</span>      </li>
-      <li><a href="#lte"    >lessThanOrEqualTo   </a><span>lte</span>     </li>
-      <li><a href="#log"    >logarithm           </a><span>log</span>     </li>
-      <li><a href="#minus"  >minus               </a>                     </li>
-      <li><a href="#mod"    >modulo              </a><span>mod</span>     </li>
-      <li><a href="#ln"     >naturalLogarithm    </a><span>ln</span>      </li>
-      <li><a href="#neg"    >negated             </a><span>neg</span>     </li>
-      <li><a href="#plus"   >plus                </a>                     </li>
-      <li><a href="#sd"     >precision           </a><span>sd</span>      </li>
-      <li><a href="#round"  >round               </a>                     </li>
-      <li><a href="#sqrt"   >squareRoot          </a><span>sqrt</span>    </li>
-      <li><a href="#times"  >times               </a>                     </li>
-      <li><a href="#toDP"   >toDecimalPlaces     </a><span>toDP</span>    </li>
-      <li><a href="#toE"    >toExponential       </a>                     </li>
-      <li><a href="#toFi"   >toFixed             </a>                     </li>
-      <li><a href="#toFo"   >toFormat            </a>                     </li>
-      <li><a href="#toFr"   >toFraction          </a>                     </li>
-      <li><a href="#toJSON" >toJSON              </a>                     </li>
-      <li><a href="#toNear" >toNearest           </a>                     </li>
-      <li><a href="#toNum"  >toNumber            </a>                     </li>
-      <li><a href="#pow"    >toPower             </a><span>pow</span>     </li>
-      <li><a href="#toP"    >toPrecision         </a>                     </li>
-      <li><a href="#toSD"   >toSignificantDigits </a><span>toSD</span>    </li>
-      <li><a href="#toS"    >toString            </a>                     </li>
-      <li><a href="#trunc"  >truncated           </a><span>trunc</span>   </li>
-      <li><a href="#valueOf">valueOf             </a>                     </li>
+      <li><a href="#abs"          >absoluteValue           </a><span>abs</span>     </li>
+      <li><a href="#ceil"         >ceil                    </a>                     </li>
+      <li><a href="#cmp"          >comparedTo              </a><span>cmp</span>     </li>
+      <li><a href="#cos"          >cosine                  </a><span>cos</span>     </li>
+      <li><a href="#cbrt"         >cubeRoot                </a><span>cbrt</span>    </li>
+      <li><a href="#dp"           >decimalPlaces           </a><span>dp</span>      </li>
+      <li><a href="#div"          >dividedBy               </a><span>div</span>     </li>
+      <li><a href="#divToInt"     >dividedToIntegerBy      </a><span>divToInt</span></li>
+      <li><a href="#eq"           >equals                  </a><span>eq</span>      </li>
+      <li><a href="#floor"        >floor                   </a>                     </li>
+      <li><a href="#gt"           >greaterThan             </a><span>gt</span>      </li>
+      <li><a href="#gte"          >greaterThanOrEqualTo    </a><span>gte</span>     </li>
+      <li><a href="#cosh"         >hyperbolicCosine        </a><span>cosh</span>    </li>
+      <li><a href="#sinh"         >hyperbolicSine          </a><span>sinh</span>    </li>
+      <li><a href="#tanh"         >hyperbolicTangent       </a><span>tanh</span>    </li>
+      <li><a href="#acos"         >inverseCosine           </a><span>acos</span>    </li>
+      <li><a href="#acosh"        >inverseHyperbolicCosine </a><span>acosh</span>   </li>
+      <li><a href="#asinh"        >inverseHyperbolicSine   </a><span>asinh</span>   </li>
+      <li><a href="#atanh"        >inverseHyperbolicTangent</a><span>atanh</span>   </li>
+      <li><a href="#asin"         >inverseSine             </a><span>asin</span>    </li>
+      <li><a href="#atan"         >inverseTangent          </a><span>atan</span>    </li>
+      <li><a href="#isFinite"     >isFinite                </a>                     </li>
+      <li><a href="#isInt"        >isInteger               </a><span>isInt</span>   </li>
+      <li><a href="#isNaN"        >isNaN                   </a>                     </li>
+      <li><a href="#isNeg"        >isNegative              </a><span>isNeg</span>   </li>
+      <li><a href="#isPos"        >isPositive              </a><span>isPos</span>   </li>
+      <li><a href="#isZero"       >isZero                  </a>                     </li>
+      <li><a href="#lt"           >lessThan                </a><span>lt</span>      </li>
+      <li><a href="#lte"          >lessThanOrEqualTo       </a><span>lte</span>     </li>
+      <li><a href="#log"          >logarithm               </a><span>log</span>     </li>
+      <li><a href="#sub"          >minus                   </a><span>sub</span>     </li>
+      <li><a href="#mod"          >modulo                  </a><span>mod</span>     </li>
+      <li><a href="#exp"          >naturalExponential      </a><span>exp</span>     </li>
+      <li><a href="#ln"           >naturalLogarithm        </a><span>ln</span>      </li>
+      <li><a href="#neg"          >negated                 </a><span>neg</span>     </li>
+      <li><a href="#add"          >plus                    </a><span>add</span>     </li>
+      <li><a href="#sd"           >precision               </a><span>sd</span>      </li>
+      <li><a href="#round"        >round                   </a>                     </li>
+      <li><a href="#sin"          >sine                    </a><span>sin</span>     </li>
+      <li><a href="#sqrt"         >squareRoot              </a><span>sqrt</span>    </li>
+      <li><a href="#tan"          >tangent                 </a><span>tan</span>     </li>
+      <li><a href="#mul"          >times                   </a><span>mul</span>     </li>
+      <li><a href="#toBinary"     >toBinary                </a>                     </li>
+      <li><a href="#toDP"         >toDecimalPlaces         </a><span>toDP</span>    </li>
+      <li><a href="#toExponential">toExponential           </a>                     </li>
+      <li><a href="#toFixed"      >toFixed                 </a>                     </li>
+      <li><a href="#toFraction"   >toFraction              </a>                     </li>
+      <li><a href="#toHex"        >toHexadecimal           </a><span>toHex</span>   </li>
+      <li><a href="#toJSON"       >toJSON                  </a>                     </li>
+      <li><a href="#toNearest"    >toNearest               </a>                     </li>
+      <li><a href="#toNumber"     >toNumber                </a>                     </li>
+      <li><a href="#toOctal"      >toOctal                 </a>                     </li>
+      <li><a href="#pow"          >toPower                 </a><span>pow</span>     </li>
+      <li><a href="#toPrecision"  >toPrecision             </a>                     </li>
+      <li><a href="#toSD"         >toSignificantDigits     </a><span>toSD</span>    </li>
+      <li><a href="#toString"     >toString                </a>                     </li>
+      <li><a href="#trunc"        >truncated               </a><span>trunc</span>   </li>
+      <li><a href="#valueOf"      >valueOf                 </a>                     </li>
     </ul>
 
     <a href="#instance-properties">Properties</a>
     <ul>
-      <li><a href="#coefficient">c: coefficient</a></li>
-      <li><a href="#exponent"   >e: exponent</a></li>
-      <li><a href="#sign"       >s: sign</a></li>
+      <li><a href="#digits"  >d</a><span>digits</span></li>
+      <li><a href="#exponent">e</a><span>exponent</span></li>
+      <li><a href="#sign"    >s</a><span>sign</span></li>
     </ul>
 
     <a href="#zero-nan-infinity">Zero, NaN &amp; Infinity</a>
     <a href="#Errors">Errors</a>
+    <a href="#Pi">Pi</a>
     <a class='end' href="#faq">FAQ</a>
 
   </div>
@@ -186,17 +227,20 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
     </p><br />
     <p>
       When the library is loaded, it defines a single function object,
-      <a href='#decimal'><code>Decimal</code></a>, the constructor of Decimal numbers.
+      <a href='#decimal'><code>Decimal</code></a>, the constructor of Decimal instances.
     </p>
     <p>
-      Multiple Decimal constructors can be created, each with their own independent configuration,
-      e.g. precision and range, which applies to all Decimal numbers created from it.
+      <i>
+        If necessary, multiple Decimal constructors can be created, each with their own independent
+        configuration, e.g. precision and range, which applies to all Decimal instances created from
+        it.
+      </i>
     </p>
     <p>
-      A new Decimal constructor is created by calling the
-      <code><a href='#Dconstr'>constructor</a></code> method of an already existing Decimal
-      constructor - when the library is loaded this will be
-      <a href='#decimal'><code>Decimal</code></a>.
+      <i>
+        A new Decimal constructor is created by calling the <code><a href='#Dclone'>clone</a></code>
+        method of an already existing Decimal constructor.
+      </i>
     </p>
 
 
@@ -204,76 +248,43 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
     <h3 class='end'>CONSTRUCTOR</h3>
 
     <h5 id="decimal">
-      Decimal<code class='inset'>Decimal(value [, base]) <i>&rArr; Decimal</i></code>
+      Decimal<code class='inset'>Decimal(value) <i>&rArr; Decimal</i></code>
     </h5>
     <dl>
-      <dt><code>value</code></dt>
-      <dd><i>number|string|Decimal</i></dd>
-      <dd>A numeric value.</dd>
+      <dt><code>value</code>: <i>number|string|Decimal</i></dt>
       <dd>
-        Legitimate values include &plusmn;<code>0</code>, &plusmn;<code>Infinity</code> and
-        <code>NaN</code>.
+        A legitimate <code>value</code> is an integer or float, including <code>&plusmn;0</code>, or
+        is <code>&plusmn;Infinity</code>, or <code>NaN</code>.
       </dd>
       <dd>
-        Values of type <em>number</em> with more than 15 significant digits are considered invalid
-        (if <a href='#errors'><code>errors</code></a> is true) as calling
-        <code><a href='#toS'>toString</a></code> or <code><a href='#valueOf'>valueOf</a></code> on
-        such numbers may not result in the intended value.
-        <pre>console.log( 823456789123456.3 );    // 823456789123456.2</pre>
+        The number of digits of <code>value</code> is not limited, except by JavaScript's maximum
+        array size and, in practice, the processing time required.
       </dd>
       <dd>
-        There is no limit to the number of digits of a value of type <em>string</em> (other than
-        that of JavaScript's maximum array size).
+        The allowable range of <code>value</code> is defined in terms of a maximum exponent, see
+        <a href='#maxE'>maxE</a>, and a minimum exponent, see <a href='#minE'>minE</a>.
       </dd>
       <dd>
-        See <a href='#minE'>minE</a> and <a href='#maxE'>maxE</a> for the allowable range of a
-        Decimal in terms of exponent limits.
+        As well as in decimal, a string <code>value</code> may be expressed in binary, hexadecimal
+        or octal, if the appropriate prefix is included: <code>0x</code> or <code>0X</code> for
+        hexadecimal, <code>0b</code> or <code>0B</code> for binary, and <code>0o</code> or
+        <code>0O</code> for octal.
       </dd>
       <dd>
-        Decimal string values may be in exponential, as well as normal (fixed-point) notation.
-        Non-decimal values must be in normal notation.
+        Both decimal and non-decimal string values may use exponential (floating-point), as well as
+        normal (fixed-point) notation.
       </dd>
       <dd>
-        String values in hexadecimal literal form, e.g. <code>'0xff'</code>, are invalid, and string
-        values in octal literal form will be interpreted as decimals, e.g. <code>'011'</code> is
-        interpreted as 11, not 9.
-      </dd>
-      <dd>Values in any base may have fraction digits.</dd>
-      <dd>
-        For bases from 10 to 36, lower and/or upper case letters can be used to represent values
-        from 10 to 35.
-      </dd>
-      <dd>
-        For bases above 36, <code>a-z</code> represents values from 10 to 35, <code>A-Z</code> from
-        36 to 61, and <code>$</code> and <code>_</code> represent 62 and 63 respectively.
+        In exponential notation, <code>e</code> or <code>E</code> defines a power-of-ten exponent
+        for decimal values, and <code>p</code> or <code>P</code> defines a power-of-two exponent for
+        non-decimal values, i.e. binary, hexadecimal or octal.
       </dd>
     </dl>
-    <dl>
-      <dt><code>base</code></dt>
-      <dd>
-        <i>number</i>: integer, <code>2</code> to <code>64</code> inclusive
-      </dd>
-      <dd>The base of <code>value</code>.</dd>
-      <dd>
-        If <code>base</code> is omitted or is <code>null</code> or undefined, base 10 is assumed.
-      </dd>
-    </dl>
-    <p>Returns a new instance of a Decimal object.</p>
-    <p>
-      If a base is specified, <code>value</code> is rounded according to the current
-      <a href='#precision'><code>precision</code></a> and
-      <a href='#rounding'><code>rounding</code></a> settings.
-    </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of an invalid <code>value</code> or
-      <code>base</code>.
-    </p>
+    <p>Returns a new Decimal object instance.</p>
+    <p>Throws on an invalid <code>value</code>.</p>
     <pre>
 x = new Decimal(9)                       // '9'
 y = new Decimal(x)                       // '9'
-
- // 'new' is optional if errors is false
-Decimal(435.345)
 
 new Decimal('5032485723458348569331745.33434346346912144534543')
 new Decimal('4.321e+4')                  // '43210'
@@ -282,40 +293,175 @@ new Decimal('5.6700000')                 // '5.67'
 new Decimal(Infinity)                    // 'Infinity'
 new Decimal(NaN)                         // 'NaN'
 new Decimal('.5')                        // '0.5'
-new Decimal('+2')                        // '2'
-new Decimal(-10110100.1, 2)              // '-180.5'
-new Decimal('123412421.234324', 5)       // '607236.557696'
-new Decimal('ff.8', 16)                  // '255.5'</pre>
-    <p>
-      The following throws <code>'not a base 2 number'</code> if
-      <a href='#errors'><code>errors</code></a> is true, otherwise it returns a Decimal with value
-      <code>NaN</code>.
-    </p>
-    <pre>new Decimal(9, 2)</pre>
-    <p>
-      The following throws <code>'number type has more than 15 significant digits'</code> if
-      <a href='#errors'><code>errors</code></a> is true, otherwise it returns a Decimal with value
-      <code>96517860459076820</code>.
-    </p>
-    <pre>new Decimal(96517860459076817.4395)</pre>
-    <p>
-      The following throws <code>'not a number'</code> if <a href='#errors'><code>errors</code></a>
-      is true, otherwise it returns a Decimal with value <code>NaN</code>.
-    </p>
-    <pre>new Decimal('blurgh')</pre>
-    <p>
-      A value is rounded only if a base is specified.
-    </p>
-    <pre>Decimal.config({ precision: 5 })
-new Decimal(1.23456789)                  // '1.23456789'
-new Decimal(1.23456789, 10)              // '1.2346'</pre>
+new Decimal('-0b10110100.1')             // '-180.5'
+new Decimal('0xff.8')                    // '255.5'
 
+new Decimal(0.046875)                    // '0.046875'
+new Decimal('0.046875000000')            // '0.046875'
 
+new Decimal(4.6875e-2)                   // '0.046875'
+new Decimal('468.75e-4')                 // '0.046875'
+
+new Decimal('0b0.000011')                // '0.046875'
+new Decimal('0o0.03')                    // '0.046875'
+new Decimal('0x0.0c')                    // '0.046875'
+
+new Decimal('0b1.1p-5')                  // '0.046875'
+new Decimal('0o1.4p-5')                  // '0.046875'
+new Decimal('0x1.8p-5')                  // '0.046875'</pre>
 
 
 
     <h4 id="methods">Methods</h4>
-    <p>The static methods of a Decimal constructor.</p>
+    <p>The methods of a Decimal constructor.</p>
+
+
+
+    <h5 id="Dabs">abs<code class='inset'>.abs(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#abs'>absoluteValue</a></code>.</p>
+    <pre>a = Decimal.abs(x)
+b = new Decimal(x).abs()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dacos">acos<code class='inset'>.acos(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#acos'>inverseCosine</a></code>.</p>
+    <pre>a = Decimal.acos(x)
+b = new Decimal(x).acos()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dacosh">acosh<code class='inset'>.acosh(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#acos'>inverseHyperbolicCosine</a></code>.</p>
+    <pre>a = Decimal.acosh(x)
+b = new Decimal(x).acosh()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dadd">add<code class='inset'>.add(x, y) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>See <code><a href='#add'>plus</a></code>.</p>
+    <pre>a = Decimal.add(x, y)
+b = new Decimal(x).plus(y)
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dasin">asin<code class='inset'>.asin(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#asin'>inverseSine</a></code>.</p>
+    <pre>a = Decimal.asin(x)
+b = new Decimal(x).asin()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dasinh">asinh<code class='inset'>.asinh(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#asin'>inverseHyperbolicSine</a></code>.</p>
+    <pre>a = Decimal.asinh(x)
+b = new Decimal(x).asinh()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Datan">atan<code class='inset'>.atan(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#atan'>inverseTangent</a></code>.</p>
+    <pre>a = Decimal.atan(x)
+b = new Decimal(x).atan()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Datanh">atanh<code class='inset'>.atanh(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#atan'>inverseHyperbolicTangent</a></code>.</p>
+    <pre>a = Decimal.atanh(x)
+b = new Decimal(x).atanh()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Datan2">atan2<code class='inset'>.atan2(y, x) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>y</code>: <i>number|string|Decimal</i><br />
+      <code>x</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>
+      Returns a new Decimal whose value is the inverse tangent in radians of the quotient of
+      <code>y</code> and <code>x</code>, rounded to <a href='#precision'><code>precision</code></a>
+      significant digits using rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      The signs of <code>y</code> and <code>x</code> are used to determine the quadrant of the
+      result.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-pi, pi</code>]
+    </p>
+    <p>
+      See <a href='#Pi'><code>Pi</code></a> and
+      <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/atan2'><code>Math.atan2()</code>.</a>
+    </p>
+    <pre>r = Decimal.atan2(y, x)</pre>
+
+
+
+    <h5 id="Dcbrt">cbrt<code class='inset'>.cbrt(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#cbrt'>cubeRoot</a></code>.</p>
+    <pre>a = Decimal.cbrt(x)
+b = new Decimal(x).cbrt()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dceil">ceil<code class='inset'>.ceil(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#ceil'>ceil</a></code>.</p>
+    <pre>a = Decimal.ceil(x)
+b = new Decimal(x).ceil()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dclone">
+      clone
+      <code class='inset'>.clone([object]) <i>&rArr; Decimal constructor</i></code>
+    </h5>
+    <p><code>object</code>: <i>object</i></p>
+    <p>
+      Returns a new independent Decimal constructor with configuration settings as described by
+      <code>object</code> (see <a href='#Dconfig'><code>config</code></a>), or with the same
+      settings as <code>this</code> Decimal constructor if <code>object</code> is omitted.
+    </p>
+    <pre>Decimal.config({ precision: 5 })
+D9 = Decimal.clone({ precision: 9 })
+
+a = new Decimal(1)
+b = new D9(1)
+
+a.div(3)                           // 0.33333
+b.div(3)                           // 0.333333333
+
+// D9 = Decimal.clone({ precision: 9 }) is equivalent to:
+D9 = Decimal.clone()
+D9.config({ precision: 9 })</pre>
+    <p>
+      It is not inefficient in terms of memory usage to use multiple Decimal constructors as
+      functions are shared between them.
+    </p>
 
 
 
@@ -323,8 +469,11 @@ new Decimal(1.23456789, 10)              // '1.2346'</pre>
       config<code class='inset'>.config(object) <i>&rArr; Decimal constructor</i></code>
     </h5>
     <p><code>object</code>: <i>object</i></p>
-    <p>Configures the 'global' settings for this particular Decimal constructor.</p>
-    <p>Returns this Decimal constructor.</p>
+    <p>
+      Configures the 'global' settings for <code>this</code> particular Decimal constructor, i.e.
+      the settings which apply to operations performed on the Decimal instances created by it.
+    </p>
+    <p>Returns <code>this</code> Decimal constructor.</p>
     <p>
       The configuration object, <code>object</code>, can contain some or all of the properties
       described in detail at <a href="#constructor-properties">Properties</a> and shown in the
@@ -332,12 +481,9 @@ new Decimal(1.23456789, 10)              // '1.2346'</pre>
     </p>
     <p>
       The values of the configuration object properties are checked for validity and then stored as
-      equivalently-named properties of this Decimal constructor.
+      equivalently-named properties of <code>this</code> Decimal constructor.
     </p>
-    <p>
-      If the value to be assigned to any of the properties is <code>null</code> or undefined
-      it is ignored.<br />See <a href='#Errors'>Errors</a> for the treatment of invalid values.
-    </p>
+    <p>Throws on an invalid <code>object</code> or configuration property value.</p>
     <pre>
 // Defaults
 Decimal.config({
@@ -345,144 +491,210 @@ Decimal.config({
     rounding: 4,
     toExpNeg: -7,
     toExpPos: 21,
-    minE: -9e15,
     maxE: 9e15,
-    errors: true,
-    crypto: false,
+    minE: -9e15,
     modulo: 1,
-    format: {
-        decimalSeparator : '.',
-        groupSeparator : ',',
-        groupSize : 3,
-        secondaryGroupSize : 0,
-        fractionGroupSeparator : '\xA0',    // non-breaking space
-        fractionGroupSize : 0
-    }
+    crypto: undefined
 })</pre>
     <p>
       The properties of a Decimal constructor can also be set by direct assignment, but that will
-      obviously by-pass the validity checking that this method performs.
+      by-pass the validity checking that this method performs - which is not a problem if the user
+      knows that the checks are unnecessary.
     </p>
 
 
 
-    <h5 id="Dconstr">
-      constructor
-      <code class='inset'>.constructor([object]) <i>&rArr; Decimal constructor</i></code>
+    <h5 id="Dcos">cos<code class='inset'>.cos(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#cos'>cosine</a></code>.</p>
+    <pre>a = Decimal.cos(x)
+b = new Decimal(x).cos()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dcosh">cosh<code class='inset'>.cosh(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#cos'>hyperbolicCosine</a></code>.</p>
+    <pre>a = Decimal.cosh(x)
+b = new Decimal(x).cosh()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Ddiv">div<code class='inset'>.div(x, y) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>See <code><a href='#div'>dividedBy</a></code>.</p>
+    <pre>a = Decimal.div(x, y)
+b = new Decimal(x).div(y)
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dexp">exp<code class='inset'>.exp(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#exp'>naturalExponential</a></code>.</p>
+    <pre>a = Decimal.exp(x)
+b = new Decimal(x).exp()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dfloor">floor<code class='inset'>.floor(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#floor'>floor</a></code>.</p>
+    <pre>a = Decimal.floor(x)
+b = new Decimal(x).floor()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="DfromJSON">fromJSON<code class='inset'>.fromJSON(s) <i>&rArr; Decimal</i></code></h5>
+    <p><code>s</code>: <i>string</i><br /></p>
+    <p>
+      Returns a new Decimal whose value is the same as the value of the Decimal that created string
+      <code>s</code> from a <a href='#toJSON'><code>toJSON</code></a> call.
+    </p>
+    <p>See <a href='#toJSON'><code>toJSON</code></a>.</p>
+    <pre>
+a = new Decimal(x)
+s = a.toJSON()
+b = Decimal.fromJSON(s)
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dhypot">
+      hypot<code class='inset'>.hypot([x [, y, ...]]) <i>&rArr; Decimal</i></code>
     </h5>
-    <p><code>object</code>: <i>object</i></p>
     <p>
-      Returns a new independent Decimal constructor with configuration settings as described by
-      <code>object</code> (see <a href='#Dconfig'><code>config</code></a>).
-    </p>
-    <pre>Decimal.config({ precision: 5 })
-D9 = Decimal.constructor({ precision: 9 })
-
-x = new Decimal(1)
-y = new D9(1)
-
-x.div(3)                           // 0.33333
-y.div(3)                           // 0.333333333
-
-// D9 = Decimal.constructor({ precision: 9 }) is equivalent to:
-D9 = Decimal.constructor()
-D9.config({ precision: 9 })</pre>
-    <p>
-      It is not inefficient in terms of memory usage to use multiple Decimal constructors as
-      functions are shared between them.
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
     </p>
     <p>
-      <code>constructor</code> is a factory method so it is not necessary or desirable to use
-      <code>new</code> but it will do no harm.
+      Returns a new Decimal whose value is the square root of the sum of the squares of the
+      arguments, rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
     </p>
-    <pre>D = new Decimal.constructor()</pre>
+    <pre>r = Decimal.hypot(x, y)</pre>
 
 
 
-    <h5 id="Dexp">exp<code class='inset'>.exp() <i>&rArr; Decimal</i></code></h5>
-    <p>See <code><a href='#exp'>exponential</a></code>.</p>
-    <pre>x = Decimal.exp(3)
-y = new Decimal(3).exp()
-x.equals(y)                    // true</pre>
-
-
-
-    <h5 id="Dln">ln<code class='inset'>.ln() <i>&rArr; Decimal</i></code></h5>
+    <h5 id="Dln">ln<code class='inset'>.ln(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>See <code><a href='#ln'>naturalLogarithm</a></code>.</p>
-    <pre>x = Decimal.ln(4.321)
-y = new Decimal(4.321).ln()
-x.equals(y)                    // true</pre>
+    <pre>a = Decimal.ln(x)
+b = new Decimal(x).ln()
+a.equals(b)                    // true</pre>
 
 
 
-    <h5 id="Dlog">log<code class='inset'>.log(arg [, base]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="Dlog">log<code class='inset'>.log(x [, base]) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>arg</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number|string|Decimal</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>base</code>: <i>number|string|Decimal</i>
     </p>
     <p>See <code><a href='#log'>logarithm</a></code>.</p>
-    <pre>x = Decimal.log(100, 2.5)
-y = new Decimal(100).log(2.5)
-x.equals(y)                    // true</pre>
+    <p>
+      The default base is <code>10</code>, which is not the same as JavaScript's
+      <code>Math.log()</code>, which returns the natural logarithm (base <code>e</code>).
+    </p>
+    <pre>a = Decimal.log(x, y)
+b = new Decimal(x).log(y)
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dlog2">log2<code class='inset'>.log2(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>
+      Returns a new Decimal whose value is the base <code>2</code> logarithm of <code>x</code>,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
+      mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <pre>r = Decimal.log2(x)</pre>
+
+
+
+    <h5 id="Dlog10">log10<code class='inset'>.log10(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>
+      Returns a new Decimal whose value is the base <code>10</code> logarithm of <code>x</code>,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
+      mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <pre>r = Decimal.log10(x)</pre>
 
 
 
     <h5 id="Dmax">
-      max<code class='inset'>.max([arg1 [, arg2, ...]]) <i>&rArr; Decimal</i></code>
+      max<code class='inset'>.max([x [, y, ...]]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>arg1</code>, <code>arg2</code>, ... : <i>number|string|Decimal</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
     </p>
-    <p>
-      Returns a new Decimal whose value is the maximum of <code>arg1</code>, <code>arg2</code>,... .
-    </p>
-    <p>Alternatively, the argument to this method can be an array of values.</p>
-    <pre>x = new Decimal('3257869345.0378653')
-Decimal.max(4e9, x, '123456789.9')          // '4000000000'
-
-arr = [12, '13', new Decimal(14)]
-Decimal.max(arr)                            // '14'</pre>
+    <p>Returns a new Decimal whose value is the maximum of the <code>arguments</code>.</p>
+    <pre>r = Decimal.max(x, y, z)</pre>
 
 
 
     <h5 id="Dmin">
-      min<code class='inset'>.min([arg1 [, arg2, ...]]) <i>&rArr; Decimal</i></code>
+      min<code class='inset'>.min([x [, y, ...]]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>arg1</code>, <code>arg2</code>, ... : <i>number|string|Decimal</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
     </p>
+    <p>Returns a new Decimal whose value is the minimum of the <code>arguments</code>.</p>
+    <pre>r = Decimal.min(x, y, z)</pre>
+
+
+
+    <h5 id="Dmod">mod<code class='inset'>.mod(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
-      Returns a new Decimal whose value is the minimum of <code>arg1</code>, <code>arg2</code>,... .
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
     </p>
-    <p>Alternatively, the argument to this method can be an array of values.</p>
-    <pre>x = new Decimal('3257869345.0378653')
-Decimal.min(4e9, x, '123456789.9')          // '123456789.9'
-
-arr = [2, new Decimal(-14), '-15.9999', -12]
-Decimal.min(arr)                            // '-15.9999'</pre>
+    <p>See <code><a href='#mod'>modulo</a></code>.</p>
+    <pre>a = Decimal.mod(x, y)
+b = new Decimal(x).mod(y)
+a.equals(b)                    // true</pre>
 
 
 
-    <h5 id="DnoCon">
+    <h5 id="Dmul">mul<code class='inset'>.mul(x, y) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>See <code><a href='#mul'>times</a></code>.</p>
+    <pre>a = Decimal.mul(x, y)
+b = new Decimal(x).mul(y)
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="DnoConflict">
       noConflict<code class='inset'>.noConflict() <i>&rArr; Decimal constructor</i></code>
     </h5>
     <p><i>Browsers only.</i></p>
     <p>
-      Reverts the <code>Decimal</code> variable to the value it had before this library
-      was loaded and returns a reference to the original Decimal constructor so it can be assigned
-      to a variable with a  different name.
+      Reverts the <code>Decimal</code> variable to the value it had before this library was loaded
+      and returns a reference to the original Decimal constructor so it can be assigned to a
+      variable with a different name.
     </p>
     <pre>
 &lt;script&gt; Decimal = 1 &lt;/script&gt;
 &lt;script src='/path/to/decimal.js'&gt;&lt;/script&gt;
 &lt;script&gt;
-  x = new Decimal(2)      // '2'
+  a = new Decimal(2)      // '2'
   D = Decimal.noConflict()
   Decimal                 // 1
-  y = new D(3)            // '3'
+  b = new D(3)            // '3'
 &lt;/script&gt;</pre>
 
 
@@ -490,69 +702,161 @@ Decimal.min(arr)                            // '-15.9999'</pre>
     <h5 id="Dpow">pow<code class='inset'>.pow(base, exponent) <i>&rArr; Decimal</i></code></h5>
     <p>
       <code>base</code>: <i>number|string|Decimal</i><br />
-      <code>exponent</code>: <i>number|string|Decimal</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      <code>exponent</code>: <i>number|string|Decimal</i>
     </p>
     <p>See <code><a href="#pow">toPower</a></code>.</p>
-    <pre>x = Decimal.pow(3257.4, 17.01)
-y = new Decimal(3257.4).pow(17.01)
-x.equals(y)                    // true</pre>
+    <pre>a = Decimal.pow(x, y)
+b = new Decimal(x).pow(y)
+a.equals(b)                    // true</pre>
 
 
 
-    <h5 id="Drand">
+    <h5 id="Drandom">
       random<code class='inset'>.random([dp]) <i>&rArr; Decimal</i></code>
     </h5>
-    <p><code>dp</code>: <i>number</i>: integer, 0 to 1e+9 inclusive</p>
+    <p><code>dp</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive</p>
     <p>
       Returns a new Decimal with a pseudo-random value equal to or greater than <code>0</code> and
       less than <code>1</code>.
     </p>
     <p>
-      The return value will have <code>dp</code></a> decimal places (or less if trailing zeros are
+      The return value will have <code>dp</code> decimal places (or less if trailing zeros are
       produced). If <code>dp</code> is omitted then the number of decimal places will
       default to the current <a href='#precision'><code>precision</code></a> setting.
     </p>
     <p>
-      Depending on the value of a Decimal constructor's <a href='#crypto'><code>crypto</code></a>
-      property and the support for the <code>crypto</code> object in the host environment, the
-      random digits of the return value are generated by either <code>Math.random</code> (fastest),
-      <code>crypto.getRandomValues</code> (Web Cryptography API in recent browsers) or
-      <code>crypto.randomBytes</code> (Node.js).
+      If the value of <code>this</code> Decimal constructor's
+      <a href='#crypto'><code>crypto</code></a> property is <code>undefined</code> or
+      <code>true</code>, and the <code>crypto</code> object is available in the host environment,
+      the random digits of the return value are generated by either
+      <code>crypto.getRandomValues</code> (Web Cryptography API in modern browsers) or
+      <code>crypto.randomBytes</code> (Node.js), otherwise, if the the value of the property is
+      <code>false</code>, or the <code>crypto</code> object is not available, the return value is
+      generated by <code>Math.random</code> (fastest).
     </p>
     <p>
-      If <a href='#crypto'><code>crypto</code></a> is <code>true</code>, i.e. one of the
-      <code>crypto</code> methods is to be used, the value of a returned Decimal should be
+      If the value of <code>this</code> Decimal constructor's
+      <a href='#crypto'><code>crypto</code></a> property is set <code>true</code> and the
+      <code>crypto</code> object and associated method are not available, an exception will be
+      thrown.
+    </p>
+    <p>
+      If one of the <code>crypto</code> methods is used, the value of the returned Decimal should be
       cryptographically-secure and statistically indistinguishable from a random value.
     </p>
     <pre>Decimal.config({ precision: 10 })
 Decimal.random()                    // '0.4117936847'
-
 Decimal.random(20)                  // '0.78193327636914089009'</pre>
 
 
 
+    <h5 id="Dround">round<code class='inset'>.round(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#round'>round</a></code>.</p>
+    <pre>a = Decimal.round(x)
+b = new Decimal(x).round()
+a.equals(b)                    // true</pre>
 
-    <h5 id="Dsqrt">sqrt<code class='inset'>.sqrt() <i>&rArr; Decimal</i></code></h5>
+
+
+    <h5 id="Dsign">sign<code class='inset'>.sign(x) <i>&rArr; number</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <table>
+      <tr><th>Returns</th><th>&nbsp;</th></tr>
+      <tr>
+        <td class='centre'><code>1</code></td>
+        <td>if the value of <code>x</code> is non-zero and its sign is positive</td>
+      </tr>
+      <tr>
+        <td class='centre'><code>-1</code></td>
+        <td>if the value of <code>x</code> is non-zero and its sign is negative</td>
+      </tr>
+      <tr>
+        <td class='centre'><code>0</code></td>
+        <td>if the value of <code>x</code> is positive zero</td>
+      </tr>
+      <tr>
+        <td class='centre'><code>-0</code></td>
+        <td>if the value of <code>x</code> is negative zero</td>
+      </tr>
+      <tr>
+        <td class='centre'><code>NaN</code></td>
+        <td>if the value of <code>x</code> is <code>NaN</code></td>
+      </tr>
+    </table>
+    <pre>r = Decimal.sign(x)</pre>
+
+
+
+    <h5 id="Dsin">sin<code class='inset'>.sin(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#sin'>sine</a></code>.</p>
+    <pre>a = Decimal.sin(x)
+b = new Decimal(x).sin()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dsinh">sinh<code class='inset'>.sinh(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#sin'>hyperbolicSine</a></code>.</p>
+    <pre>a = Decimal.sinh(x)
+b = new Decimal(x).sinh()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dsqrt">sqrt<code class='inset'>.sqrt(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>See <a href='#sqrt'>squareRoot</a>.</p>
-    <pre>x = Decimal.sqrt('987654321.123456789')
-y = new Decimal('987654321.123456789').sqrt()
-x.equals(y)                         // true</pre>
+    <pre>a = Decimal.sqrt(x)
+b = new Decimal(x).sqrt()
+a.equals(b)                         // true</pre>
 
+
+
+      <h5 id="Dsub">sub<code class='inset'>.sub(x, y) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>See <code><a href='#sub'>minus</a></code>.</p>
+    <pre>a = Decimal.sub(x, y)
+b = new Decimal(x).sub(y)
+a.equals(b)                    // true</pre>
+
+
+
+     <h5 id="Dtan">tan<code class='inset'>.tan(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#tan'>tangent</a></code>.</p>
+    <pre>a = Decimal.tan(x)
+b = new Decimal(x).tan()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dtanh">tanh<code class='inset'>.tanh(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#tan'>hyperbolicTangent</a></code>.</p>
+    <pre>a = Decimal.tanh(x)
+b = new Decimal(x).tanh()
+a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="Dtrunc">trunc<code class='inset'>.trunc(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>See <code><a href='#trunc'>truncated</a></code>.</p>
+    <pre>a = Decimal.trunc(x)
+b = new Decimal(x).trunc()
+a.equals(b)                    // true</pre>
 
 
 
 
     <h4 id="constructor-properties">Properties</h4>
-    <p>
-      The static properties of a Decimal constructor.
-    </p>
-
-
-
-    <h5 id="one">ONE</h5>
-    <p>A Decimal instance with value one.</p>
-    <pre>new Decimal(3).times(Decimal.ONE)    // '3'</pre>
+    <p>The properties of a Decimal constructor.</p>
 
 
 
@@ -561,23 +865,20 @@ x.equals(y)                         // true</pre>
       The values of the configuration properties <a href='#precision'><code>precision</code></a>,
       <a href='#rounding'><code>rounding</code></a>, <a href='#minE'><code>minE</code></a>,
       <a href='#maxE'><code>maxE</code></a>, <a href='#toExpNeg'><code>toExpNeg</code></a>,
-      <a href='#toExpPos'><code>toExpPos</code></a>, <a href='#errors'><code>errors</code></a>,
-      <a href='#modulo'><code>modulo</code></a>, <a href='#crypto'><code>crypto</code></a> and
-      <a href='#format'><code>format</code></a> are set using the
+      <a href='#toExpPos'><code>toExpPos</code></a>, <a href='#modulo'><code>modulo</code></a>, and
+      <a href='#crypto'><code>crypto</code></a> are set using the
       <a href='#Dconfig'><code>config</code></a> method.
     </p>
     <p>
       As simple object properties they can be set directly without using
       <a href='#Dconfig'><code>config</code></a>, and it is fine to do so, but the values assigned
-      will not then be checked for validity (the properties of the
-      <a href='#Dconfig'><code>format</code></a> object are not checked by
-      <code>config</code>). For example:
+      will not then be checked for validity. For example:
     </p>
     <pre>Decimal.config({ precision: 0 })
-// 'Decimal Error: config() precision out of range: 0'
+// '[DecimalError] Invalid argument: precision: 0'
 
 Decimal.precision = 0
-// No error is thrown and the results of calculations are unpredictable</pre>
+// No error is thrown and the results of calculations are unreliable</pre>
 
 
 
@@ -586,21 +887,16 @@ Decimal.precision = 0
       <i>number</i>: integer, <code>1</code> to <code>1e+9</code> inclusive<br />
       Default value: <code>20</code>
     </p>
+    <p>The <i>maximum</i> number of significant digits of the result of an operation.</p>
     <p>
-      The <i>maximum</i> number of significant digits of the result of a calculation or base
-      conversion.
-    </p>
-    <p>
-      All methods which return a Decimal will round the return value to <code>precision</code>
-      significant digits except <a href='#abs'><code>absoluteValue</code></a>,
+      All functions which return a Decimal will round the return value to <code>precision</code>
+      significant digits except <a href='#decimal'><code>Decimal</code></a>,
+      <a href='#abs'><code>absoluteValue</code></a>,
       <a href='#ceil'><code>ceil</code></a>, <a href='#floor'><code>floor</code></a>,
       <a href='#neg'><code>negated</code></a>, <a href='#round'><code>round</code></a>,
-      <a href='#toDP'><code>toDecimalPlaces</code></a>, <a href='#toNear'><code>toNearest</code></a>
-      and <a href='#trunc'><code>truncated</code></a>.
-    </p>
-    <p>
-      A Decimal constructor will also not round to <code>precision</code> unless a base is
-      specified.
+      <a href='#toDP'><code>toDecimalPlaces</code></a>,
+      <a href='#toNearest'><code>toNearest</code></a> and
+      <a href='#trunc'><code>truncated</code></a>.
     </p>
     <pre>Decimal.config({ precision: 5 })
 Decimal.precision                  // 5</pre>
@@ -613,13 +909,17 @@ Decimal.precision                  // 5</pre>
       Default value: <code>4</code> <a href="#h-up">(<code>ROUND_HALF_UP</code>)</a>
     </p>
     <p>
-      The default rounding mode used when rounding the result of a calculation or base conversion to
+      The default rounding mode used when rounding the result of an operation to
       <code><a href='#precision'>precision</a></code> significant digits, and when rounding the
       return value of the <a href='#round'><code>round</code></a>,
+      <a href='#toBinary'><code>toBinary</code></a>,
       <a href='#toDP'><code>toDecimalPlaces</code></a>,
-      <a href='#toE'><code>toExponential</code></a>, <a href='#toFi'><code>toFixed</code></a>,
-      <a href='#toFo'><code>toFormat</code></a>, <a href='#toNear'><code>toNearest</code></a>,
-      <a href='#toP'><code>toPrecision</code></a> and
+      <a href='#toExponential'><code>toExponential</code></a>,
+      <a href='#toFixed'><code>toFixed</code></a>,
+      <a href='#toHexadecimal'><code>toHexadecimal</code></a>,
+      <a href='#toNearest'><code>toNearest</code></a>,
+      <a href='#toOctal'><code>toOctal</code></a>,
+      <a href='#toPrecision'><code>toPrecision</code></a> and
       <a href='#toSD'><code>toSignificantDigits</code></a> methods.
     </p>
     <p>
@@ -642,7 +942,7 @@ Decimal.rounding                   // 0</pre>
     </p>
     <p>
       If the <code>Decimal</code> to be returned by a calculation would have an exponent lower than
-      <code>minE</code> then its value becomes zero.
+      <code>minE</code> then the value of that <code>Decimal</code> becomes zero.
     <p>
       JavaScript numbers underflow to zero for exponents below <code>-324</code>.
     </p>
@@ -671,7 +971,7 @@ new Decimal(0.0001)                // '0'          e is -4</pre>
     </p>
     <p>
       If the <code>Decimal</code> to be returned by a calculation would have an exponent higher than
-      <code>maxE</code> then its value becomes <code>Infinity</code>.
+      <code>maxE</code> then the value of that <code>Decimal</code> becomes <code>Infinity</code>.
     <p>
       JavaScript numbers overflow to <code>Infinity</code> for exponents above <code>308</code>.
     </p>
@@ -695,7 +995,7 @@ new Decimal(100000)                // 'Infinity'</pre>
       Default value: <code>-7</code>
     </p>
     <p>
-      The negative exponent value at and below which <a href='#toS'><code>toString</code></a>
+      The negative exponent value at and below which <a href='#toString'><code>toString</code></a>
       returns exponential notation.
     </p>
     <pre>Decimal.config({ toExpNeg: -7 })
@@ -711,13 +1011,9 @@ Decimal.config({ toExpNeg: 0 })</pre>
     </p>
     <p>
       Regardless of the value of <code>toExpNeg</code>, the
-      <a href='#toFi'><code>toFixed</code></a> method will always return a value in normal notation
-      and the <a href='#toE'><code>toExponential</code></a> method will always return a value in
-      exponential form.
-    </p>
-    <p>
-      Calling <a href='#toS'><code>toString</code></a> with a base argument, e.g.
-      <code>toString(10)</code>, will also always return normal notation.
+      <a href='#toFixed'><code>toFixed</code></a> method will always return a value in normal
+      notation and the <a href='#toExponential'><code>toExponential</code></a> method will always
+      return a value in exponential form.
     </p>
 
 
@@ -728,7 +1024,7 @@ Decimal.config({ toExpNeg: 0 })</pre>
       Default value: <code>20</code>
     </p>
     <p>
-      The positive exponent value at and above which <a href='#toS'><code>toString</code></a>
+      The positive exponent value at and above which <a href='#toString'><code>toString</code></a>
       returns exponential notation.
     </p>
     <pre>Decimal.config({ toExpPos: 2 })
@@ -744,28 +1040,10 @@ Decimal.config({ toExpPos: 0 })</pre>
     </p>
     <p>
       Regardless of the value of <code>toExpPos</code>, the
-      <a href='#toFi'><code>toFixed</code></a> method will always return a value in normal notation
-      and the <a href='#toE'><code>toExponential</code></a> method will always return a value in
-      exponential form.
+      <a href='#toFixed'><code>toFixed</code></a> method will always return a value in normal
+      notation and the <a href='#toExponential'><code>toExponential</code></a> method will always
+      return a value in exponential form.
     </p>
-    <p>
-      Calling <a href='#toS'><code>toString</code></a> with a base argument, e.g.
-      <code>toString(10)</code>, will also always return normal notation.
-    </p>
-
-
-
-    <h5 id="errors">errors</h5>
-    <p>
-      <i>boolean/number</i>: <code>true, false, 1 or 0</code><br /> Default value: <code>true</code>
-    </p>
-    <p>
-      The value that determines whether Decimal Errors are thrown.<br />
-      If <code>errors</code> is false, no erros will be thrown.
-    </p>
-    <p>See <a href='#Errors'>Errors</a>.</p>
-    <pre>Decimal.config({ errors: false })
-Decimal.errors                     // false</pre>
 
 
 
@@ -815,13 +1093,12 @@ Decimal.errors                     // false</pre>
          <td>EUCLID</td><td class='centre'>9</td>
          <td>
            The remainder is always positive.<br />
-           Euclidian division: <code>q = sign(n) * floor(a / abs(n))</code>.
+           Euclidian division: <code>q = sign(x) * floor(a / abs(x))</code>.
          </td>
        </tr>
     </table>
     <p>
-      The rounding/modulo modes are available as enumerated properties of the Decimal
-      constructor.
+      The rounding/modulo modes are available as enumerated properties of the Decimal constructor.
     </p>
     <pre>Decimal.config({ modulo: Decimal.EUCLID })
 Decimal.config({ modulo: 9 })      // equivalent
@@ -831,81 +1108,22 @@ Decimal.modulo                     // 9</pre>
 
     <h5 id="crypto">crypto</h5>
     <p>
-      <i>boolean/number</i>: <code>true, false, 1 or 0</code><br /> Default value:
-      <code>false</code>
+      <i>boolean</i>: <code>true/false/undefined</code><br /> Default value: <code>undefined</code>
     </p>
     <p>
-      The value that determines whether cryptographically-secure pseudo-random number generation
-      is used.
+      The value that determines whether cryptographically-secure pseudo-random number generation is
+      used.
     </p>
-    <p>
-      If <code>crypto</code> is truthy then the <a href='#Drand'><code>random</code></a> method will
-      generate random digits using <code>crypto.getRandomValues</code> in browsers that support it,
-      or <code>crypto.randomBytes</code> if using a version of Node.js that supports it.
-    </p>
-    <p>
-      If neither function is supported by the host environment or if <code>crypto</code> is falsey
-      then the source of randomness will be <code>Math.random</code>. If the <code>crypto</code>
-      property is set directly (i.e. without using <code>config</code>) to <code>true</code>, then
-      at the time the <code>random</code> method is called, if
-      <a href='#errors'><code>errors</code></a> is <code>true</code>, an error will be thrown if the
-      <code>crypto</code> methods are unavailable.
-    </p>
-    <pre>
-Decimal.crypto                     // false
-Decimal.config({ crypto: true })</pre>
-    <p>
-      If <code>crypto.getRandomValues</code> and <code>crypto.randomBytes</code> are undefined, the
-      crypto property will remain <code>false</code>.
-    </p>
-    <pre>Decimal.crypto                     // false</pre>
-
-
-
-    <h5 id="format">format</h5>
-    <p><i>object</i></p>
-    <p>
-      The <code>format</code> object configures the format of the string returned by the
-      <a href='#toFo'><code>toFormat</code></a> method.
-    </p>
-    <p>
-      The example below shows the properties of the <code>format</code> object
-      that are recognised, and their default values.
-    </p>
-    <p>
-      Unlike setting other properties using <code>config</code>, the values of the
-      properties of the <code>format</code> object will not be checked for validity. The existing
-      <code>format</code> object will simply be replaced by the object that is passed in. Only the
-      <a href='#toFo'><code>toFormat</code></a> method ever references a Decimal constructor's
-      <code>format</code> object property.
-    </p>
-    <p>
-      See <a href='#toFo'><code>toFormat</code></a> for examples of usage, and of setting
-      <code>format</code> properties individually and directly without using <code>config</code>.
-    </p>
-    <pre>
-Decimal.config({
-    format : {
-        // the decimal separator
-        decimalSeparator : '.',
-        // the grouping separator of the integer part of the number
-        groupSeparator : ',',
-        // the primary grouping size of the integer part of the number
-        groupSize : 3,
-        // the secondary grouping size of the integer part of the number
-        secondaryGroupSize : 0,
-        // the grouping separator of the fraction part of the number
-        fractionGroupSeparator : ' ',
-        // the grouping size of the fraction part of the number
-        fractionGroupSize : 0
-    }
-});</pre>
+    <p>See <a href='#Drandom'><code>random</code></a>.</p>
+    <pre>Decimal.crypto                     // undefined
+Decimal.config({ crypto: true })
+Decimal.crypto                     // true</pre>
 
 
 
     <h6 id="modes">Rounding modes</h6>
     <p>
-      The library's enumerated rounding modes are stored as properties of a Decimal constructor.
+      The library's enumerated rounding modes are stored as properties of the Decimal constructor.
       <br />They are not referenced internally by the library itself.
     </p>
     <p>Rounding modes 0 to 6 (inclusive) are the same as those of Java's BigDecimal class.</p>
@@ -949,22 +1167,21 @@ Decimal.rounding                   // 2</pre>
 
 
 
-
     <h3>INSTANCE</h3>
 
     <h4 id="prototype-methods">Methods</h4>
     <p>The methods inherited by a Decimal instance from its constructor's prototype object.</p>
-    <p>A Decimal is immutable in the sense that it is not changed by its methods.</p>
+    <p>A Decimal instance is immutable in the sense that it is not changed by its methods.</p>
     <p>Methods that return a Decimal can be chained:</p>
     <pre>x = new Decimal(2).times('999.999999999999999').dividedBy(4).ceil()</pre>
     <p>Methods do not round their arguments before execution.</p>
     <p>
-      The treatment of &plusmn;<code>0</code>, &plusmn;<code>Infinity</code> and <code>NaN</code>
+      The treatment of <code>&plusmn;0</code>, <code>&plusmn;Infinity</code> and <code>NaN</code>
       is consistent with how JavaScript treats these values.
     </p>
     <p>
-      Some method names have a shorter alias. (Internally, the library always uses the shorter method
-      names.)
+      Many method names have a shorter alias. (Internally, the library always uses the shorter
+      method names.)
     </p>
 
 
@@ -974,7 +1191,10 @@ Decimal.rounding                   // 2</pre>
       Returns a new Decimal whose value is the absolute value, i.e. the magnitude, of the value of
       this Decimal.
     </p>
-    <p>The return value is not rounded.</p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
     <pre>
 x = new Decimal(-0.8)
 y = x.absoluteValue()         // '0.8'
@@ -987,7 +1207,10 @@ z = y.abs()                   // '0.8'</pre>
       Returns a new Decimal whose value is the value of this Decimal rounded to a whole number in
       the direction of positive <code>Infinity</code>.
     </p>
-    <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
     <pre>
 x = new Decimal(1.3)
 x.ceil()                      // '2'
@@ -996,29 +1219,25 @@ y.ceil()                      // '-1'</pre>
 
 
 
-    <h5 id="cmp">comparedTo<code class='inset'>.cmp(n [, base]) <i>&rArr; number</i></code></h5>
-    <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
+    <h5 id="cmp">comparedTo<code class='inset'>.cmp(x) <i>&rArr; number</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <table>
       <tr><th>Returns</th><th>&nbsp;</th></tr>
       <tr>
         <td class='centre'><code>1</code></td>
-        <td>If the value of this Decimal is greater than the value of <code>n</code></td>
+        <td>if the value of this Decimal is greater than the value of <code>x</code></td>
       </tr>
       <tr>
         <td class='centre'><code>-1</code></td>
-        <td>If the value of this Decimal is less than the value of <code>n</code></td>
+        <td>if the value of this Decimal is less than the value of <code>x</code></td>
       </tr>
       <tr>
         <td class='centre'><code>0</code></td>
-        <td>If this Decimal and <code>n</code> have the same value</td>
+        <td>if this Decimal and <code>x</code> have the same value</td>
       </tr>
       <tr>
         <td class='centre'><code>null</code></td>
-        <td>If the value of either this Decimal or <code>n</code> is <code>NaN</code> </td>
+        <td>if the value of either this Decimal or <code>x</code> is <code>NaN</code> </td>
       </tr>
     </table>
     <pre>
@@ -1028,6 +1247,43 @@ x.comparedTo(y)                // 1
 x.comparedTo(x.minus(1))       // 0
 y.cmp(NaN)                     // null
 y.cmp('110', 2)                // -1</pre>
+
+
+
+    <h5 id="cos">cosine<code class='inset'>.cos() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the cosine of the value in radians of this Decimal,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
+      mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-1, 1</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0.25)
+x.cosine()                      // '0.96891242171064478414'
+y = new Decimal(-0.25)
+y.cos()                         // '0.96891242171064478414'</pre>
+
+
+
+    <h5 id="cbrt">cubeRoot<code class='inset'>.cbrt() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the cube root of this Decimal, rounded to
+      <a href='#precision'><code>precision</code></a> significant digits using rounding mode
+      <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      The return value will be correctly rounded, i.e. rounded as if the result was first calculated
+      to an infinite number of correct digits before rounding.
+    </p>
+    <pre>
+x = new Decimal(125)
+x.cubeRoot()                    // '5'
+y = new Decimal(3)
+y.cbrt()                        // '1.4422495703074083823'</pre>
 
 
 
@@ -1044,13 +1300,10 @@ y.dp()                         // '6'</pre>
 
 
 
-    <h5 id="div">dividedBy<code class='inset'>.div(n [, base]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="div">dividedBy<code class='inset'>.div(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br /><code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
-    <p>
-      Returns a new Decimal whose value is the value of this Decimal divided by <code>n</code>,
+      Returns a new Decimal whose value is the value of this Decimal divided by <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
       mode <a href='#rounding'><code>rounding</code></a>.
     </p>
@@ -1058,39 +1311,31 @@ y.dp()                         // '6'</pre>
 x = new Decimal(355)
 y = new Decimal(113)
 x.dividedBy(y)             // '3.14159292035398230088'
-x.div(5)                   // '71'
-x.div(47, 16)              // '5'</pre>
+x.div(5)                   // '71'</pre>
 
 
 
-    <h5 id="divInt">
-      dividedToIntegerBy<code class='inset'>.divToInt(n [, base]) <i>&rArr; Decimal</i></code>
+    <h5 id="divToInt">
+      dividedToIntegerBy<code class='inset'>.divToInt(x) <i>&rArr; Decimal</i></code>
     </h5>
-    <p>
-      <code>n</code>: <i>number|string|Decimal</i><br /><code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
       Return a new Decimal whose value is the integer part of dividing this Decimal by
-      <code>n</code>, rounded to <code><a href='#precision'>precision</a></code> significant digits
+      <code>x</code>, rounded to <code><a href='#precision'>precision</a></code> significant digits
       using rounding mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <pre>
 x = new Decimal(5)
 y = new Decimal(3)
 x.dividedToIntegerBy(y)     // '1'
-x.divToInt(0.7)             // '7'
-x.divToInt('0.f', 16)       // '5'</pre>
+x.divToInt(0.7)             // '7'</pre>
 
 
 
-    <h5 id="eq">equals<code class='inset'>.eq(n [, base]) <i>&rArr; boolean</i></code></h5>
+    <h5 id="eq">equals<code class='inset'>.eq(x) <i>&rArr; boolean</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br /><code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
-    <p>
-      Returns <code>true</code> if the value of this Decimal equals the value of <code>n</code>,
+      Returns <code>true</code> if the value of this Decimal equals the value of <code>x</code>,
       otherwise returns <code>false</code>.<br /> As with JavaScript, <code>NaN</code> does not
       equal <code>NaN</code>.
     </p>
@@ -1100,34 +1345,9 @@ x.divToInt('0.f', 16)       // '5'</pre>
 x = new Decimal(0)
 x.equals('1e-324')               // false
 new Decimal(-0).eq(x)            // true  ( -0 === 0 )
-new Decimal(255).eq('ff', 16)    // true
 
 y = new Decimal(NaN)
 y.equals(NaN)                    // false</pre>
-
-
-
-    <h5 id="exp">exponential<code class='inset'>.exp() <i>&rArr; Decimal</i></code></h5>
-    <p>
-      Returns a new Decimal whose value is the base <code>e</code> (Euler's number, the base of the
-      natural logarithm) exponential of the value of this Decimal, rounded to
-      <a href='#precision'><code>precision</code></a> significant digits using rounding mode
-      <a href='#rounding'><code>rounding</code></a>.
-    </p>
-    <p>
-      The <code><a href='#ln'>naturalLogarithm</a></code> function is the inverse of this function.
-    </p>
-    <pre>
-x = new Decimal(1)
-x.exponential()             // '2.7182818284590452354'
-y = new Decimal(2)
-y.exp()                     // '7.3890560989306502272'</pre>
-     <p>
-      The return value will be correctly rounded, i.e. rounded as if the result was first calculated
-      to an infinite number of correct digits before rounding. (The mathematical result of the
-      exponential function is non-terminating, unless its argument is <code>0</code>).
-    </p>
-    <p>The performance of this method degrades exponentially with increasing digits.</p>
 
 
 
@@ -1136,7 +1356,10 @@ y.exp()                     // '7.3890560989306502272'</pre>
       Returns a new Decimal whose value is the value of this Decimal rounded to a whole number in
       the direction of negative <code>Infinity</code>.
     </p>
-    <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
     <pre>
 x = new Decimal(1.8)
 x.floor()                   // '1'
@@ -1145,49 +1368,216 @@ y.floor()                   // '-2'</pre>
 
 
 
-    <h5 id="gt">greaterThan<code class='inset'>.gt(n [, base]) <i>&rArr; boolean</i></code></h5>
-    <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
+    <h5 id="gt">greaterThan<code class='inset'>.gt(x) <i>&rArr; boolean</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is greater than the value of
-      <code>n</code>, otherwise returns <code>false</code>.
+      <code>x</code>, otherwise returns <code>false</code>.
     </p>
     <p>Note: This method uses the <code>cmp</code> method internally.</p>
     <pre>
 0.1 &gt; (0.3 - 0.2)                            // true
 x = new Decimal(0.1)
 x.greaterThan(Decimal(0.3).minus(0.2))       // false
-new Decimal(0).gt(x)                         // false
-new Decimal(11, 3).gt(11.1, 2)               // true</pre>
+new Decimal(0).gt(x)                         // false</pre>
 
 
 
     <h5 id="gte">
-      greaterThanOrEqualTo<code class='inset'>.gte(n [, base]) <i>&rArr; boolean</i></code>
+      greaterThanOrEqualTo<code class='inset'>.gte(x) <i>&rArr; boolean</i></code>
     </h5>
-    <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is greater than or equal to the value
-      of <code>n</code>, otherwise returns <code>false</code>.
+      of <code>x</code>, otherwise returns <code>false</code>.
     </p>
     <p>Note: This method uses the <code>cmp</code> method internally.</p>
     <pre>
 (0.3 - 0.2) &gt;= 0.1                       // false
 x = new Decimal(0.3).minus(0.2)
 x.greaterThanOrEqualTo(0.1)              // true
-new Decimal(1).gte(x)                    // true
-new Decimal(10, 18).gte('i', 36)         // true</pre>
+new Decimal(1).gte(x)                    // true</pre>
 
 
 
-    <h5 id="isF">isFinite<code class='inset'>.isFinite() <i>&rArr; boolean</i></code></h5>
+    <h5 id="cosh">hyperbolicCosine<code class='inset'>.cosh() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the hyperbolic cosine of the value in radians of this
+      Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>1, Infinity</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(1)
+x.hyperbolicCosine()                     // '1.5430806348152437785'
+y = new Decimal(0.5)
+y.cosh()                                 // '1.1276259652063807852'</pre>
+
+
+
+    <h5 id="sinh">hyperbolicSine<code class='inset'>.sinh() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the hyperbolic sine of the value in radians of this
+      Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-Infinity, Infinity</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(1)
+x.hyperbolicSine()                       // '1.1752011936438014569'
+y = new Decimal(0.5)
+y.sinh()                                 // '0.52109530549374736162'</pre>
+
+
+
+    <h5 id="tanh">hyperbolicTangent<code class='inset'>.tanh() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the hyperbolic tangent of the value in radians of this
+      Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-1, 1</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(1)
+x.hyperbolicTangent()                    // '0.76159415595576488812'
+y = new Decimal(0.5)
+y.tanh()                                 // '0.4621171572600097585'</pre>
+
+
+
+    <h5 id="acos">inverseCosine<code class='inset'>.acos() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the inverse cosine in radians of the value of this
+      Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-1, 1</code>]<br />
+      Range: [<code>0, pi</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0)
+x.inverseCosine()                        // '1.5707963267948966192'
+y = new Decimal(0.5)
+y.acos()                                 // '1.0471975511965977462'</pre>
+
+
+
+    <h5 id="acosh">
+      inverseHyperbolicCosine<code class='inset'>.acosh() <i>&rArr; Decimal</i></code>
+    </h5>
+    <p>
+      Returns a new Decimal whose value is the inverse hyperbolic cosine in radians of the value of
+      this Decimal, rounded to <a href='#precision'><code>precision</code></a> significant
+      digits using rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>1, Infinity</code>]<br />
+      Range: [<code>0, Infinity</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(5)
+x.inverseHyperbolicCosine()              // '2.2924316695611776878'
+y = new Decimal(50)
+y.acosh()                                // '4.6050701709847571595'</pre>
+
+
+
+    <h5 id="asinh">
+      inverseHyperbolicSine<code class='inset'>.asinh() <i>&rArr; Decimal</i></code>
+    </h5>
+    <p>
+      Returns a new Decimal whose value is the inverse hyperbolic sine in radians of the value of
+      this Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits
+      using rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-Infinity, Infinity</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(5)
+x.inverseHyperbolicSine()                // '2.3124383412727526203'
+y = new Decimal(50)
+y.asinh()                                // '4.6052701709914238266'</pre>
+
+
+
+    <h5 id="atanh">
+      inverseHyperbolicTangent<code class='inset'>.atanh() <i>&rArr; Decimal</i></code>
+    </h5>
+    <p>
+      Returns a new Decimal whose value is the inverse hyperbolic tangent in radians of the value of
+      this Decimal, rounded to <a href='#precision'><code>precision</code></a> significant
+      digits using rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-1, 1</code>]<br />
+      Range: [<code>-Infinity, Infinity</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0.5)
+x.inverseHyperbolicTangent()             // '0.5493061443340548457'
+y = new Decimal(0.75)
+y.atanh()                                // '0.97295507452765665255'</pre>
+
+
+
+    <h5 id="asin">inverseSine<code class='inset'>.asin() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the inverse sine in radians of the value of this Decimal,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
+      mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-1, 1</code>]<br />
+      Range: [<code>-pi/2, pi/2</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0.5)
+x.inverseSine()                          // '0.52359877559829887308'
+y = new Decimal(0.75)
+y.asin()                                 // '0.84806207898148100805'</pre>
+
+
+
+    <h5 id="atan">inverseTangent<code class='inset'>.atan() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the inverse tangent in radians of the value of this
+      Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-pi/2, pi/2</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0.5)
+x.inverseTangent()                       // '0.46364760900080611621'
+y = new Decimal(0.75)
+y.atan()                                 // '0.6435011087932843868'</pre>
+
+
+
+    <h5 id="isFinite">isFinite<code class='inset'>.isFinite() <i>&rArr; boolean</i></code></h5>
     <p>
       Returns <code>true</code> if the value of this Decimal is a finite number, otherwise returns
       <code>false</code>.<br />
@@ -1196,9 +1586,9 @@ new Decimal(10, 18).gte('i', 36)         // true</pre>
     </p>
     <pre>
 x = new Decimal(1)
-x.isFinite()                  // true
+x.isFinite()                             // true
 y = new Decimal(Infinity)
-y.isFinite()                  // false</pre>
+y.isFinite()                             // false</pre>
     <p>
       Note: The native method <code>isFinite()</code> can be used if
       <code>n &lt;= Number.MAX_VALUE</code>.
@@ -1213,9 +1603,9 @@ y.isFinite()                  // false</pre>
     </p>
     <pre>
 x = new Decimal(1)
-x.isInteger()                 // true
+x.isInteger()                            // true
 y = new Decimal(123.456)
-y.isInt()                     // false</pre>
+y.isInt()                                // false</pre>
 
 
 
@@ -1226,9 +1616,9 @@ y.isInt()                     // false</pre>
     </p>
     <pre>
 x = new Decimal(NaN)
-x.isNaN()                     // true
+x.isNaN()                                // true
 y = new Decimal('Infinity')
-y.isNaN()                     // false</pre>
+y.isNaN()                                // false</pre>
     <p>Note: The native method <code>isNaN()</code> can also be used.</p>
 
 
@@ -1240,88 +1630,87 @@ y.isNaN()                     // false</pre>
     </p>
     <pre>
 x = new Decimal(-0)
-x.isNegative()                // true
+x.isNegative()                           // true
 y = new Decimal(2)
-y.isNeg                       // false</pre>
+y.isNeg                                  // false</pre>
     <p>Note: <code>n &lt; 0</code> can be used if <code>n &lt;= -Number.MIN_VALUE</code>.</p>
 
 
 
-    <h5 id="isZ">isZero<code class='inset'>.isZero() <i>&rArr; boolean</i></code></h5>
+     <h5 id="isPos">isPositive<code class='inset'>.isPos() <i>&rArr; boolean</i></code></h5>
+    <p>
+      Returns <code>true</code> if the value of this Decimal is positive, otherwise returns
+      <code>false</code>.
+    </p>
+    <pre>
+x = new Decimal(0)
+x.isPositive()                           // true
+y = new Decimal(-2)
+y.isPos                                  // false</pre>
+    <p>Note: <code>n &lt; 0</code> can be used if <code>n &lt;= -Number.MIN_VALUE</code>.</p>
+
+
+
+    <h5 id="isZero">isZero<code class='inset'>.isZero() <i>&rArr; boolean</i></code></h5>
     <p>
       Returns <code>true</code> if the value of this Decimal is zero or minus zero, otherwise
       returns <code>false</code>.
     </p>
     <pre>
 x = new Decimal(-0)
-x.isZero() && x.isNeg()          // true
+x.isZero() && x.isNeg()                  // true
 y = new Decimal(Infinity)
-y.isZero()                       // false</pre>
+y.isZero()                               // false</pre>
     <p>Note: <code>n == 0</code> can be used if <code>n &gt;= Number.MIN_VALUE</code>.</p>
 
 
 
-    <h5 id="lt">lessThan<code class='inset'>.lt(n [, base]) <i>&rArr; boolean</i></code></h5>
-    <p>
-      <code>n</code>: <i>number|string|Decimal</i><br /><code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
+    <h5 id="lt">lessThan<code class='inset'>.lt(x) <i>&rArr; boolean</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is less than the value of
-      <code>n</code>, otherwise returns <code>false</code>.
+      <code>x</code>, otherwise returns <code>false</code>.
     </p>
     <p>Note: This method uses the <code>cmp</code> method internally.</p>
     <pre>
-(0.3 - 0.2) &lt; 0.1                    // true
+(0.3 - 0.2) &lt; 0.1                        // true
 x = new Decimal(0.3).minus(0.2)
-x.lessThan(0.1)                      // false
-new Decimal(0).lt(x)                 // true
-new Decimal(11.1, 2).lt(11, 3)       // true</pre>
+x.lessThan(0.1)                          // false
+new Decimal(0).lt(x)                     // true</pre>
 
 
 
-    <h5 id="lte">
-      lessThanOrEqualTo<code class='inset'>.lte(n [, base]) <i>&rArr; boolean</i></code>
-    </h5>
-    <p>
-      <code>n</code>: <i>number|string|Decimal</i><br /><code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details. </i>
-    </p>
+    <h5 id="lte">lessThanOrEqualTo<code class='inset'>.lte(x) <i>&rArr; boolean</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is less than or equal to the value of
-      <code>n</code>, otherwise returns <code>false</code>.
+      <code>x</code>, otherwise returns <code>false</code>.
     </p>
     <p>Note: This method uses the <code>cmp</code> method internally.</p>
     <pre>
 0.1 &lt;= (0.3 - 0.2)                              // false
 x = new Decimal(0.1)
 x.lessThanOrEqualTo(Decimal(0.3).minus(0.2))    // true
-new Decimal(-1).lte(x)                          // true
-new Decimal(10, 18).lte('i', 36)                // true</pre>
+new Decimal(-1).lte(x)                          // true</pre>
 
 
 
-    <h5 id="log">logarithm<code class='inset'>.log([n [, base]]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="log">logarithm<code class='inset'>.log(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i> <i>(This is not the base of the logarithm but the base of
-      <code>n</code>)</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details. </i>
-    </p>
-    <p>
-      Returns a new Decimal whose value is the base <code>n</code> logarithm of the value of this
+      Returns a new Decimal whose value is the base <code>x</code> logarithm of the value of this
       Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
       rounding mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <p>
-      If <code>n</code> is <code>null</code> or undefined, then the base 10 logarithm of the
-      value of this Decimal will be returned.
+      If <code>x</code> is omitted, the base 10 logarithm of the value of this Decimal will be
+      returned.
     </p>
     <pre>
 x = new Decimal(1000)
-x.logarithm()             // '3'
+x.logarithm()                            // '3'
 y = new Decimal(256)
-y.log(2)                  // '8'</pre>
+y.log(2)                                 // '8'</pre>
     <p>
       The return value will <i>almost always</i> be correctly rounded, i.e. rounded as if the result
       was first calculated to an infinite number of correct digits before rounding. If a result is
@@ -1337,33 +1726,24 @@ y.log(2)                  // '8'</pre>
 
 
 
-    <h5 id="minus">minus<code class='inset'>.minus(n [, base]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="sub">minus<code class='inset'>.minus(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
-    <p>
-      Returns a new Decimal whose value is the value of this Decimal minus <code>n</code>, rounded
+      Returns a new Decimal whose value is the value of this Decimal minus <code>x</code>, rounded
       to <a href='#precision'><code>precision</code></a> significant digits using rounding mode
       <a href='#rounding'><code>rounding</code></a>.
     </p>
     <pre>
-0.3 - 0.1                  // 0.19999999999999998
+0.3 - 0.1                                // 0.19999999999999998
 x = new Decimal(0.3)
-x.minus(0.1)               // '0.2'
-x.minus(0.6, 20)           // '0'</pre>
+x.minus(0.1)                             // '0.2'</pre>
 
 
 
-    <h5 id="mod">modulo<code class='inset'>.mod(n [, base]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="mod">modulo<code class='inset'>.mod(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
-    <p>
-      Returns a new Decimal whose value is the value of this Decimal modulo <code>n</code>,
+      Returns a new Decimal whose value is the value of this Decimal modulo <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
       mode <a href='#rounding'><code>rounding</code></a>.
     </p>
@@ -1378,19 +1758,40 @@ x.minus(0.6, 20)           // '0'</pre>
       See <a href='#modulo'><code>modulo</code></a> for a description of the other modulo modes.
     </p>
     <pre>
-1 % 0.9                    // 0.09999999999999998
+1 % 0.9                                  // 0.09999999999999998
 x = new Decimal(1)
-x.modulo(0.9)              // '0.1'
+x.modulo(0.9)                            // '0.1'
 
-y = new Decimal(33)
-y.mod('a', 33)             // '3'
-
-x = new Decimal(8)
-y = new Decimal(-3)
+y = new Decimal(8)
+z = new Decimal(-3)
 Decimal.modulo = 1
-x.mod(y)                   // '2'
+y.mod(z)                                 // '2'
 Decimal.modulo = 3
-x.mod(y)                   // '-1'</pre>
+y.mod(z)                                 // '-1'</pre>
+
+
+
+    <h5 id="exp">naturalExponential<code class='inset'>.exp() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the base <code>e</code> (Euler's number, the base of the
+      natural logarithm) exponential of the value of this Decimal, rounded to
+      <a href='#precision'><code>precision</code></a> significant digits using rounding mode
+      <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      The <code><a href='#ln'>naturalLogarithm</a></code> function is the inverse of this function.
+    </p>
+    <pre>
+x = new Decimal(1)
+x.naturalExponential()                   // '2.7182818284590452354'
+y = new Decimal(2)
+y.exp()                                  // '7.3890560989306502272'</pre>
+     <p>
+      The return value will be correctly rounded, i.e. rounded as if the result was first calculated
+      to an infinite number of correct digits before rounding. (The mathematical result of the
+      exponential function is non-terminating, unless its argument is <code>0</code>).
+    </p>
+    <p>The performance of this method degrades exponentially with increasing digits.</p>
 
 
 
@@ -1401,14 +1802,14 @@ x.mod(y)                   // '-1'</pre>
       mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <p>
-      The natual logarithm is the inverse of the <code><a href='#exp'>exponential</a></code>
+      The natural logarithm is the inverse of the <code><a href='#exp'>naturalExponential</a></code>
       function.
     </p>
     <pre>
 x = new Decimal(10)
-x.naturalLogarithm()            // '2.3026'
+x.naturalLogarithm()                     // '2.3026'
 y = new Decimal('1.23e+30')
-y.ln()                          // '69.28'</pre>
+y.ln()                                   // '69.28'</pre>
     <p>
       The return value will be correctly rounded, i.e. rounded as if the result was first calculated
       to an infinite number of correct digits before rounding. (The mathematical result of the
@@ -1434,32 +1835,30 @@ y.ln()                          // '69.28'</pre>
       Returns a new Decimal whose value is the value of this Decimal negated, i.e. multiplied by
       <code>-1</code>.
     </p>
-    <p>The return value is not rounded.</p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
     <pre>
 x = new Decimal(1.8)
-x.negated()                    // '-1.8'
+x.negated()                              // '-1.8'
 y = new Decimal(-1.3)
-y.neg()                        // '1.3'</pre>
+y.neg()                                  // '1.3'</pre>
 
 
 
-    <h5 id="plus">plus<code class='inset'>.plus(n [, base]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="add">plus<code class='inset'>.plus(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
-    </p>
-    <p>
-      Returns a new Decimal whose value is the value of this Decimal plus <code>n</code>, rounded to
+      Returns a new Decimal whose value is the value of this Decimal plus <code>x</code>, rounded to
       <a href='#precision'><code>precision</code></a> significant digits using rounding mode
       <a href='#rounding'><code>rounding</code></a>.
     </p>
     <pre>
-0.1 + 0.2                          // 0.30000000000000004
+0.1 + 0.2                                // 0.30000000000000004
 x = new Decimal(0.1)
-y = x.plus(0.2)                    // '0.3'
-new Decimal(0.7).plus(x).plus(y)   // '1.1'
-x.plus('0.1', 8)                   // '0.225'</pre>
+y = x.plus(0.2)                          // '0.3'
+new Decimal(0.7).plus(x).plus(y)         // '1.1'</pre>
 
 
 
@@ -1471,10 +1870,10 @@ x.plus('0.1', 8)                   // '0.225'</pre>
     </p>
     <pre>
 x = new Decimal(1.234)
-x.precision()                   // '4'
+x.precision()                            // '4'
 y = new Decimal(987000)
-y.sd()                          // '3'
-y.sd(true)                      // '6'</pre>
+y.sd()                                   // '3'
+y.sd(true)                               // '6'</pre>
 
 
 
@@ -1490,11 +1889,30 @@ y.sd(true)                      // '6'</pre>
     <pre>
 Decimal.config({ rounding: 4 })
 x = 1234.5
-x.round()                                  // '1235'
+x.round()                                // '1235'
 
 Decimal.rounding = Decimal.ROUND_DOWN
-x.round()                                  // '1234'
-x                                          // '1234.5'</pre>
+x.round()                                // '1234'
+x                                        // '1234.5'</pre>
+
+
+
+    <h5 id="sin">sine<code class='inset'>.sin() <i>&rArr; Decimal</i></code></h5>
+    <p>
+      Returns a new Decimal whose value is the sine of the value in radians of this Decimal,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
+      mode <a href='#rounding'><code>rounding</code></a>.
+    </p>
+    <p>
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-1, 1</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0.5)
+x.sine()                                 // '0.47942553860420300027'
+y = new Decimal(0.75)
+y.sin()                                  // '0.68163876002333416673'</pre>
 
 
 
@@ -1514,30 +1932,74 @@ x                                          // '1234.5'</pre>
     </p>
     <pre>
 x = new Decimal(16)
-x.squareRoot()                // '4'
+x.squareRoot()                           // '4'
 y = new Decimal(3)
-y.sqrt()                      // '1.73205080756887729353'
-y.sqrt().eq( y.pow(0.5) )     // true</pre>
+y.sqrt()                                 // '1.73205080756887729353'
+y.sqrt().eq( y.pow(0.5) )                // true</pre>
 
 
 
-    <h5 id="times">times<code class='inset'>.times(n [, base]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="tan">tangent<code class='inset'>.tan() <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      Returns a new Decimal whose value is the tangent of the value in radians of this Decimal,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
+      mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <p>
-      Returns a new Decimal whose value is the value of this Decimal times <code>n</code>,
+      Domain: [<code>-Infinity, Infinity</code>]<br />
+      Range: [<code>-Infinity, Infinity</code>]
+    </p>
+    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <pre>
+x = new Decimal(0.5)
+x.tangent()                              // '0.54630248984379051326'
+y = new Decimal(0.75)
+y.tan()                                  // '0.93159645994407246117'</pre>
+
+
+
+    <h5 id="mul">times<code class='inset'>.times(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p>
+      Returns a new Decimal whose value is the value of this Decimal times <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
       mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <pre>
-0.6 * 3                             // 1.7999999999999998
+0.6 * 3                                  // 1.7999999999999998
 x = new Decimal(0.6)
-y = x.times(3)                      // '1.8'
-new Decimal('7e+500').times(y)      // '1.26e+501'
-x.times('-a', 16)                   // '-6'</pre>
+y = x.times(3)                           // '1.8'
+new Decimal('7e+500').times(y)           // '1.26e+501'</pre>
+
+
+
+    <h5 id="toBinary">
+      toBinary<code class='inset'>.toBinary([sd [, rm]]) <i>&rArr; string</i></code>
+    </h5>
+    <p>
+      <code>sd</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
+    </p>
+    <p>
+      Returns a string representing the value of this Decimal in binary, rounded to <code>sd</code>
+      significant digits using rounding mode <code>rm</code>.
+    </p>
+    <p>
+      If <code>sd</code> is defined, the return value will use binary exponential notation.
+    </p>
+    <p>
+      If <code>sd</code> is omitted, the return value will be rounded to
+      <a href='#precision'><code>precision</code></a> significant digits.
+    </p>
+    <p>
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a>
+      will be used.
+    </p>
+    <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.</p>
+    <pre>
+x = new Decimal(256)
+x.toBinary()                             // '0b100000000'
+x.toBinary(1)                            // '0b1p+8'</pre>
 
 
 
@@ -1545,25 +2007,21 @@ x.times('-a', 16)                   // '-6'</pre>
       toDecimalPlaces<code class='inset'>.toDP([dp [, rm]]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>dp</code>: <i>number</i>: integer, 0 to 1e+9 inclusive<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive.
+      <code>dp</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive.
     </p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal rounded to <code>dp</code>
       decimal places using rounding mode <code>rm</code>.
     </p>
     <p>
-      If <code>dp</code> is omitted or is <code>null</code> or undefined, the return value will
-      have the same value as this Decimal.
+      If <code>dp</code> is omitted, the return value will have the same value as this Decimal.
     </p>
     <p>
-      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> is used.
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a>
+      is used.
     </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>dp</code> values.
-    </p>
+    <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
 x = new Decimal(12.24567)
 x.toDecimalPlaces(0)                // '12'
@@ -1576,12 +2034,12 @@ y.toDP(1, Decimal.ROUND_DOWN)       // '9876.5'</pre>
 
 
 
-    <h5 id="toE">
+    <h5 id="toExponential">
       toExponential<code class='inset'>.toExponential([dp [, rm]]) <i>&rArr; string</i></code>
     </h5>
     <p>
-      <code>dp</code>: <i>number</i>: integer, 0 to 1e+9 inclusive<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive
+      <code>dp</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
       Returns a string representing the value of this Decimal in exponential notation rounded
@@ -1593,21 +2051,17 @@ y.toDP(1, Decimal.ROUND_DOWN)       // '9876.5'</pre>
       digits, the return value will be appended with zeros accordingly.
     </p>
     <p>
-      If <code>dp</code> is omitted, or is <code>null</code> or undefined, the number of digits
-      after the decimal point defaults to the minimum number of digits necessary to represent the
-      value exactly.
+      If <code>dp</code> is omitted, the number of digits after the decimal point defaults to the
+      minimum number of digits necessary to represent the value exactly.
     </p>
     <p>
-      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> is used.
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a> is
+      used.
     </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>decimal_places</code> values.
-    </p>
+    <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
 x = 45.6
-y = new Decimal(x)
+b = new Decimal(x)
 x.toExponential()              // '4.56e+1'
 y.toExponential()              // '4.56e+1'
 x.toExponential(0)             // '5e+1'
@@ -1620,18 +2074,20 @@ y.toExponential(3)             // '4.560e+1'</pre>
 
 
 
-    <h5 id="toFi">toFixed<code class='inset'>.toFixed([dp [, rm]]) <i>&rArr; string</i></code></h5>
+    <h5 id="toFixed">
+      toFixed<code class='inset'>.toFixed([dp [, rm]]) <i>&rArr; string</i></code>
+    </h5>
     <p>
-      <code>dp</code>: <i>number</i>: integer, 0 to 1e+9 inclusive<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive
+      <code>dp</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
       Returns a string representing the value of this Decimal in normal (fixed-point) notation
       rounded to <code>dp</code> decimal places using rounding mode <code>rm</code>.
     </p>
     <p>
-      If the value of this Decimal in normal notation has fewer than <code>dp</code> fraction digits
-      , the return value will be appended with zeros accordingly.
+      If the value of this Decimal in normal notation has fewer than <code>dp</code> fraction
+      digits, the return value will be appended with zeros accordingly.
     </p>
     <p>
       Unlike <code>Number.prototype.toFixed</code>, which returns exponential notation if a number
@@ -1639,24 +2095,21 @@ y.toExponential(3)             // '4.560e+1'</pre>
       notation.
     </p>
     <p>
-      If <code>dp</code> is omitted or is <code>null</code> or undefined, then the return value will
-      be unrounded and in normal notation. This is unlike <code>Number.prototype.toFixed</code>,
-      which returns the value to zero decimal places, but is useful when because of the current
+      If <code>dp</code> is omitted, the return value will be unrounded and in normal notation. This
+      is unlike <code>Number.prototype.toFixed</code>, which returns the value to zero decimal
+      places, but is useful when because of the current
       <a href="#toExpNeg"><code>toExpNeg</code></a> or
-      <a href="#toExpPos"><code>toExpNeg</code></a> values, <code><a href='#toS'>toString</a></code>
-      returns exponential notation.
+      <a href="#toExpPos"><code>toExpNeg</code></a> values,
+      <code><a href='#toString'>toString</a></code> returns exponential notation.
     </p>
     <p>
-      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> is used.
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a> is
+      used.
     </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>dp</code> values.
-    </p>
+    <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
 x = 3.456
-y = new Decimal(x)
+b = new Decimal(x)
 x.toFixed()              // '3'
 y.toFixed()              // '3.456'
 y.toFixed(0)             // '3'
@@ -1668,86 +2121,24 @@ y.toFixed(5)             // '3.45600'</pre>
 
 
 
-    <h5 id="toFo">
-       toFormat<code class='inset'>.toFormat([dp [, rm]]) <i>&rArr; string</i></code>
-    </h5>
-    <p>
-      <code>dp</code>: <i>number</i>: integer, 0 to 1e+9 inclusive<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive
-    </p>
-    <p>
-      Returns a string representing the value of this Decimal in fixed-point notation rounded to
-      <code>dp</code> decimal places using rounding mode <code>rm</code> (as
-      <a href='#toFi'><code>toFixed</code></a>), and formatted according to the properties of this
-      Decimal's constructor's <a href='#format'><code>format</code></a> object property.
-    </p>
-    <p>
-      See the examples below for the properties of the <a href='#format'><code>format</code></a>
-      object, their types and their usage.
-    </p>
-    <p>
-      If <code>dp</code> is omitted or is <code>null</code> or undefined, then the return value is
-      not rounded to a fixed number of decimal places.
-    </p>
-     <p>
-      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> is used.
-    </p>
-    <pre>
-// Using config to assign values to the format object
-Decimal.config({
-    format : {
-        decimalSeparator : '.',
-        groupSeparator : ',',
-        groupSize : 3,
-        secondaryGroupSize : 0,
-        fractionGroupSeparator : ' ',
-        fractionGroupSize : 0
-    }
-});
-
-x = new Decimal('123456789.123456789')
-x.toFormat()                     // '123,456,789.123456789'
-x.toFormat(1)                    // '123,456,789.1'
-
-// Assigning the format properties directly
-Decimal.format.groupSeparator = ' ';
-Decimal.format.fractionGroupSize = 5;
-x.toFormat()                     // '123 456 789.12345 6789'
-
-// Assigning the format object directly
-Decimal.format = {
-    decimalSeparator = ',',
-    groupSeparator = '.',
-    groupSize = 3,
-    secondaryGroupSize = 2
-}
-
-x.toFormat()                     // '12.34.56.789,123456789'</pre>
-
-
-
-    <h5 id="toFr">
+    <h5 id="toFraction">
       toFraction
-      <code class='inset'>.toFraction([max_denominator]) <i>&rArr; [string, string]</i></code>
+      <code class='inset'>.toFraction([max_denominator]) <i>&rArr; [Decimal, Decimal]</i></code>
     </h5>
     <p>
       <code>max_denominator</code>: <i>number|string|Decimal</i>: <code>1</code> &gt;= integer &lt;
       <code>Infinity</code>
     </p>
     <p>
-      Returns a string array representing the value of this Decimal as a simple fraction with an
-      integer numerator and an integer denominator. The denominator will be a positive non-zero
-      value less than or equal to <code>max_denominator</code>.
+      Returns an array of two Decimals representing the value of this Decimal as a simple fraction
+      with an integer numerator and an integer denominator. The denominator will be a positive
+      non-zero value less than or equal to <code>max_denominator</code>.
     </p>
     <p>
-      If a maximum denominator is not specified, or is <code>null</code> or undefined, the
-      denominator will be the lowest value necessary to represent the number exactly.
+      If a maximum denominator is omitted, the denominator will be the lowest value necessary to
+      represent the number exactly.
     </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>max_denominator</code> values.
-    </p>
+    <p>Throws on an invalid <code>max_denominator</code> value.</p>
     <pre>
 x = new Decimal(1.75)
 x.toFraction()                       // '7, 4'
@@ -1762,59 +2153,110 @@ pi.toFraction(1)                     // '3, 1'</pre>
 
 
 
+    <h5 id="toHex">
+      toHexadecimal<code class='inset'>.toHex([sd [, rm]]) <i>&rArr; string</i></code>
+    </h5>
+    <p>
+      <code>sd</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
+    </p>
+    <p>
+      Returns a string representing the value of this Decimal in hexadecimal, rounded to
+      <code>sd</code> significant digits using rounding mode <code>rm</code>.
+    </p>
+    <p>
+      If <code>sd</code> is defined, the return value will use binary exponential notation.
+    </p>
+    <p>
+      If <code>sd</code> is omitted, the return value will be rounded to
+      <a href='#precision'><code>precision</code></a> significant digits.
+    </p>
+    <p>
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a>
+      will be used.
+    </p>
+    <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.</p>
+    <pre>
+x = new Decimal(256)
+x.toHexadecimal()                        // '0x100'
+x.toHex(1)                               // '0x1p+8'</pre>
+
+
+
     <h5 id="toJSON">toJSON<code class='inset'>.toJSON() <i>&rArr; string</i></code></h5>
-    <p>As <code>valueOf</code>.</p>
+    <p>
+      Returns a string representing the exact value of this Decimal in a compact base-88 based
+      format.
+    </p>
+    <p>
+      A Decimal instance with the same value as this Decimal can be created by passing the return
+      value to the <code><a href='#fromJSON'>fromJSON</a></code> method of a Decimal constructor.
+    </p>
+    <p>
+      The number of characters of the return value will always be equal to or less than the number
+      of characters returned by <a href='#toString'><code>toString</code></a> - usually just over
+      half as many.
+    </p>
+    <p>
+      The 7 printable ASCII characters, <code>(space) \ " & ' &lt; &gt;</code>, are not used in
+      the return value, so it should be safe for inclusion in HTML, JSON and XML.
+    </p>
     <pre>
 x = new Decimal('177.7e+457')
+x.toJSON()                               // '25jkh'
 y = new Decimal(235.4325)
+y.toJSON()                               // '/3E1Z'
 z = new Decimal('0.0098074')
+z.toJSON()                               // '*cWG'
 
 // Serialize an array of three Decimals
-str = JSON.stringify( [x, y, z] )
-// "["1.777e+459","235.4325","0.0098074"]"
+str = JSON.stringify( [x, y, z] )        // "["25jkh","/3E1Z","*cWG"]"
 
 // Return an array of three Decimals
 JSON.parse(str, function (key, val) {
-    return key === '' ? val : new Decimal(val)
+    return key === '' ? val : Decimal.fromJSON(val)
 })</pre>
-    <p>If the <code>toJSON</code> method was not present, the objects (Decimal instances) themselves
-    would be serialized, rather then the string returned by <code>valueOf</code>:</p>
-    <pre>JSON.stringify( [x, y, z] )
+    <p>If the <code>toJSON</code> method was not present, deserialization would be difficult as the
+    array would be serialized as:</p>
+    <pre>
 /*
 "[{"s":1,"e":459,"c":[17770]},
   {"s":1,"e":2,"c":[235,4325000]},
   {"s":1,"e":-3,"c":[98074]}]"
- */</pre>
+*/</pre>
 
 
-    <h5 id="toNear">
+
+    <h5 id="toNearest">
       toNearest<code class='inset'>.toNearest(n [, rm]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i><br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive<br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
-      Returns a new Decimal whose value is the nearest multiple of <code>n</code> to the value of
+      Returns a new Decimal whose value is the nearest multiple of <code>x</code> to the value of
       this Decimal.
     </p>
      <p>
-      If the value of this Decimal is equidistant from two multiples of <code>n</code>, the rounding
+      If the value of this Decimal is equidistant from two multiples of <code>x</code>, the rounding
       mode <code>rm</code>, or <a href='#rounding'><code>rounding</code></a> if <code>rm</code> is
-      omitted or is <code>null</code> or undefined, determines the direction of the nearest.
+      omitted, determines the direction of the nearest.
     </p>
     <p>
       In this context, rounding mode <a href='#rounding'><code>ROUND_HALF_UP</code></a> is
       interpreted the same as rounding mode <a href='#rounding'><code>ROUND_UP</code></a>, and so
-      on. I.e. the rounding is either up, down, to ceil, to floor or to even.
+      on, i.e. the rounding is either up, down, to ceil, to floor or to even.
     </p>
     <p>
       The return value will always have the same sign as this Decimal, unless either this Decimal
-      or <code>n</code> is <code>NaN</code>, in which case the return value will be also be
+      or <code>x</code> is <code>NaN</code>, in which case the return value will be also be
       <code>NaN</code>.
     </p>
-    <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
     <pre>
 x = new Decimal(1.39)
 x.toNearest(0.25)              // '1.5'
@@ -1825,8 +2267,8 @@ y.toNearest(0.5, 1)            // '0.5'  (ROUND_DOWN)</pre>
 
 
 
-    <h5 id="toNum">toNumber<code class='inset'>.toNumber() <i>&rArr; number</i></code></h5>
-    <p>Returns the value of this Decimal converted to a number primitive.</p>
+    <h5 id="toNumber">toNumber<code class='inset'>.toNumber() <i>&rArr; number</i></code></h5>
+    <p>Returns the value of this Decimal converted to a primitive number.</p>
     <p>
       Type coercion with, for example, JavaScript's unary plus operator will also work, except that
       a Decimal with the value minus zero will convert to positive zero.
@@ -1845,15 +2287,41 @@ z = new Decimal(-0)
 
 
 
-    <h5 id="pow">toPower<code class='inset'>.pow(n [, base]) <i>&rArr; Decimal</i></code></h5>
+     <h5 id="toOctal">
+      toOctal<code class='inset'>.toOctal([sd [, rm]]) <i>&rArr; string</i></code>
+    </h5>
     <p>
-      <code>n</code>: <i>number|string|Decimal</i>: integer or non-integer<br />
-      <code>base</code>: <i>number</i><br />
-      <i>See <code><a href="#decimal">Decimal</a></code> for further parameter details.</i>
+      <code>sd</code>: <i>number</i>: integer, <code>0</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
+      Returns a string representing the value of this Decimal in octal, rounded to <code>sd</code>
+      significant digits using rounding mode <code>rm</code>.
+    </p>
+    <p>
+      If <code>sd</code> is defined, the return value will use binary exponential notation.
+    </p>
+    <p>
+      If <code>sd</code> is omitted, the return value will be rounded to
+      <a href='#precision'><code>precision</code></a> significant digits.
+    </p>
+    <p>
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a>
+      will be used.
+    </p>
+    <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.</p>
+    <pre>
+x = new Decimal(256)
+x.toOctal()                              // '0o400'
+x.toOctal(1)                             // '0o1p+8'</pre>
+
+
+
+    <h5 id="pow">toPower<code class='inset'>.pow(x) <i>&rArr; Decimal</i></code></h5>
+    <p><code>x</code>: <i>number|string|Decimal</i>: integer or non-integer</p>
+    <p>
       Returns a new Decimal whose value is the value of this Decimal raised to the power
-      <code>n</code>, rounded to <a href='#precision'><code>precision</code></a> significant digits
+      <code>x</code>, rounded to <a href='#precision'><code>precision</code></a> significant digits
       using rounding mode <a href='#rounding'><code>rounding</code></a>.
     </p>
     <p>
@@ -1878,17 +2346,17 @@ new Decimal(1217652.23).pow('98765.489305603941')
     <p>For non-integer and larger exponents this method uses the formula</p>
     <blockquote><code>x<sup>y</sup> = exp(y*ln(x))</code></blockquote>
     <p>
-      As the mathematical return values of the <code>exp</code> and <code>ln</code> functions are
-      both non-terminating (excluding arguments of <code>0</code> or <code>1</code>), the Decimal
-      return values of the functions as implemented by this library will be rounded approximations,
-      which means that there can be no guarantee of correct rounding when they are combined in the
-      above formula.
+      As the mathematical return values of the <a href='#exp'><code>exp</code></a> and
+      <a href='#ln'><code>ln</code></a> functions are both non-terminating (excluding arguments of
+      <code>0</code> or <code>1</code>), the values of the Decimals returned by the functions as
+      implemented by this library will necessarily be rounded approximations, which means that there
+      can be no guarantee of correct rounding when they are combined in the above formula.
     </p>
     <p>
       The return value may, depending on the rounding mode, be incorrectly rounded only if the first
       <code>15</code> rounding digits are <code>15</code> zeros (and there are non-zero digits
-      following at some point) or <code>15</code> nines (the first rounding digit may also be
-      <code>5</code> or <code>4</code> respectively).
+      following at some point), or <code>15</code> nines, or a <code>5</code> or <code>4</code>
+      followed by <code>14</code> nines.
     </p>
     <p>
       Therefore, assuming the first <code>15</code> rounding digits are each equally likely to be
@@ -1912,12 +2380,12 @@ new Decimal(28).pow('6.166675020000903537297764507632802193308677149')
 
 
 
-    <h5 id="toP">
+    <h5 id="toPrecision">
       toPrecision<code class='inset'>.toPrecision([sd [, rm]]) <i>&rArr; string</i></code>
     </h5>
     <p>
-      <code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive
+      <code>sd</code>: <i>number</i>: integer, <code>1</code> to <code>1e+9</code> inclusive<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
       Returns a string representing the value of this Decimal rounded to <code>sd</code> significant
@@ -1928,28 +2396,25 @@ new Decimal(28).pow('6.166675020000903537297764507632802193308677149')
       of the value in normal (fixed-point) notation, then exponential notation is used.
     </p>
     <p>
-      If <code>sd</code> is omitted or is <code>null</code> or undefined, then the return value is
-      the same as <code><a href='#toS'>toString</a></code>.
+      If <code>sd</code> is omitted, the return value is the same as
+      <code><a href='#toString'>toString</a></code>.
     </p>
     <p>
-      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> is used.
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a> is
+      used.
     </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>sd</code> values.
-    </p>
+    <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.</p>
     <pre>
 x = 45.6
-y = new Decimal(x)
-x.toPrecision()                // '45.6'
-y.toPrecision()                // '45.6'
-x.toPrecision(1)               // '5e+1'
-y.toPrecision(1)               // '5e+1'
-y.toPrecision(2, 0)            // '4.6e+1'  (ROUND_UP)
-y.toPrecision(2, 1)            // '4.5e+1'  (ROUND_DOWN)
-x.toPrecision(5)               // '45.600'
-y.toPrecision(5)               // '45.600'</pre>
+b = new Decimal(x)
+x.toPrecision()                          // '45.6'
+y.toPrecision()                          // '45.6'
+x.toPrecision(1)                         // '5e+1'
+y.toPrecision(1)                         // '5e+1'
+y.toPrecision(2, 0)                      // '4.6e+1'  (ROUND_UP)
+y.toPrecision(2, 1)                      // '4.5e+1'  (ROUND_DOWN)
+x.toPrecision(5)                         // '45.600'
+y.toPrecision(5)                         // '45.600'</pre>
 
 
 
@@ -1957,25 +2422,22 @@ y.toPrecision(5)               // '45.600'</pre>
       toSignificantDigits<code class='inset'>.toSD([sd [, rm]]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>sd</code>: <i>number</i>: integer, 1 to 1e+9 inclusive.<br />
-      <code>rm</code>: <i>number</i>: integer, 0 to 8 inclusive.
+      <code>sd</code>: <i>number</i>: integer, <code>1</code> to <code>1e+9</code> inclusive.<br />
+      <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive.
     </p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal rounded to <code>sd</code>
       significant digits using rounding mode <code>rm</code>.
     </p>
     <p>
-      If <code>sd</code> is omitted or is <code>null</code> or undefined, the return value will
-      be rounded to <a href='#precision'><code>precision</code></a> significant digits.
+      If <code>sd</code> is omitted, the return value will be rounded to
+      <a href='#precision'><code>precision</code></a> significant digits.
     </p>
     <p>
-      If <code>rm</code> is omitted or is <code>null</code> or undefined, rounding mode
-      <a href='#rounding'><code>rounding</code></a> will be used.
+      If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a>
+      will be used.
     </p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>sd</code> or <code>rm</code> values.
-    </p>
+    <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.</p>
     <pre>
 Decimal.config({ precision: 5, rounding: 4 })
 x = new Decimal(9876.54321)
@@ -1989,47 +2451,22 @@ x                                                // '9876.54321'</pre>
 
 
 
-    <h5 id="toS">toString<code class='inset'>.toString([base]) <i>&rArr; string</i></code></h5>
-    <p><code>base</code>: <i>number</i>: integer, 2 to 64 inclusive</p>
+    <h5 id="toString">toString<code class='inset'>.toString() <i>&rArr; string</i></code></h5>
+    <p>Returns a string representing the value of this Decimal.</p>
     <p>
-      Returns a string representing the value of this Decimal in the specified base, or base 10 if
-      <code>base</code> is omitted or is <code>null</code> or undefined.
-    </p>
-    <p>
-      For bases above 10, values from 10 to 35 are represented by <code>a-z</code> (as with
-      <code>Number.prototype.toString</code>), 36 to 61 by <code>A-Z</code>, and 62 and 63 by
-      <code>$</code> and <code>_</code> respectively.
-    </p>
-    <p>
-      If a base is specified the value is rounded to <a href='#precision'><code>precision</code></a>
-      significant digits using rounding mode <a href='#rounding'><code>rounding</code></a>.
-    </p>
-    <p>
-      If a base is not specified and this Decimal has a positive exponent that is equal to or
-      greater than <a href="#toExpPos"><code>toExpPos</code></a>, or a negative exponent equal to
-      or less than <a href="#toExpPos"><code>toExpNeg</code></a>, then exponential notation is
-      returned.
-    </p>
-    <p>If <code>base</code> is <code>null</code> or undefined it is ignored.</p>
-    <p>
-      See <a href='#Errors'>Errors</a> for the treatment of other non-integer or out of range
-      <code>base</code> values.
+      If this Decimal has a positive exponent that is equal to or greater than
+      <a href="#toExpPos"><code>toExpPos</code></a>, or a negative exponent equal to or less than
+      <a href="#toExpPos"><code>toExpNeg</code></a>, then exponential notation will be returned.
     </p>
     <pre>
 x = new Decimal(750000)
-x.toString()                    // '750000'
+x.toString()                             // '750000'
 Decimal.config({ toExpPos: 5 })
-x.toString()                    // '7.5e+5'
-
-y = new Decimal(362.875)
-y.toString(2)                   // '101101010.111'
-y.toString(9)                   // '442.77777777777777777778'
-y.toString(32)                  // 'ba.s'
+x.toString()                             // '7.5e+5'
 
 Decimal.config({ precision: 4 });
-z = new Decimal('1.23456789')
-z.toString()                    // '1.23456789'
-z.toString(10)                  // '1.2346'</pre>
+y = new Decimal('1.23456789')
+y.toString()                             // '1.23456789'</pre>
 
 
 
@@ -2037,20 +2474,23 @@ z.toString(10)                  // '1.2346'</pre>
     <p>
       Returns a new Decimal whose value is the value of this Decimal truncated to a whole number.
     </p>
-    <p>The return value is not rounded to <a href='#precision'><code>precision</code></a>.</p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
     <pre>
 x = new Decimal(123.456)
-x.truncated()                   // '123'
+x.truncated()                            // '123'
 y = new Decimal(-12.3)
-y.trunc()                       // '-12'</pre>
+y.trunc()                                // '-12'</pre>
 
 
 
     <h5 id="valueOf">valueOf<code class='inset'>.valueOf() <i>&rArr; string</i></code></h5>
-    <p>As <code>toString</code>, but does not accept a base argument.</p>
+    <p>As <a href='#toString'><code>toString</code></a>, but zero is signed.</p>
     <pre>
-x = new Decimal('1.777e+457')
-x.valueOf()                     // '1.777e+457'</pre>
+x = new Decimal(-0)
+x.valueOf()                              // '-0'</pre>
 
 
 
@@ -2059,7 +2499,11 @@ x.valueOf()                     // '1.777e+457'</pre>
 
     <h4 id="instance-properties">Properties</h4>
     <p>
-      A Decimal is an object with three properties:
+      The value of a Decimal is stored in a normalised base <code>10000000</code> floating point
+      format.
+    </p>
+    <p>
+      A Decimal instance is an object with three properties:
     </p>
     <table>
       <tr>
@@ -2069,307 +2513,123 @@ x.valueOf()                     // '1.777e+457'</pre>
         <th>Value</th>
       </tr>
       <tr>
-        <td class='centre' id='coefficient'><b>c</b></td>
-        <td>coefficient<sup>*</sup></td>
+        <td class='centre' id='digits'><b>d</b></td>
+        <td>digits</td>
         <td><i>number</i><code style='color:#000'>[]</code></td>
-        <td> Array of integers, each 0 - 1e7</td>
+        <td> Array of integers, each <code>0</code> - <code>1e7</code>, or <code>null</code></td>
       </tr>
       <tr>
         <td class='centre' id='exponent'><b>e</b></td>
         <td>exponent</td>
         <td><i>number</i></td>
-        <td>Integer, -9e15 to 9e15 inclusive</td>
+        <td>Integer, <code>-9e15</code> to <code>9e15</code> inclusive, or <code>NaN</code></td>
       </tr>
       <tr>
         <td class='centre' id='sign'><b>s</b></td>
         <td>sign</td>
         <td><i>number</i></td>
-        <td>-1 or 1</td>
+        <td><code>-1</code>, <code>1</code>, or <code>NaN</code></td>
       </tr>
     </table>
-    <p><sup>*</sup>significand</p>
-    <p>
-      The value of any of the three properties may also be <code>null</code>.
-    </p>
-    <p>
-      The properties are best considered to be read-only.
-    </p>
-    <p>
-      From version 3 of this library, the value of a Decimal is stored in a normalised base
-      <code>10000</code> floating point format. While previously it was acceptable to change the
-      exponent of a Decimal by writing to its exponent property directly, this is no longer
-      recommended (as the number of digits in the first element of the coefficient array is
-      dependent on the exponent, so the coefficient would also need to be altered).
-    </p>
+    <p>The properties are best considered to be read-only.</p>
     <p>
       As with JavaScript numbers, the original exponent and fractional trailing zeros of a number
       are not preserved.
     </p>
     <pre>
-x = new Decimal(0.123)                // '0.123'
-x.toExponential()                     // '1.23e-1'
-x.c                                   // [ 1230000 ]
-x.e                                   // -1
-x.s                                   // 1
+x = new Decimal(0.123)                   // '0.123'
+x.toExponential()                        // '1.23e-1'
+x.d                                      // [ 1230000 ]
+x.e                                      // -1
+x.s                                      // 1
 
-y = new Number(-123.4567000e+2)       // '-12345.67'
-y.toExponential()                     // '-1.234567e+4'
-z = new Decimal('-123.4567000e+2')    // '-12345.67'
-z.toExponential()                     // '-1.234567e+4'
-z.c                                   // [ 12345, 6700000 ]
-z.e                                   // 4
-z.s                                   // -1</pre>
+y = new Number(-123.4567000e+2)          // '-12345.67'
+y.toExponential()                        // '-1.234567e+4'
+z = new Decimal('-123.4567000e+2')       // '-12345.67'
+z.toExponential()                        // '-1.234567e+4'
+z.d                                      // [ 12345, 6700000 ]
+z.e                                      // 4
+z.s                                      // -1</pre>
 
 
 
     <h4 id="zero-nan-infinity">Zero, NaN and Infinity</h4>
     <p>
-      The table below shows how &plusmn;<code>0</code>, <code>NaN</code> and
-      &plusmn;<code>Infinity</code> are stored.
+      The table below shows how <code>&plusmn;0</code>, <code>NaN</code> and
+      <code>&plusmn;Infinity</code> are stored.
     </p>
-    <table>
+       <table>
       <tr>
         <th> </th>
-        <th class='centre'>c</th>
-        <th class='centre'>e</th>
-        <th class='centre'>s</th>
+        <th>&plusmn;0</th>
+        <th>NaN</th>
+        <th>&plusmn;Infinity</th>
       </tr>
       <tr>
-        <td>&plusmn;0</td>
+        <td><b>&nbsp;d&nbsp;</b></td>
         <td><code>[0]</code></td>
+        <td><code>null</code></td>
+        <td><code>null</code></td>
+      </tr>
+      <tr>
+        <td><b>&nbsp;e&nbsp;</b></td>
         <td><code>0</code></td>
+        <td><code>NaN</code></td>
+        <td><code>NaN</code></td>
+      </tr>
+      <tr>
+        <td><b>&nbsp;s&nbsp;</b></td>
         <td><code>&plusmn;1</code></td>
-      </tr>
-      <tr>
-        <td>NaN</td>
-        <td><code>null</code></td>
-        <td><code>null</code></td>
-        <td><code>null</code></td>
-      </tr>
-      <tr>
-        <td>&plusmn;Infinity</td>
-        <td><code>null</code></td>
-        <td><code>null</code></td>
+        <td><code>NaN</code></td>
         <td><code>&plusmn;1</code></td>
       </tr>
     </table>
     <pre>
-x = new Number(-0)             // 0
-1 / x == -Infinity             // true
+x = new Number(-0)                       // 0
+1 / x == -Infinity                       // true
 
-y = new Decimal(-0)            // '0'
-y.c                            // '0' ( [0].toString() )
-y.e                            //  0
-y.s                            // -1</pre>
+y = new Decimal(-0)
+y.d                                      // '0' ( [0].toString() )
+y.e                                      //  0
+y.s                                      // -1
+y.toString()                             // '0'
+y.valueOf()                              // '-0'</pre>
 
 
 
     <h4 id='Errors'>Errors</h4>
     <p>
-      The errors that are thrown are generic <code>Error</code> objects with <code>name</code>
-      <i>Decimal Error</i>.
+      The errors that are thrown are generic <code>Error</code> objects whose <code>message</code>
+      property begins with <code>"[DecimalError]"</code>.
     </p>
-    <p>
-      The table below shows the errors that may be thrown if <code>errors</code> is
-      <code>true</code>, and the action taken if <code>errors</code> is <code>false</code>.
-    </p>
-    <table class='error-table'>
-      <tr>
-        <th>Method(s)</th>
-        <th>errors: true<br />Throw Decimal Error</th>
-        <th>errors: false<br />Action on invalid argument</th>
-      </tr>
-      <tr>
-        <td rowspan=5>
-          <code>
-            comparedTo<br />
-            Decimal<br />
-            dividedBy<br />
-            dividedToIntegerBy<br />
-            equals<br />
-            greaterThan<br />
-            greaterThanOrEqualTo<br />
-            lessThan<br />
-            lessThanOrEqualTo<br />
-            logarithm <br />
-            minus<br />
-            modulo<br />
-            naturalLogarithm<br />
-            plus<br />
-            times<br />
-            toPower
-          </code>
-        </td>
-        <td>number type has more than<br />15 significant digits</td>
-        <td>Accept.</td>
-      </tr>
-      <tr>
-        <td>not a base... number</td>
-        <td>Substitute <code>NaN</code></td>
-      </tr>
-      <tr>
-        <td>base not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td>base out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td>not a number<sup>*</sup></td>
-        <td>Substitute <code>NaN</code></td>
-      </tr>
-      <tr>
-        <td rowspan=16><code>config</code></td>
-        <td><code>precision</code> not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td><code>precision</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>rounding</code> not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td><code>rounding</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>toExpNeg</code> not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td><code>toExpNeg</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>toExpPos</code> not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td><code>toExpPos</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>minE</code> not an integer</td>
-        <td> Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td><code>minE</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>maxE</code> not an integer</td>
-        <td> Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-       <tr>
-        <td><code>maxE</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>errors</code> not a boolean or binary digit</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>crypto</code> not a boolean or binary digit</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>modulo</code> not an integer</td>
-        <td> Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-       <tr>
-        <td><code>modulo</code> out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>logarithm<br />naturalLogarithm</code></td>
-        <td>LN10 out of digits</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>precision</code></td>
-        <td>argument not a boolean or binary digit</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td><code>random</code></td>
-        <td><code>crypto</code> unavailable</td>
-        <td>Use <code>Math.random</code></td>
-      </tr>
-      <tr>
-        <td rowspan=4>
-          <code>
-            toDecimalPlaces<br />
-            toExponential<br />
-            toFixed<br />
-            toPrecision<br />
-            toSignificantDigits
-          </code>
-        </td>
-        <td>argument not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td>argument out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td>rounding mode not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td>rounding mode out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td rowspan=3><code>toFraction</code></td>
-        <td>number type has more than<br />15 significant digits</td>
-        <td>Accept.</td>
-      </tr>
-      <tr>
-        <td>max denominator not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td>max denominator out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td rowspan=2><code>toNearest</code></td>
-        <td>number type has more than<br />15 significant digits</td>
-        <td>Accept.</td>
-      </tr>
-      <tr>
-        <td>rounding mode out of range</td>
-        <td>Ignore</td>
-      </tr>
-      <tr>
-        <td rowspan=2><code>toString</code></td>
-        <td>base not an integer</td>
-        <td>Truncate to integer.<br />Ignore if not a number</td>
-      </tr>
-      <tr>
-        <td>base out of range</td>
-        <td>Ignore</td>
-      </tr>
-    </table>
-    <p><sup>*</sup>No error is thrown if the value is <code>NaN</code> or 'NaN'.</p>
-    <p>
-      The message of a <i>Decimal Error</i> will also contain the name of the method from which the
-      error originated.
-    </p>
-    <p>To determine if an exception is a <i>Decimal Error</i>:</p>
+    <p>To determine if an exception is a Decimal Error:</p>
     <pre>
 try {
     // ...
 } catch (e) {
-    if ( e instanceof Error && e.name == 'Decimal Error' ) {
+    if ( e instanceof Error && /DecimalError/.test(e.message) ) {
         // ...
     }
 }</pre>
+
+
+
+    <h4 id='Pi'>Pi</h4>
+    <p>
+      The maximum precision of the trigonometric methods is dependent on the internal value of the
+      constant pi, which is defined as the string <code>PI</code> near the top of the source file.
+    </p>
+    <p>
+      It has a precision of <code>1025</code> digits, meaning that the trigonometric methods
+      can accurately calculate up to at least <code>1000</code> digits.
+    </p>
+    <p>
+      If greater precision is required then the value of <code>PI</code> will need to be extended to
+      about <code>25</code> digits more than the precision required.
+    </p>
+    <p>The value can also be shortened to reduce the size of the source file.</p>
+
+
 
     <h2 id='faq'>FAQ</h2>
     <h6>Why are trailing fractional zeros removed from Decimals?</h6>
@@ -2419,5 +2679,6 @@ z = x.multiply(y)                 // 4.1400000</pre>
       <code>toPrecision</code> methods enable trailing zeros to be added if and when required.<br />
     </p>
   </div>
+
 </body>
 </html>
