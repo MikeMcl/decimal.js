@@ -10,6 +10,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - Simple but full-featured API
   - Replicates many of the methods of JavaScript's `Number.prototype` and `Math` objects
   - Also handles hexadecimal, binary and octal values
+  - Supports serialization of Decimals to a compact base-88 format for transmission or persistence 
   - Faster, smaller, and perhaps easier to use than JavaScript versions of Java's BigDecimal
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
@@ -67,7 +68,7 @@ It accepts a value of type number, string or Decimal.
 A value can also be in binary, hexadecimal or octal if the appropriate prefix is included.
 
     x = new Decimal('0xff.f')            // '255.9375'
-    y = new Decimal('1b10101100')        // '172'
+    y = new Decimal('0b10101100')        // '172'
     z = x.plus(y)                        // '427.9375'
     
     z.toBinary()                         // '0b110101011.1111'
