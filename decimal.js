@@ -3875,6 +3875,7 @@
       pi = getPi(Ctor, Ctor.precision, 1),
       halfPi = pi.times(HALF);
 
+    x = Ctor(x);
     x.s = 1;
 
     if (x.lte(halfPi)) {

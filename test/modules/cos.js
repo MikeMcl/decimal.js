@@ -8,6 +8,10 @@ if (typeof T === 'undefined') require('../setup');
         Decimal.rounding = rm;
         T.assertEqual(expected, Decimal.cos(n).valueOf());
         T.assertEqual(expected, new Decimal(n).cos().valueOf());
+
+        var x = new Decimal(n);
+        x.cos();
+        T.assertEqual(new Decimal(n).valueOf(), x.valueOf());
     }
 
     Decimal.config({
@@ -29,6 +33,7 @@ if (typeof T === 'undefined') require('../setup');
     t('0.000000065', 18, 4, '0.999999999999997888');  // 0.99999999999999788750000000000074377...
 
     t('14044.44444444444', 10, 4, '0.04549771706');
+    t('-14044.44444444444', 10, 4, '0.04549771706');
     t('5', 8, 5, '0.28366219');
     t('6723', 3, 3, '0.999');
     t('2.04964', 8, 2, '-0.46075321');
