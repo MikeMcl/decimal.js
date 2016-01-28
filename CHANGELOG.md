@@ -1,3 +1,8 @@
+####5.0.1
+* 28/01/2015 
+* Bugfix: #20 cos mutates value.
+* Add pi info to docs.
+
 ####5.0.0
 * 25/01/2016
 * Added trigonometric functions and `cubeRoot` method.
@@ -5,6 +10,7 @@
 * Added `toBinary`, `toHexadecimal` and `toOctal` methods.
 * Added `isPositive` method.
 * Removed the 15 significant digit limit for numbers. 
+* `toFraction` now returns an array of two Decimals, not two strings.
 * String values containing whitespace or a plus sign are no longer accepted.
 * `valueOf` now returns `'-0'` for minus zero.
 * `comparedTo` now returns `NaN` not `null` for comparisons with `NaN`.

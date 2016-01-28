@@ -1,10 +1,10 @@
-/*! decimal.js v5.0.0 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v5.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (globalScope) {
   'use strict';
 
 
   /*
-   *  decimal.js v5.0.0
+   *  decimal.js v5.0.1
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
    *  Copyright (c) 2016 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -413,17 +413,17 @@
    *
    */
   P.decimalPlaces = P.dp = function () {
-    var v,
+    var w,
       d = this.d,
       n = NaN;
 
     if (d) {
-      v = d.length - 1;
-      n = (v - mathfloor(this.e / LOG_BASE)) * LOG_BASE;
+      w = d.length - 1;
+      n = (w - mathfloor(this.e / LOG_BASE)) * LOG_BASE;
 
-      // Subtract the number of trailing zeros of the last number.
-      v = d[v];
-      if (v) for (; v % 10 == 0; v /= 10) n--;
+      // Subtract the number of trailing zeros of the last word.
+      w = d[w];
+      if (w) for (; w % 10 == 0; w /= 10) n--;
       if (n < 0) n = 0;
     }
 
@@ -3089,7 +3089,7 @@
       // they had leading zeros)
       // j: if > 0, the actual index of rd within w (if < 0, rd is a leading zero).
 
-      // Get the length of the first word of the coefficient array xd.
+      // Get the length of the first word of the digits array xd.
       for (digits = 1, k = xd[0]; k >= 10; k /= 10) digits++;
       i = sd - digits;
 
@@ -3326,8 +3326,8 @@
 
 
   /*
-   * Return a new Decimal whose value is the value of Decimal `x` to the power `n`, where `n` is
-   * an integer of type number.
+   * Return a new Decimal whose value is the value of Decimal `x` to the power `n`, where `n` is an
+   * integer of type number.
    *
    * Implements 'exponentiation by squaring'. Called by `pow` and `parseOther`.
    *
@@ -3337,7 +3337,7 @@
       r = new Ctor(ONE),
 
       // Max n of 9007199254740991 takes 53 loop iterations.
-      // Maximum coefficient length; leaves [28, 34] guard digits.
+      // Maximum digits array length; leaves [28, 34] guard digits.
       k = Math.ceil(pr / LOG_BASE + 4);
 
     external = false;
@@ -3675,7 +3675,7 @@
       // Transform base
 
       // e is the base 10 exponent.
-      // i is where to slice str to get the first word of the coefficient array.
+      // i is where to slice str to get the first word of the digits array.
       i = (e + 1) % LOG_BASE;
       if (e < 0) i += LOG_BASE;
 
@@ -3875,8 +3875,7 @@
       pi = getPi(Ctor, Ctor.precision, 1),
       halfPi = pi.times(HALF);
 
-    x = Ctor(x);
-    x.s = 1;
+    x = x.abs();
 
     if (x.lte(halfPi)) {
       quadrant = isNeg ? 4 : 1;
@@ -3899,10 +3898,7 @@
       quadrant = isOdd(t) ? (isNeg ? 1 : 4) : (isNeg ? 3 : 2);
     }
 
-    x = x.minus(pi);
-    x.s = 1;
-
-    return x;
+    return x.minus(pi).abs();
   }
 
 
@@ -4373,7 +4369,6 @@
      * Return a new Decimal instance.
      *
      * v {number|string|Decimal} A numeric value.
-     * [b] {number} The base of n. Integer, 2 to 64 inclusive.
      *
      */
     function Decimal(v) {
@@ -4776,9 +4771,9 @@
 
 
   /*
-   * Returns a new Decimal with a random value equal to or greater than 0 and less than 1, and
-   * with `sd`, or `Decimal.precision` if `sd` is omitted, significant digits (or less if
-   * trailing zeros are produced).
+   * Returns a new Decimal with a random value equal to or greater than 0 and less than 1, and with
+   * `sd`, or `Decimal.precision` if `sd` is omitted, significant digits (or less if trailing zeros
+   * are produced).
    *
    * [sd] {number} Significant digits. Integer, 0 to MAX_DIGITS inclusive.
    *
@@ -5015,7 +5010,9 @@
 
   // AMD.
   if (typeof define == 'function' && define.amd) {
-    define(function () { return Decimal; });
+    define(function () {
+      return Decimal;
+    });
 
   // Node and other environments that support module.exports.
   } else if (typeof module != 'undefined' && module.exports) {
