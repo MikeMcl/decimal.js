@@ -6,8 +6,10 @@ if (typeof T === 'undefined') require('../setup');
     function t(n, pr, rm, expected) {
         Decimal.precision = pr;
         Decimal.rounding = rm;
+        var x = new Decimal(n);
+        T.assertEqual(expected, x.tan().valueOf());
         T.assertEqual(expected, Decimal.tan(n).valueOf());
-        T.assertEqual(expected, new Decimal(n).tan().valueOf());
+        T.assert(x.eq(n) || x.isNaN());
     }
 
     Decimal.config({
@@ -26,8 +28,10 @@ if (typeof T === 'undefined') require('../setup');
     t('-Infinity', 40, 4, 'NaN');
 
     t('3', 5, 5, '-0.14255');
+    t('-3', 5, 5, '0.14255');
     t('0.8', 7, 6, '1.029639');
     t('539998661123466984649191689138494900416386817996524', 7, 6, '32.04695');
+    t('-539998661123466984649191689138494900416386817996524', 7, 6, '-32.04695');
     t('0.5172293543584894071801901902', 5, 1, '0.56888');
     t('5', 10, 5, '-3.380515006');
     t('0.5283979979897015', 1, 4, '0.6');

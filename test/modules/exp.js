@@ -6,8 +6,10 @@ if (typeof T === 'undefined') require('../setup');
     function t(n, expected, pr, rm) {
         Decimal.precision = pr;
         Decimal.rounding = rm;
+        var x = new Decimal(n);
+        T.assertEqual(expected, x.exp().valueOf());
         T.assertEqual(expected, Decimal.exp(n).valueOf());
-        T.assertEqual(expected, new Decimal(n).exp().valueOf());
+        T.assert(x.eq(n) || x.isNaN());
     }
 
     Decimal.config({
