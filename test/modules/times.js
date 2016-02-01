@@ -4,7 +4,9 @@ if (typeof T === 'undefined') require('../setup');
     T('times');
 
     var t = function (multiplicand, multiplier, expected) {
-        T.assertEqual(expected, new Decimal(multiplicand).times(multiplier).valueOf());
+        var x = new Decimal(multiplicand);
+        T.assertEqual(expected, x.times(multiplier).valueOf());
+        T.assert(x.eq(multiplicand) || x.isNaN());
     }
 
     Decimal.config({

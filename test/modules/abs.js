@@ -4,7 +4,9 @@ if (typeof T === 'undefined') require('../setup');
     T('absoluteValue');
 
     function t(expected, value){
-        T.assertEqual(expected, new Decimal(value).abs().valueOf());
+        var x = new Decimal(value);
+        T.assertEqual(expected, x.abs().valueOf());
+        T.assert(x.eq(value) || x.isNaN());
     }
 
     Decimal.config({
