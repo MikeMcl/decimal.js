@@ -36,7 +36,29 @@ T = (function () {
     }
   };
 
-  T.assertDecimal = function (digits, exponent, sign, n) {
+  T.assertEqual = function (expected, actual) {
+    ++testNumber;
+    if (expected === actual || expected !== expected && actual !== actual) {
+      ++passed;
+    } else {
+      writeError('\n Test number ' + testNumber + ' failed: assertEqual');
+      writeError(' Expected: ' + expected);
+      writeError(' Actual:   ' + actual);
+    }
+  };
+
+  T.assertEqualDecimal = function (x, y) {
+    ++testNumber;
+    if (x.eq(y) || x.isNaN() && y.isNaN()) {
+      ++passed;
+    } else {
+      writeError('\n Test number ' + testNumber + ' failed: assertEqualDecimal');
+      writeError(' x: ' + x.valueOf());
+      writeError(' y: ' + y.valueOf());
+    }
+  };
+
+  T.assertEqualProps = function (digits, exponent, sign, n) {
     var i = 0,
       len = digits.length;
     ++testNumber;
@@ -44,27 +66,13 @@ T = (function () {
     if (i === len && i === n.d.length && exponent === n.e && sign === n.s) {
       ++passed;
     } else {
-      writeError('\n Test number ' + testNumber + ' failed: assertDecimal');
+      writeError('\n Test number ' + testNumber + ' failed: assertEqualProps');
       writeError(' Expected digits:   ' + digits);
       writeError(' Expected exponent: ' + exponent);
       writeError(' Expected sign:     ' + sign);
       writeError(' Actual digits:     ' + n.d);
       writeError(' Actual exponent:   ' + n.e);
       writeError(' Actual sign:       ' + n.s);
-      //process.exit();
-    }
-  };
-
-  T.assertEqual = function (expected, actual) {
-    ++testNumber;
-    if (expected === actual || expected !== expected && actual !== actual) {
-      ++passed;
-      //write('\n Expected and actual: ' + actual);
-    } else {
-      writeError('\n Test number ' + testNumber + ' failed: assertEqual');
-      writeError(' Expected: ' + expected);
-      writeError(' Actual:   ' + actual);
-      //process.exit();
     }
   };
 
@@ -78,12 +86,10 @@ T = (function () {
     }
     if (actual instanceof Error && /DecimalError/.test(actual.message)) {
       ++passed;
-      //write('\n Expected and actual: ' + actual);
     } else {
       writeError('\n Test number ' + testNumber + ' failed: assertException');
       writeError(' Expected: ' + msg + ' to raise a [DecimalError].');
       writeError(' Actual:   ' + (actual || 'no exception'));
-      //process.exit();
     }
   };
 

@@ -1,30 +1,30 @@
 if (typeof T === 'undefined') require('../setup');
 
 (function () {
-    T('sign');
+  T('sign');
 
-    function t(n, expected) {
-        T.assertEqual(expected, Decimal.sign(n));
-    }
+  function t(n, expected) {
+    T.assertEqual(expected, Decimal.sign(n));
+  }
 
-    t(NaN, NaN);
-    t('NaN', NaN);
-    t(Infinity, 1);
-    t(-Infinity, -1);
-    t('Infinity', 1);
-    t('-Infinity', -1);
+  t(NaN, NaN);
+  t('NaN', NaN);
+  t(Infinity, 1);
+  t(-Infinity, -1);
+  t('Infinity', 1);
+  t('-Infinity', -1);
 
-    T.assert(1 / Decimal.sign('0') === Infinity);
-    T.assert(1 / Decimal.sign(new Decimal('0')) === Infinity);
-    T.assert(1 / Decimal.sign('-0') === -Infinity);
-    T.assert(1 / Decimal.sign(new Decimal('-0')) === -Infinity);
+  T.assert(1 / Decimal.sign('0') === Infinity);
+  T.assert(1 / Decimal.sign(new Decimal('0')) === Infinity);
+  T.assert(1 / Decimal.sign('-0') === -Infinity);
+  T.assert(1 / Decimal.sign(new Decimal('-0')) === -Infinity);
 
-    t('0', 0);
-    t('-0', -0);
-    t('1', 1);
-    t('-1', -1);
-    t('9.99', 1);
-    t('-9.99', -1);
+  t('0', 0);
+  t('-0', -0);
+  t('1', 1);
+  t('-1', -1);
+  t('9.99', 1);
+  t('-9.99', -1);
 
-    T.stop();
+  T.stop();
 })();

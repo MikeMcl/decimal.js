@@ -27,6 +27,7 @@ console.log('\n Testing decimal.js\n');
     'exp',
     'floor',
    'hypot',
+   'immutability',
     'intPow',
     'isFiniteEtc',
     'ln',
