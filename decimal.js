@@ -242,12 +242,6 @@
     // Signs differ?
     if (xs !== ys) return xs;
 
-    // Either zero?
-    if (!xd[0] || !yd[0]) return xd[0] ? xs : yd[0] ? -ys : 0;
-
-    // Signs differ?
-    if (xs !== ys) return xs;
-
     // Compare exponents.
     if (x.e !== y.e) return x.e > y.e ^ xs < 0 ? 1 : -1;
 
@@ -365,8 +359,7 @@
       r = divide(t3plusx.plus(x).times(t), t3plusx.plus(t3), sd + 2, 1);
 
       // TODO? Replace with for-loop and checkRoundingDigits.
-      if (digitsToString(t.d).slice(0, sd) ===
-        (n = digitsToString(r.d)).slice(0, sd)) {
+      if (digitsToString(t.d).slice(0, sd) === (n = digitsToString(r.d)).slice(0, sd)) {
         n = n.slice(sd - 3, sd + 1);
 
         // The 4th rounding digit may be in error by -1 so if the 4 rounding digits are 9999 or 4999
@@ -3307,10 +3300,10 @@
     // If non-zero...
     if (w) {
 
-      // Subtract the number of trailing zeros of the last number.
+      // Subtract the number of trailing zeros of the last word.
       for (; w % 10 == 0; w /= 10) len--;
 
-      // Add the number of digits of the first number.
+      // Add the number of digits of the first word.
       for (w = digits[0]; w >= 10; w /= 10) len++;
     }
 
@@ -4779,7 +4772,7 @@
    *
    */
   function random(sd) {
-    var a, k, v,
+    var d, e, k, n,
       i = 0,
       r = new this(ONE),
       rd = [];
@@ -4790,27 +4783,24 @@
     k = Math.ceil(sd / LOG_BASE);
 
     if (this.crypto === false) {
-
-      // Use Math.random
       for (; i < k;) rd[i++] = Math.random() * 1e7 | 0;
 
     // Browsers supporting crypto.getRandomValues.
     } else if (cryptoObject && cryptoObject.getRandomValues) {
-      a = cryptoObject.getRandomValues(new Uint32Array(k));
+      d = cryptoObject.getRandomValues(new Uint32Array(k));
 
       for (; i < k;) {
-        v = a[i];
+        n = d[i];
 
-        // 0 <= v < 4294967296
-        // Probability v >= 4.29e9, is 4967296 / 4294967296 = 0.00116 (1 in 865).
-        if (v >= 4.29e9) {
-
-          a[i] = cryptoObject.getRandomValues(new Uint32Array(1))[0];
+        // 0 <= n < 4294967296
+        // Probability n >= 4.29e9, is 4967296 / 4294967296 = 0.00116 (1 in 865).
+        if (n >= 4.29e9) {
+          d[i] = cryptoObject.getRandomValues(new Uint32Array(1))[0];
         } else {
 
-          // 0 <= v <= 4289999999
-          // 0 <= (v % 1e7) <= 9999999
-          rd[i++] = v % 1e7;
+          // 0 <= n <= 4289999999
+          // 0 <= (n % 1e7) <= 9999999
+          rd[i++] = n % 1e7;
         }
       }
 
@@ -4818,22 +4808,21 @@
     } else if (cryptoObject && cryptoObject.randomBytes) {
 
       // buffer
-      a = cryptoObject.randomBytes(k *= 4);
+      d = cryptoObject.randomBytes(k *= 4);
 
       for (; i < k;) {
 
-        // 0 <= v < 2147483648
-        v = a[i] + (a[i + 1] << 8) + (a[i + 2] << 16) +
-          ((a[i + 3] & 0x7f) << 24);
+        // 0 <= n < 2147483648
+        n = d[i] + (d[i + 1] << 8) + (d[i + 2] << 16) + ((d[i + 3] & 0x7f) << 24);
 
-        // Probability v >= 2.14e9, is 7483648 / 2147483648 = 0.0035 (1 in 286).
-        if (v >= 2.14e9) {
-          cryptoObject.randomBytes(4).copy(a, i);
+        // Probability n >= 2.14e9, is 7483648 / 2147483648 = 0.0035 (1 in 286).
+        if (n >= 2.14e9) {
+          cryptoObject.randomBytes(4).copy(d, i);
         } else {
 
-          // 0 <= v <= 2139999999
-          // 0 <= (v % 1e7) <= 9999999
-          rd.push(v % 1e7);
+          // 0 <= n <= 2139999999
+          // 0 <= (n % 1e7) <= 9999999
+          rd.push(n % 1e7);
           i += 4;
         }
       }
@@ -4850,8 +4839,8 @@
 
     // Convert trailing digits to zeros according to sd.
     if (k && sd) {
-      v = mathpow(10, LOG_BASE - sd);
-      rd[i] = (k / v | 0) * v;
+      n = mathpow(10, LOG_BASE - sd);
+      rd[i] = (k / n | 0) * n;
     }
 
     // Remove trailing words which are zero.
@@ -4859,24 +4848,22 @@
 
     // Zero?
     if (i < 0) {
-      rd = [k = 0];
+      e = 0;
+      rd = [0];
     } else {
-      k = -1;
+      e = -1;
 
       // Remove leading words which are zero and adjust exponent accordingly.
-      for (; rd[0] === 0;) {
-        rd.shift();
-        k -= LOG_BASE;
-      }
+      for (; rd[0] === 0; e -= LOG_BASE) rd.shift();
 
       // Count the digits of the first word of rd to determine leading zeros.
-      for (i = 1, v = rd[0]; v >= 10; v /= 10) i++;
+      for (k = 1, n = rd[0]; n >= 10; n /= 10) k++;
 
       // Adjust the exponent for leading zeros of the first word of rd.
-      if (i < LOG_BASE) k -= LOG_BASE - i;
+      if (k < LOG_BASE) e -= LOG_BASE - k;
     }
 
-    r.e = k;
+    r.e = e;
     r.d = rd;
 
     return r;
