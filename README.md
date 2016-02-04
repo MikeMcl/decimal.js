@@ -1,6 +1,8 @@
 ![decimal.js](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/decimaljs.png)
 
 An arbitrary-precision Decimal type for JavaScript.
+
+*WARNING: Version 5 brings significant API changes (see CHANGELOG). Version 4 will continue to be supported.*
 <br>   
 [![Build Status](https://travis-ci.org/MikeMcl/decimal.js.svg)](https://travis-ci.org/MikeMcl/decimal.js)
 
