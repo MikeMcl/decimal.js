@@ -1,3 +1,8 @@
+####5.0.2
+* 05/02/2015 
+* Added immutability tests.
+* Minor *decimal.js* clean-up.
+
 ####5.0.1
 * 28/01/2015 
 * Bugfix: #20 cos mutates value.
@@ -18,7 +23,7 @@
 * The Decimal constructor and `toString` no longer accept a base argument. 
 * Binary, hexadecimal and octal prefixes are now recognised for string values.
 * Removed `Decimal.errors` configuration property.
-* Removed `toFormat`.
+* Removed `toFormat` method.
 * Removed `Decimal.ONE`.
 * Renamed `exponential` method to `naturalExponential`. 
 * Renamed `Decimal.constructor` method to `Decimal.clone`.
