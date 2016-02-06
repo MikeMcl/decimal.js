@@ -1,3 +1,7 @@
+####5.0.3
+* 06/02/2015 
+* Refactor tests.
+
 ####5.0.2
 * 05/02/2015 
 * Added immutability tests.
