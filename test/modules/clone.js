@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('clone');
+T('clone', function () {
 
   function t(expression) {
     T.assert(expression);
@@ -106,7 +105,5 @@ if (typeof T === 'undefined') require('../setup');
   t(new D8(1).constructor !== new D9(1).constructor);
 
   T.assertException(function () { Decimal.clone(null) }, "Decimal.clone(null)");
-
-  T.stop();
-})();
+});
 

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toDecimalPlaces');
+T('toDecimalPlaces', function () {
 
   function t(expected, n, dp, rm) {
     T.assertEqual(expected, new Decimal(n).toDP(dp, rm).valueOf());
@@ -529,6 +528,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {new Decimal('12.345').toDP(1, '-1e-1')}, ".toDP(1, '-1e-1')");
   tx(function () {new Decimal('12.345').toDP(1, Infinity)}, ".toDP(1, Infinity)");
   tx(function () {new Decimal('12.345').toDP(1, '-Infinity')}, ".toDP(1, '-Infinity')");
-
-  T.stop();
-})();
+});

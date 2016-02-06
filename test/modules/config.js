@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('config');
+T('config', function () {
 
   var MAX_DIGITS = 1e9;
   var EXP_LIMIT = 9e15;
@@ -342,6 +341,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {Decimal.config({modulo: Infinity})}, "modulo: Infinity");
 
   t(9, {modulo: void 0});
-
-  T.stop();
-})();
+});

@@ -4,9 +4,7 @@
   <meta charset='utf-8' />
   <title>Testing decimal.js</title>
   <style>
-    body {font-family: monospace; font-size: 12px; line-height: 14px;}
-    .pass { color: black; background-color: white  }
-    .fail { color: black; background-color: white }
+  body {font-family: monospace; font-size: 12px; line-height: 14px;}
   </style>
   <script src='../decimal.js'></script>
   <script src='./setup.js'></script>
@@ -14,103 +12,100 @@
 <body>
   <script>
   var arr,
-    i = 0,
-    passed = 0,
-    total = 0,
-    start = +new Date(),
-    modules = [
-      'abs',
-      'acos',
-      'acosh',
-      'asin',
-      'asinh',
-      'atan',
-      'atan2',
-      'atanh',
-      'cbrt',
-      'ceil',
-      'clone',
-      'cmp',
-      'config',
-      'cos',
-      'cosh',
-      'Decimal',
-      'div',
-      'divToInt',
-      'dpSd',
-      'exp',
-      'floor',
-      'hypot',
-      'immutability',
-      'intPow',
-      'isFiniteEtc',
-      'ln',
-      'log',
-      'log10',
-      'log2',
-      'minAndMax',
-      'minus',
-      'mod',
-      'neg',
-      'plus',
-      'pow',
-      'random',
-      'round',
-      'sign',
-      'sin',
-      'sinh',
-      'sqrt',
-      'tan',
-      'tanh',
-      'times',
-      'toBinary',
-      'toDP',
-      'toExponential',
-      'toFixed',
-      'toFraction',
-      'toHex',
-      'toJSON',
-      'toNearest',
-      'toNumber',
-      'toOctal',
-      'toPrecision',
-      'toSD',
-      'toString',
-      'trunc',
-      'valueOf',
-    ];
+  head = document.getElementsByTagName("head")[0],
+  i = 0,
+  passed = 0,
+  total = 0,
+  time = new Date(),
+  modules = [
+    'abs',
+    'acos',
+    'acosh',
+    'asin',
+    'asinh',
+    'atan',
+    'atan2',
+    'atanh',
+    'cbrt',
+    'ceil',
+    'clone',
+    'cmp',
+    'config',
+    'cos',
+    'cosh',
+    'Decimal',
+    'div',
+    'divToInt',
+    'dpSd',
+    'exp',
+    'floor',
+    'hypot',
+    'immutability',
+    'intPow',
+    'isFiniteEtc',
+    'ln',
+    'log',
+    'log10',
+    'log2',
+    'minAndMax',
+    'minus',
+    'mod',
+    'neg',
+    'plus',
+    'pow',
+    'random',
+    'round',
+    'sign',
+    'sin',
+    'sinh',
+    'sqrt',
+    'tan',
+    'tanh',
+    'times',
+    'toBinary',
+    'toDP',
+    'toExponential',
+    'toFixed',
+    'toFraction',
+    'toHex',
+    'toJSON',
+    'toNearest',
+    'toNumber',
+    'toOctal',
+    'toPrecision',
+    'toSD',
+    'toString',
+    'trunc',
+    'valueOf',
+  ];
 
   function load() {
-    var head = document.getElementsByTagName("head")[0],
-      script = document.createElement("script");
-    script.src = './modules/' + modules[i] + '.js';
-    if (!modules[i++]) {
-      document.body.innerHTML += '<br>In total, ' + passed + ' of ' + total +
-          ' tests passed in ' + ((+new Date() - start) / 1000) + ' secs.<br>';
+    var module = modules[i++];
+    if (!module) {
+      time = new Date() - time;
+      document.body.innerHTML +=
+        '<br><br>&nbsp;In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.<br>';
       document.body.scrollIntoView(false);
       return;
     }
+    var script = document.createElement("script");
+    script.src = './modules/' + module + '.js';
     script.onload = script.onreadystatechange = function () {
       if (!script.readyState || /loaded|complete/.test(script.readyState)) {
-        if (!T.result)  {
-          document.body.innerHTML +=
-              '<br><span style="color: red">Test script failed - see error console.</span>';
-        } else {
+        if (T.result)  {
           passed += T.result[0];
           total += T.result[1];
         }
         head.removeChild(script);
         count = script = null;
-        //document.body.innerHTML += '<br>';
         document.body.scrollIntoView(false);
         setTimeout(load, 0);
       }
-
     };
     head.appendChild(script);
   }
 
-  document.body.innerHTML += 'Testing decimal.js<br>';
+  document.body.innerHTML += '&nbsp;Testing decimal.js<br>';
   load();
   </script>
 </body>

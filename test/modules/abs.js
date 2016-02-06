@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('absoluteValue');
+T('absoluteValue', function () {
 
   function t(expected, value){
     T.assertEqual(expected, new Decimal(value).abs().valueOf());
@@ -123,6 +122,4 @@ if (typeof T === 'undefined') require('../setup');
   t('Infinity', '1E9000000000000001');
   t('Infinity', '-1e+9000000000000001');
   t('5.5879983320336874473209567979e+287894365', '-5.5879983320336874473209567979e+287894365');
-
-  T.stop();
-})();
+});

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toBinary');
+T('toBinary', function () {
 
   var t = function (expected, n, sd, rm) {
     Decimal.precision = sd;
@@ -357,6 +356,4 @@ if (typeof T === 'undefined') require('../setup');
   t('0b1.10110111p-1', '0.857421875', 9, 4);
 
   t('0b1.001010101110101p-4', '0b1.001010101110101p-4', 16, 1);
-
-  T.stop();
-})();
+});

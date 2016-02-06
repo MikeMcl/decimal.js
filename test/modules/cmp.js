@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('comparedTo');
+T('comparedTo', function () {
 
   var N = NaN, I = Infinity;
 
@@ -1024,6 +1023,4 @@ if (typeof T === 'undefined') require('../setup');
   t('-3.292e-15', '-2.2e-1', 1);
   t('-9.29480350675e-6', '9.4830355594e+4', -1);
   t('-2.49267401e-19', '3.3296905e+4', -1);
-
-  T.stop();
-})();
+});

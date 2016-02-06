@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('fromJSON');
+T('fromJSON', function () {
 
   Decimal.config({
     precision: Math.random() * 40 + 1 | 0,
@@ -41,6 +40,4 @@ if (typeof T === 'undefined') require('../setup');
     */
     T.assert(r.eq(fromJ));
   }
-
-  T.stop();
-})();
+});

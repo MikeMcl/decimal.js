@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('ceil');
+T('ceil', function () {
 
   function t(expected, n) {
     T.assertEqual(expected, new Decimal(n).ceil().valueOf());
@@ -69,6 +68,4 @@ if (typeof T === 'undefined') require('../setup');
   t('9105942082143427451223', '9105942082143427451223');
   t('276312604693909858428', '276312604693909858427.21965306055697011390137926559');
   t('1', '0.0000252');
-
-  T.stop();
-})();
+});

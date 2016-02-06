@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('sign');
+T('sign', function () {
 
   function t(n, expected) {
     T.assertEqual(expected, Decimal.sign(n));
@@ -25,6 +24,4 @@ if (typeof T === 'undefined') require('../setup');
   t('-1', -1);
   t('9.99', 1);
   t('-9.99', -1);
-
-  T.stop();
-})();
+});

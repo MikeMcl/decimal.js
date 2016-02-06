@@ -1,69 +1,69 @@
-var start = +new Date(),
- passed = 0,
- total = 0;
+var time = new Date(),
+  passed = 0,
+  total = 0;
 
-console.log('\n Testing decimal.js\n');
+console.log('\n Testing decimal.js');
 
 [
-    'abs',
-   'acos',
-   'acosh',
-   'asin',
-   'asinh',
-   'atan',
-   'atan2',
-   'atanh',
-   'cbrt',
-    'ceil',
-    'clone',
-    'cmp',
-    'config',
-   'cos',
-   'cosh',
-   'Decimal',
-    'div',
-    'divToInt',
-    'dpSd',
-    'exp',
-    'floor',
-   'hypot',
-   'immutability',
-    'intPow',
-    'isFiniteEtc',
-    'ln',
-    'log',
-    'log10',
-    'log2',
-    'minAndMax',
-    'minus',
-    'mod',
-    'neg',
-    'plus',
-    'pow',
-    'random',
-    'round',
-   'sign',
-   'sin',
-   'sinh',
-    'sqrt',
-   'tan',
-   'tanh',
-    'times',
-   'toBinary',
-    'toDP',
-    'toExponential',
-    'toFixed',
-    'toFraction',
-   'toHex',
-   'toJSON',
-    'toNearest',
-    'toNumber',
-   'toOctal',
-    'toPrecision',
-    'toSD',
-    'toString',
-    'trunc',
-    'valueOf',
+  'abs',
+  'acos',
+  'acosh',
+  'asin',
+  'asinh',
+  'atan',
+  'atan2',
+  'atanh',
+  'cbrt',
+  'ceil',
+  'clone',
+  'cmp',
+  'config',
+  'cos',
+  'cosh',
+  'Decimal',
+  'div',
+  'divToInt',
+  'dpSd',
+  'exp',
+  'floor',
+  'hypot',
+  'immutability',
+  'intPow',
+  'isFiniteEtc',
+  'ln',
+  'log',
+  'log10',
+  'log2',
+  'minAndMax',
+  'minus',
+  'mod',
+  'neg',
+  'plus',
+  'pow',
+  'random',
+  'round',
+  'sign',
+  'sin',
+  'sinh',
+  'sqrt',
+  'tan',
+  'tanh',
+  'times',
+  'toBinary',
+  'toDP',
+  'toExponential',
+  'toFixed',
+  'toFraction',
+  'toHex',
+  'toJSON',
+  'toNearest',
+  'toNumber',
+  'toOctal',
+  'toPrecision',
+  'toSD',
+  'toString',
+  'trunc',
+  'valueOf',
 ]
 .forEach(function (module) {
   require('./modules/' + module);
@@ -71,52 +71,5 @@ console.log('\n Testing decimal.js\n');
   total += T.result[1];
 });
 
-console.log('\n In total, ' + passed + ' of ' + total + ' tests passed in ' +
-  ((+new Date() - start) / 1000) + ' secs.\n');
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+time = new Date() - time;
+console.log('\n\n In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.\n');

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('decimalPlaces and precision');
+T('decimalPlaces and precision', function () {
 
   function t(n, dp, sd, zs) {
     T.assertEqual(dp, new Decimal(n).dp());
@@ -68,6 +67,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {new Decimal(1).sd(2)}, "new Decimal(1).sd(2)");
   tx(function () {new Decimal(1).sd('3')}, "new Decimal(1).sd('3')");
   tx(function () {new Decimal(1).sd({})}, "new Decimal(1).sd({})");
-
-  T.stop();
-})();
+});

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('pow against sqrt');
+T('pow against sqrt', function () {
 
   Decimal.config({
     toExpNeg: -7,
@@ -36,7 +35,5 @@ if (typeof T === 'undefined') require('../setup');
 
     T.assertEqual(p.valueOf(), s.valueOf());
   }
-
-  T.stop();
-})();
+});
 

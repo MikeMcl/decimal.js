@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toNearest');
+T('toNearest', function () {
 
   function isMinusZero(n) {
     return n.isZero() && n.isNegative();
@@ -152,6 +151,4 @@ if (typeof T === 'undefined') require('../setup');
   t('42840000000000000', '42835000000000001', '1e+13', 2, 1);
   t('42840000000000000', '42835000000000000.0002', '1e+13', 200, 0);
   t('42840000000000000', '42835000000000000.0002', '1e+13', 200, 1);
-
-  T.stop();
-})();
+});

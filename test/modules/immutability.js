@@ -2,8 +2,7 @@
 // Also tests each Decimal.prototype method against its equivalent Decimal method where applicable.
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('immutability');
+T('immutability', function () {
 
   Decimal.config({
     precision: 20,
@@ -157,7 +156,7 @@ if (typeof T === 'undefined') require('../setup');
 
     T.assertEqual(x, y);
 
-    // Omit these hyperbolic methods if a is large, as they are too time-consuming.
+    // Omit hyperbolic methods if a is large, as they are too time-consuming.
     if (a.abs().lt(1000)) {
       x = a.hyperbolicCosine();
       t(a, aa);
@@ -547,9 +546,7 @@ if (typeof T === 'undefined') require('../setup');
     Decimal.sign(a);
     t(a, aa);
   }
-
-  T.stop();
-})();
+});
 
 /*
 // All methods tested above except:

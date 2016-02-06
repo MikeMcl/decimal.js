@@ -1,26 +1,27 @@
 // Adds global: T
 
 T = (function () {
-  var passed, start, testNumber, write, writer, writeError;
+  var passed, testNumber, write;
 
-  function T(name) {
+  function T(name, tests) {
+    var time;
     write('\n Testing ' + name + '...');
-    start = +new Date();
     passed = testNumber = 0;
-    T.result = null;
+    time = new Date();
+    tests();
+    time = new Date() - time;
+    T.result = [passed, testNumber, time];
+    if (passed !== testNumber) write('\n');
+    write(' ' + passed + ' of ' + testNumber + ' tests passed in ' + time + ' ms');
   }
 
   if (typeof window != 'undefined') {
-    writer = function (str, className) {
-      document.body.innerHTML += '<div class="' + className + '">' +
-        str.replace('\n', '<br>') + '</div>';
+    write = function (str) {
+      document.body.innerHTML += str.replace(/\n/g, '<br>').replace(/ /g, '&nbsp;');
     };
-    write = function (str) { writer(str, 'pass'); };
-    writeError = function (str) { writer(str, 'fail'); };
   } else {
     Decimal = require('../decimal');
-    write = console.log;
-    writeError = console.error;
+    write = process.stdout.write.bind(process.stdout);
   }
 
   T.assert = function (actual) {
@@ -29,21 +30,26 @@ T = (function () {
       ++passed;
       //write('\n Expected and actual: ' + actual);
     } else {
-      writeError('\n Test number ' + testNumber + ' failed: assert');
-      writeError(' Expected: true');
-      writeError(' Actual:   ' + actual);
+      write(
+        '\n  Test number ' + testNumber + ' failed: assert' +
+        '\n  Expected: true' +
+        '\n  Actual:   ' + actual
+      );
       //process.exit();
     }
   };
 
   T.assertEqual = function (expected, actual) {
     ++testNumber;
+    // If expected and actual are both NaN, consider them equal.
     if (expected === actual || expected !== expected && actual !== actual) {
       ++passed;
     } else {
-      writeError('\n Test number ' + testNumber + ' failed: assertEqual');
-      writeError(' Expected: ' + expected);
-      writeError(' Actual:   ' + actual);
+      write(
+        '\n  Test number ' + testNumber + ' failed: assertEqual' +
+        '\n  Expected: ' + expected +
+        '\n  Actual:   ' + actual
+      );
     }
   };
 
@@ -52,9 +58,11 @@ T = (function () {
     if (x.eq(y) || x.isNaN() && y.isNaN()) {
       ++passed;
     } else {
-      writeError('\n Test number ' + testNumber + ' failed: assertEqualDecimal');
-      writeError(' x: ' + x.valueOf());
-      writeError(' y: ' + y.valueOf());
+      write(
+        '\n  Test number ' + testNumber + ' failed: assertEqualDecimal' +
+        '\n  x: ' + x.valueOf() +
+        '\n  y: ' + y.valueOf()
+      );
     }
   };
 
@@ -66,13 +74,15 @@ T = (function () {
     if (i === len && i === n.d.length && exponent === n.e && sign === n.s) {
       ++passed;
     } else {
-      writeError('\n Test number ' + testNumber + ' failed: assertEqualProps');
-      writeError(' Expected digits:   ' + digits);
-      writeError(' Expected exponent: ' + exponent);
-      writeError(' Expected sign:     ' + sign);
-      writeError(' Actual digits:     ' + n.d);
-      writeError(' Actual exponent:   ' + n.e);
-      writeError(' Actual sign:       ' + n.s);
+      write(
+        '\n  Test number ' + testNumber + ' failed: assertEqualProps' +
+        '\n  Expected digits:   ' + digits +
+        '\n  Expected exponent: ' + exponent +
+        '\n  Expected sign:     ' + sign +
+        '\n  Actual digits:     ' + n.d +
+        '\n  Actual exponent:   ' + n.e +
+        '\n  Actual sign:       ' + n.s
+      );
     }
   };
 
@@ -87,19 +97,13 @@ T = (function () {
     if (actual instanceof Error && /DecimalError/.test(actual.message)) {
       ++passed;
     } else {
-      writeError('\n Test number ' + testNumber + ' failed: assertException');
-      writeError(' Expected: ' + msg + ' to raise a [DecimalError].');
-      writeError(' Actual:   ' + (actual || 'no exception'));
+      write(
+        '\n  Test number ' + testNumber + ' failed: assertException' +
+        '\n  Expected: ' + msg + ' to raise a DecimalError.' +
+        '\n  Actual:   ' + (actual || 'no exception')
+      );
     }
   };
-
-  T.stop = function () {
-    var duration = +new Date() - start;
-    write('\n ' + passed + ' of ' + testNumber + ' tests passed in ' + duration + ' ms \n');
-    T.result = [passed, testNumber, duration];
-  };
-
-  T.write = write;
 
   return T;
 })();

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toFixed');
+T('toFixed', function () {
 
   function t(expected, n, dp) {
     T.assertEqual(expected, new Decimal(n).toFixed(dp));
@@ -567,6 +566,4 @@ if (typeof T === 'undefined') require('../setup');
   t('1.00000000000000000000', '1.000000000000000000005', 20);
   t('-1.00000000000000000', '-1.000000000000000000005', 17);
   t('-1.00000000000000000001', '-1.000000000000000000005', 20);
-
-  T.stop();
-})();
+});

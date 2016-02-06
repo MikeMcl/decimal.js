@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('Decimal');
+T('Decimal', function () {
 
   Decimal.config({
     precision: 40,
@@ -286,6 +285,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {new Decimal('--45')}, "'--45'");
   tx(function () {new Decimal('9.99--')}, "'9.99--'");
   tx(function () {new Decimal('0 0')}, "'0 0'");
-
-  T.stop();
-})();
+});

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toFraction');
+T('toFraction', function () {
 
   function t(expected, n, maxDenominator) {
     T.assertEqual(expected, new Decimal(n).toFraction(maxDenominator).toString());
@@ -229,6 +228,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {new Decimal('123.45').toFraction(-23)}, ".toFraction(-23)");
   tx(function () {new Decimal('123.45').toFraction(Infinity)}, ".toFraction(Infinity)");
   tx(function () {new Decimal('123.45').toFraction('-Infinity')}, ".toFraction('-Infinity')");
-
-  T.stop();
-})();
+});

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('ln');
+T('ln', function () {
 
   function t(n, expected, sd, rm) {
     Decimal.precision = sd;
@@ -536,6 +535,4 @@ if (typeof T === 'undefined') require('../setup');
   t('9.9102170675767525486462268743104768E+722282888', '2e+9', 1, 5);
   t('88.7213950103796184597368396487398', '4.4855e+0', 5, 1);
   t('8.245971550E+8358202', '1.92454734391578027453548100134030572e+7', 36, 2);
-
-  T.stop();
-})();
+});

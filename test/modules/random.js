@@ -1,16 +1,15 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('random');
+T('random', function () {
+  var i, sd, maxDigits;
 
   function tx(fn, msg) {
     T.assertException(fn, msg);
   }
 
-  var i, sd, maxDigits = 100;
+  maxDigits = 100;
 
   for (i = 0; i < 996; i++) {
-    Decimal.crypto = Math.random() > 0.5;
     sd = Math.random() * maxDigits + 1 | 0;
 
     if (Math.random() > 0.5) {
@@ -27,6 +26,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () { Decimal.random('-Infinity') }, "'-Infinity'");
   tx(function () { Decimal.random(NaN) }, 'NaN');
   tx(function () { Decimal.random(null) }, 'null');
-
-  T.stop();
-})();
+});

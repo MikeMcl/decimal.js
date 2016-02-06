@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toExponential');
+T('toExponential', function () {
 
   function t(expected, n, dp) {
     T.assertEqual(expected, new Decimal(n).toExponential(dp));
@@ -553,6 +552,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {new Decimal(1.23).toExponential(1, '-1e-1')}, ".toExponential(1, '-1e-1')");
   tx(function () {new Decimal(1.23).toExponential(1, Infinity)}, ".toExponential(1, Infinity)");
   tx(function () {new Decimal(1.23).toExponential(1, '-Infinity')}, ".toExponential(1, '-Infinity')");
-
-  T.stop();
-})();
+});

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('dividedToIntegerBy');
+T('dividedToIntegerBy', function () {
 
   function t(dividend, divisor, expected) {
     T.assertEqual(expected, new Decimal(dividend).divToInt(divisor).valueOf());
@@ -1016,6 +1015,4 @@ if (typeof T === 'undefined') require('../setup');
   t('8200969461.781648200152056735094101250', '-6173584.6386638', '-1.328e+3');
   t('-6162044682.46579949512756133331211291134216377880642', '70883.101619290546467', '-8.6932e+4');
   t('2.2858509075765580228170996569682255', '7.024E-8', '3.2543435e+7');
-
-  T.stop();
-})();
+});

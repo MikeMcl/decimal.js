@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('floor');
+T('floor', function () {
 
   function t(expected, n) {
     T.assertEqual(expected, new Decimal(n).floor().valueOf());
@@ -123,6 +122,4 @@ if (typeof T === 'undefined') require('../setup');
   t('-Infinity', '-1e+9000000000000001');
   t('5.5879983320336874473209567979e+287894365', '5.5879983320336874473209567979e+287894365');
   t('-5.5879983320336874473209567979e+287894365', '-5.5879983320336874473209567979e+287894365');
-
-  T.stop();
-})();
+});

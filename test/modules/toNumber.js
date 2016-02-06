@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toNumber');
+T('toNumber', function () {
 
   Decimal.config({
     precision: 20,
@@ -75,6 +74,4 @@ if (typeof T === 'undefined') require('../setup');
   t('-9.999999e+9000000000000000', -1 / 0);
   t('1e-9000000000000000', 0);
   t('-1e-9000000000000000', -0);
-
-  T.stop();
-})();
+});

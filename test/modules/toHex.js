@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toHex');
+T('toHex', function () {
 
   var t = function (expected, n, sd, rm) {
     Decimal.precision = sd;
@@ -340,6 +339,4 @@ if (typeof T === 'undefined') require('../setup');
   t('0x1.921fb4d12d84ap+1', '3.1415926', 14, 4);
   t('0x1.5b23a8dd37fc2p-10', '0.001324231321', 14, 4);
   t('0x1.81016cc52538ap+9', '770.0111319', 14, 4);
-
-  T.stop();
-})();
+});

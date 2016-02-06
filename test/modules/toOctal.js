@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toOctal');
+T('toOctal', function () {
 
   var t = function (expected, n, sd, rm) {
     Decimal.precision = sd;
@@ -323,6 +322,4 @@ if (typeof T === 'undefined') require('../setup');
   t('0o1.556p-1', '0.857421875', 40, 4);
 
   t('0o1.777p-4', '0o1.777p-4', 4, 1);
-
-  T.stop();
-})();
+});

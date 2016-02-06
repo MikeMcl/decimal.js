@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('min and max');
+T('min and max', function () {
 
   function t(min, max, arr) {
     T.assertEqual(new Decimal(max).valueOf(), Decimal.max.apply(Decimal, arr).valueOf());
@@ -73,6 +72,4 @@ if (typeof T === 'undefined') require('../setup');
   t(0, 1, [1, '1e-9000000000000001', 1e-200]);
   t(-0, 1, [1, '-1e-9000000000000001', 1e-200]);
   t(-3, 3, [1, '2', 3, '-1', -2, '-3']);
-
-  T.stop();
-})();
+});

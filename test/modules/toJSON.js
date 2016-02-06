@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toJSON');
+T('toJSON', function () {
 
   function t(n, expected) {
     T.assertEqual(expected, new Decimal(n).toJSON());
@@ -87,7 +86,5 @@ if (typeof T === 'undefined') require('../setup');
   t('0.00000009876543212345678987654321', 'h8J+]nxS}gN-^oN');
   t('-0.00000009876543212345678987654321', 'N8J+]nxS}gN-^oN');
   t('1.00000009876543212345678987654321', '-7$yQ@UAPUk2SZ#XQh');
-
-  T.stop();
-})();
+});
 

@@ -1,7 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-(function () {
-  T('toPrecision');
+T('toPrecision', function () {
 
   function t(expected, n, sd, rm) {
     T.assertEqual(expected, new Decimal(n).toPrecision(sd, rm));
@@ -565,6 +564,4 @@ if (typeof T === 'undefined') require('../setup');
   tx(function () {new Decimal(1.23).toPrecision(1, '-1e-1')}, ".toPrecision(1, '-1e-1')");
   tx(function () {new Decimal(1.23).toPrecision(1, Infinity)}, ".toPrecision(1, Infinity)");
   tx(function () {new Decimal(1.23).toPrecision(1, '-Infinity')}, ".toPrecision(1, '-Infinity')");
-
-  T.stop();
-})();
+});
