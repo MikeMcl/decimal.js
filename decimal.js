@@ -4356,6 +4356,7 @@
    *
    */
   function clone(obj) {
+    var i, p, ps;
 
     /*
      * The Decimal constructor and exported function.
@@ -4486,18 +4487,10 @@
     Decimal.tanh = tanh;          // ES6
     Decimal.trunc = trunc;        // ES6
 
-    if (obj === void 0) {
-      obj = this;
-      obj = {
-        precision: obj.precision,
-        rounding: obj.rounding,
-        modulo: obj.modulo,
-        toExpNeg: obj.toExpNeg,
-        toExpPos: obj.toExpPos,
-        minE: obj.minE,
-        maxE: obj.maxE,
-        crypto: obj.crypto
-      };
+    if (obj === void 0) obj = {};
+    if (obj) {
+      ps = ['precision', 'rounding', 'toExpNeg', 'toExpPos', 'maxE', 'minE', 'modulo', 'crypto'];
+      for (i = 0; i < ps.length;) if (!obj.hasOwnProperty(p = ps[i++])) obj[p] = this[p];
     }
 
     Decimal.config(obj);

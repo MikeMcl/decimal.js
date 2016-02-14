@@ -3,7 +3,7 @@ if (typeof T === 'undefined') require('../setup');
 T('trunc', function () {
 
   function t(expected, n) {
-    T.assertEqual(expected, Decimal.trunc(n).valueOf());
+    T.assertEqual(expected, new Decimal(n).trunc().valueOf());
   }
 
   Decimal.config({
