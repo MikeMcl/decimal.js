@@ -4046,7 +4046,7 @@
         if ( !crypto ) {
 
             try {
-                crypto = require('crypto');
+                crypto = require('cry' + 'pto');
             } catch (e) {}
         }
 
