@@ -1,7 +1,7 @@
 {
   "name": "decimal.js",
   "main": "decimal.js",
-  "version": "4.0.3",
+  "version": "4.0.4",
   "homepage": "https://github.com/MikeMcl/decimal.js",
   "authors": [
     "Michael Mclaughlin <M8ch88l@gmail.com>"

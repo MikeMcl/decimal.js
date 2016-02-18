@@ -204,6 +204,9 @@ See LICENCE.
 
 ## Change Log
 
+####4.0.4
+* 18/02/2016 Prevent browserify crypto require.
+
 ####4.0.3
 * 2/10/2015 Internal round function bugfix.
 

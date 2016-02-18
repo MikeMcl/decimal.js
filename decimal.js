@@ -1,13 +1,13 @@
-/*! decimal.js v4.0.3 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v4.0.4 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (global) {
     'use strict';
 
 
     /*
-     *  decimal.js v4.0.3
+     *  decimal.js v4.0.4
      *  An arbitrary-precision Decimal type for JavaScript.
      *  https://github.com/MikeMcl/decimal.js
-     *  Copyright (c) 2014 Michael Mclaughlin <M8ch88l@gmail.com>
+     *  Copyright (c) 2016 Michael Mclaughlin <M8ch88l@gmail.com>
      *  MIT Expat Licence
      */
 
@@ -1503,15 +1503,15 @@
      * ECMAScript compliant.
      *
      *   x is any value, including NaN.
-     *   n is any number, including ±Infinity unless stated.
+     *   n is any number, including ï¿½Infinity unless stated.
      *
      *   pow( x, NaN )                           = NaN
-     *   pow( x, ±0 )                            = 1
+     *   pow( x, ï¿½0 )                            = 1
 
      *   pow( NaN, nonzero )                     = NaN
      *   pow( abs(n) > 1, +Infinity )            = +Infinity
      *   pow( abs(n) > 1, -Infinity )            = +0
-     *   pow( abs(n) == 1, ±Infinity )           = NaN
+     *   pow( abs(n) == 1, ï¿½Infinity )           = NaN
      *   pow( abs(n) < 1, +Infinity )            = +0
      *   pow( abs(n) < 1, -Infinity )            = +Infinity
      *   pow( +Infinity, n > 0 )                 = +Infinity
