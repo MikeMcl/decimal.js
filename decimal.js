@@ -3123,8 +3123,7 @@
           j = i - LOG_BASE + digits;
 
           // Get the rounding digit at index j of w.
-          // Floor using Math.floor instead of | 0 as rd may be outside int range.
-          rd = j < 0 ? 0 : mathfloor(w / mathpow(10, digits - j - 1) % 10);
+          rd = j < 0 ? 0 : w / mathpow(10, digits - j - 1) % 10 | 0;
         }
       }
 
