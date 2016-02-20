@@ -1,18 +1,22 @@
+####5.0.5
+* 20/02/2015
+* Bugfix: #26 wrong precision applied.
+
 ####5.0.4
-* 14/02/2015 
+* 14/02/2015
 * Bugfix: #26 clone.
 
 ####5.0.3
-* 06/02/2015 
+* 06/02/2015
 * Refactor tests.
 
 ####5.0.2
-* 05/02/2015 
+* 05/02/2015
 * Added immutability tests.
 * Minor *decimal.js* clean-up.
 
 ####5.0.1
-* 28/01/2015 
+* 28/01/2015
 * Bugfix: #20 cos mutates value.
 * Add pi info to docs.
 
@@ -22,18 +26,18 @@
 * Added most of JavaScript's `Math` object methods as Decimal methods.
 * Added `toBinary`, `toHexadecimal` and `toOctal` methods.
 * Added `isPositive` method.
-* Removed the 15 significant digit limit for numbers. 
+* Removed the 15 significant digit limit for numbers.
 * `toFraction` now returns an array of two Decimals, not two strings.
 * String values containing whitespace or a plus sign are no longer accepted.
 * `valueOf` now returns `'-0'` for minus zero.
 * `comparedTo` now returns `NaN` not `null` for comparisons with `NaN`.
 * `Decimal.max` and `Decimal.min` no longer accept an array.
-* The Decimal constructor and `toString` no longer accept a base argument. 
+* The Decimal constructor and `toString` no longer accept a base argument.
 * Binary, hexadecimal and octal prefixes are now recognised for string values.
 * Removed `Decimal.errors` configuration property.
 * Removed `toFormat` method.
 * Removed `Decimal.ONE`.
-* Renamed `exponential` method to `naturalExponential`. 
+* Renamed `exponential` method to `naturalExponential`.
 * Renamed `Decimal.constructor` method to `Decimal.clone`.
 * Simplified error handling and amended error messages.
 * Refactored the test suite.
