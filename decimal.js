@@ -100,7 +100,7 @@
   // ----------------------------------- END OF EDITABLE DEFAULTS ------------------------------- //
 
 
-    inexact, noConflict, quadrant, HALF, ONE,
+    inexact, noConflict, quadrant,
     cryptoObject = typeof crypto != 'undefined' ? crypto : null,
     external = true,
 
@@ -279,7 +279,7 @@
     if (!x.d) return new Ctor(NaN);
 
     // cos(0) = cos(-0) = 1
-    if (!x.d[0]) return new Ctor(ONE);
+    if (!x.d[0]) return new Ctor(1);
 
     pr = Ctor.precision;
     rm = Ctor.rounding;
@@ -531,7 +531,7 @@
     var k, n, pr, rm, len,
       x = this,
       Ctor = x.constructor,
-      one = new Ctor(ONE);
+      one = new Ctor(1);
 
     if (!x.isFinite()) return new Ctor(x.s ? 1 / 0 : NaN);
     if (x.isZero()) return one;
@@ -555,7 +555,7 @@
       n = '2.3283064365386962890625e-10';
     }
 
-    x = taylorSeries(Ctor, 1, x.times(n), new Ctor(ONE), true);
+    x = taylorSeries(Ctor, 1, x.times(n), new Ctor(1), true);
 
     // Reverse argument reduction
     var cosh2_x,
@@ -707,7 +707,7 @@
     var halfPi,
       x = this,
       Ctor = x.constructor,
-      k = x.abs().cmp(ONE),
+      k = x.abs().cmp(1),
       pr = Ctor.precision,
       rm = Ctor.rounding;
 
@@ -719,7 +719,7 @@
         : new Ctor(NaN);
     }
 
-    if (x.isZero()) return getPi(Ctor, pr + 4, rm).times(HALF);
+    if (x.isZero()) return getPi(Ctor, pr + 4, rm).times(0.5);
 
     // TODO? Special case acos(0.5) = pi/3 and acos(-0.5) = 2*pi/3
 
@@ -727,7 +727,7 @@
     Ctor.rounding = 1;
 
     x = x.asin();
-    halfPi = getPi(Ctor, pr + 4, rm).times(HALF);
+    halfPi = getPi(Ctor, pr + 4, rm).times(0.5);
 
     Ctor.precision = pr;
     Ctor.rounding = rm;
@@ -760,7 +760,7 @@
       x = this,
       Ctor = x.constructor;
 
-    if (x.lte(ONE)) return new Ctor(x.eq(ONE) ? 0 : NaN);
+    if (x.lte(1)) return new Ctor(x.eq(1) ? 0 : NaN);
     if (!x.isFinite()) return new Ctor(x);
 
     pr = Ctor.precision;
@@ -769,7 +769,7 @@
     Ctor.rounding = 1;
     external = false;
 
-    x = x.times(x).minus(ONE).sqrt().plus(x);
+    x = x.times(x).minus(1).sqrt().plus(x);
 
     external = true;
     Ctor.precision = pr;
@@ -808,7 +808,7 @@
     Ctor.rounding = 1;
     external = false;
 
-    x = x.times(x).plus(ONE).sqrt().plus(x);
+    x = x.times(x).plus(1).sqrt().plus(x);
 
     external = true;
     Ctor.precision = pr;
@@ -843,7 +843,7 @@
       Ctor = x.constructor;
 
     if (!x.isFinite()) return new Ctor(NaN);
-    if (x.e >= 0) return new Ctor(x.abs().eq(ONE) ? x.s / 0 : x.isZero() ? x : NaN);
+    if (x.e >= 0) return new Ctor(x.abs().eq(1) ? x.s / 0 : x.isZero() ? x : NaN);
 
     pr = Ctor.precision;
     rm = Ctor.rounding;
@@ -853,7 +853,7 @@
 
     Ctor.precision = wpr = xsd - x.e;
 
-    x = divide(x.plus(ONE), ONE.minus(x), wpr + pr, 1);
+    x = divide(x.plus(1), new Ctor(1).minus(x), wpr + pr, 1);
 
     Ctor.precision = pr + 4;
     Ctor.rounding = 1;
@@ -863,7 +863,7 @@
     Ctor.precision = pr;
     Ctor.rounding = rm;
 
-    return x.times(HALF);
+    return x.times(0.5);
   };
 
 
@@ -896,7 +896,7 @@
 
     if (x.isZero()) return new Ctor(x);
 
-    k = x.abs().cmp(ONE);
+    k = x.abs().cmp(1);
     pr = Ctor.precision;
     rm = Ctor.rounding;
 
@@ -904,7 +904,7 @@
 
       // |x| is 1
       if (k === 0) {
-        halfPi = getPi(Ctor, pr + 4, rm).times(HALF);
+        halfPi = getPi(Ctor, pr + 4, rm).times(0.5);
         halfPi.s = x.s;
         return halfPi;
       }
@@ -918,7 +918,7 @@
     Ctor.precision = pr + 6;
     Ctor.rounding = 1;
 
-    x = x.div(ONE.plus(Ctor.sqrt(ONE.minus(x.times(x))))).atan();
+    x = x.div(new Ctor(1).minus(x.times(x)).sqrt().plus(1)).atan();
 
     Ctor.precision = pr;
     Ctor.rounding = rm;
@@ -955,13 +955,13 @@
     if (!x.isFinite()) {
       if (!x.s) return new Ctor(NaN);
       if (pr + 4 <= PI_PRECISION) {
-        r = getPi(Ctor, pr + 4, rm).times(HALF);
+        r = getPi(Ctor, pr + 4, rm).times(0.5);
         r.s = x.s;
         return r;
       }
     } else if (x.isZero()) {
       return new Ctor(x);
-    } else if (x.abs().eq(ONE) && pr + 4 <= PI_PRECISION) {
+    } else if (x.abs().eq(1) && pr + 4 <= PI_PRECISION) {
       r = getPi(Ctor, pr + 4, rm).times(0.25);
       r.s = x.s;
       return r;
@@ -978,7 +978,7 @@
 
     k = Math.min(28, wpr / LOG_BASE + 2 | 0);
 
-    for (i = k; i; --i) x = x.div(x.times(x).plus(ONE).sqrt().plus(ONE));
+    for (i = k; i; --i) x = x.div(x.times(x).plus(1).sqrt().plus(1));
 
     external = false;
 
@@ -1126,7 +1126,7 @@
       d = base.d;
 
       // Return NaN if base is negative, or non-finite, or is 0 or 1.
-      if (base.s < 0 || !d || !d[0] || base.eq(ONE)) return new Ctor(NaN);
+      if (base.s < 0 || !d || !d[0] || base.eq(1)) return new Ctor(NaN);
 
       isBase10 = base.eq(10);
     }
@@ -1134,7 +1134,7 @@
     d = arg.d;
 
     // Is arg negative, non-finite, 0 or 1?
-    if (arg.s < 0 || !d || !d[0] || arg.eq(ONE)) {
+    if (arg.s < 0 || !d || !d[0] || arg.eq(1)) {
       return new Ctor(d && !d[0] ? -1 / 0 : arg.s != 1 ? NaN : d ? 0 : 1 / 0);
     }
 
@@ -1748,7 +1748,7 @@
     // Newton-Raphson iteration.
     for (;;) {
       t = r;
-      r = t.plus(divide(x, t, sd + 2, 1)).times(HALF);
+      r = t.plus(divide(x, t, sd + 2, 1)).times(0.5);
 
       // TODO? Replace with for-loop and checkRoundingDigits.
       if (digitsToString(t.d).slice(0, sd) === (n = digitsToString(r.d)).slice(0, sd)) {
@@ -1821,7 +1821,7 @@
 
     x = x.sin();
     x.s = 1;
-    x = divide(x, ONE.minus(x.times(x)).sqrt(), pr + 10, 0);
+    x = divide(x, new Ctor(1).minus(x.times(x)).sqrt(), pr + 10, 0);
 
     Ctor.precision = pr;
     Ctor.rounding = rm;
@@ -2049,7 +2049,7 @@
 
     if (!xd) return new Ctor(x);
 
-    n1 = d0 = new Ctor(ONE);
+    n1 = d0 = new Ctor(1);
     d1 = n0 = new Ctor(0);
 
     d = new Ctor(d1);
@@ -2287,7 +2287,7 @@
       // If x is not finite, return x.
       if (!x.d) return x;
 
-      y = new Ctor(ONE);
+      y = new Ctor(1);
       rm = Ctor.rounding;
     } else {
       y = new Ctor(y);
@@ -2400,12 +2400,12 @@
 
     x = new Ctor(x);
 
-    if (x.eq(ONE)) return x;
+    if (x.eq(1)) return x;
 
     pr = Ctor.precision;
     rm = Ctor.rounding;
 
-    if (y.eq(ONE)) return finalise(x, pr, rm);
+    if (y.eq(1)) return finalise(x, pr, rm);
 
     e = mathfloor(y.e / LOG_BASE);
     k = y.d.length - 1;
@@ -2418,7 +2418,7 @@
     // If y is a small integer use the 'exponentiation by squaring' algorithm.
     } else if ((k = yn < 0 ? -yn : yn) <= MAX_SAFE_INTEGER) {
       r = intPow(Ctor, x, k, pr);
-      return y.s < 0 ? new Ctor(ONE).div(r) : finalise(r, pr, rm);
+      return y.s < 0 ? new Ctor(1).div(r) : finalise(r, pr, rm);
     }
 
     // Result is negative if x is negative and the last digit of integer y is odd.
@@ -2778,12 +2778,12 @@
 
     Ctor.precision += k;
 
-    x = taylorSeries(Ctor, 1, x.times(y), new Ctor(ONE));
+    x = taylorSeries(Ctor, 1, x.times(y), new Ctor(1));
 
     // Reverse argument reduction
     for (var i = k; i--;) {
       var cos2x = x.times(x);
-      x = cos2x.times(cos2x).minus(cos2x).times(8).plus(ONE);
+      x = cos2x.times(cos2x).minus(cos2x).times(8).plus(1);
     }
 
     Ctor.precision -= k;
@@ -3326,7 +3326,7 @@
    */
   function intPow(Ctor, x, n, pr) {
     var isTruncated,
-      r = new Ctor(ONE),
+      r = new Ctor(1),
 
       // Max n of 9007199254740991 takes 53 loop iterations.
       // Maximum digits array length; leaves [28, 34] guard digits.
@@ -3430,7 +3430,7 @@
     if (!x.d || !x.d[0] || x.e > 17) {
 
       return new Ctor(x.d
-        ? !x.d[0] ? ONE : x.s < 0 ? 0 : 1 / 0
+        ? !x.d[0] ? 1 : x.s < 0 ? 0 : 1 / 0
         : x.s ? x.s < 0 ? 0 : x : 0 / 0);
     }
 
@@ -3455,7 +3455,7 @@
     // necessary to ensure the first 4 rounding digits are correct.
     guard = Math.log(mathpow(2, k)) / Math.LN10 * 2 + 5 | 0;
     wpr += guard;
-    denominator = pow = sum = new Ctor(ONE);
+    denominator = pow = sum = new Ctor(1);
     Ctor.precision = wpr;
 
     for (;;) {
@@ -3476,7 +3476,7 @@
 
           if (rep < 3 && checkRoundingDigits(sum.d, wpr - guard, rm, rep)) {
             Ctor.precision = wpr += 10;
-            denominator = pow = t = new Ctor(ONE);
+            denominator = pow = t = new Ctor(1);
             i = 0;
             rep++;
           } else {
@@ -3580,7 +3580,7 @@
     // Taylor series.
     // ln(y) = ln((1 + x)/(1 - x)) = 2(x + x^3/3 + x^5/5 + x^7/7 + ...)
     // where x = (y - 1)/(y + 1)    (|x| < 1)
-    sum = numerator = x = divide(x.minus(ONE), x.plus(ONE), wpr, 1);
+    sum = numerator = x = divide(x.minus(1), x.plus(1), wpr, 1);
     x2 = finalise(x.times(x), wpr, 1);
     denominator = 3;
 
@@ -3605,7 +3605,7 @@
         if (sd == null) {
           if (checkRoundingDigits(sum.d, wpr - guard, rm, rep)) {
             Ctor.precision = wpr += guard;
-            t = numerator = x = divide(x1.minus(ONE), x1.plus(ONE), wpr, 1);
+            t = numerator = x = divide(x1.minus(1), x1.plus(1), wpr, 1);
             x2 = finalise(x.times(x), wpr, 1);
             denominator = rep = 1;
           } else {
@@ -3865,7 +3865,7 @@
     var t,
       isNeg = x.s < 0,
       pi = getPi(Ctor, Ctor.precision, 1),
-      halfPi = pi.times(HALF);
+      halfPi = pi.times(0.5);
 
     x = x.abs();
 
@@ -3941,7 +3941,7 @@
       // Non-integer.
       if (i >= 0) {
         str = str.replace('.', '');
-        y = new Ctor(ONE);
+        y = new Ctor(1);
         y.e = str.length - i;
         y.d = convertBase(finiteToString(y), 10, base);
         y.e = y.d.length;
@@ -4230,7 +4230,7 @@
 
     // y is ±Infinity or x is ±0
     } else if (!y.d || x.isZero()) {
-      r = getPi(this, wpr, 1).times(HALF);
+      r = getPi(this, wpr, 1).times(0.5);
       r.s = y.s;
 
     // Both non-zero and finite
@@ -4766,7 +4766,7 @@
   function random(sd) {
     var d, e, k, n,
       i = 0,
-      r = new this(ONE),
+      r = new this(1),
       rd = [];
 
     if (sd === void 0) sd = this.precision;
@@ -4977,9 +4977,7 @@
   // Create and configure initial Decimal constructor.
   Decimal = clone(Decimal);
 
-  // Internal constants.
-  HALF = new Decimal(0.5);
-  ONE = new Decimal(1);
+  // Create the internal constants from their string values.
   LN10 = new Decimal(LN10);
   PI = new Decimal(PI);
 
