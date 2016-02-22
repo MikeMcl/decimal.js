@@ -1,3 +1,7 @@
+####5.0.6
+* 22/02/2015
+* Add bower.json.
+
 ####5.0.5
 * 20/02/2015
 * Bugfix: #26 wrong precision applied.
