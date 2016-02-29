@@ -1,3 +1,8 @@
+####5.0.7
+* 29/02/2015
+* Add decimal.js-light link
+* Remove outdated example from docs
+
 ####5.0.6
 * 22/02/2015
 * Add bower.json.
