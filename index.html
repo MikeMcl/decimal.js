@@ -1241,7 +1241,7 @@ y.ceil()                      // '-1'</pre>
         <td>if this Decimal and <code>x</code> have the same value</td>
       </tr>
       <tr>
-        <td class='centre'><code>null</code></td>
+        <td class='centre'><code>NaN</code></td>
         <td>if the value of either this Decimal or <code>x</code> is <code>NaN</code> </td>
       </tr>
     </table>
@@ -1250,8 +1250,7 @@ x = new Decimal(Infinity)
 y = new Decimal(5)
 x.comparedTo(y)                // 1
 x.comparedTo(x.minus(1))       // 0
-y.cmp(NaN)                     // null
-y.cmp('110', 2)                // -1</pre>
+y.cmp(NaN)                     // NaN</pre>
 
 
 
