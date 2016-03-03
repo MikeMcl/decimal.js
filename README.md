@@ -46,7 +46,7 @@ It can be loaded using a script tag in an HTML document for the browser
 or as a [Node.js](http://nodejs.org) module using `require`.
 
 ```js
-var Decimal = require('decimal');
+var Decimal = require('decimal.js');
 ```
 
 For Node, the library is available from the [npm](https://npmjs.org/) registry
