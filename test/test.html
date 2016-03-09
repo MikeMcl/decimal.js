@@ -84,7 +84,7 @@
     if (!module) {
       time = new Date() - time;
       document.body.innerHTML +=
-        '<br><br>&nbsp;In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.<br>';
+        '<br>&nbsp;In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.<br>';
       document.body.scrollIntoView(false);
       return;
     }
@@ -105,7 +105,7 @@
     head.appendChild(script);
   }
 
-  document.body.innerHTML += '&nbsp;Testing decimal.js<br>';
+  document.body.innerHTML += '&nbsp;Testing decimal.js<br><br>';
   load();
   </script>
 </body>

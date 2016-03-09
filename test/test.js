@@ -2,7 +2,7 @@ var time = new Date(),
   passed = 0,
   total = 0;
 
-console.log('\n Testing decimal.js');
+console.log('\n Testing decimal.js\n');
 
 [
   'abs',
@@ -63,7 +63,7 @@ console.log('\n Testing decimal.js');
   'toSD',
   'toString',
   'trunc',
-  'valueOf',
+  'valueOf'
 ]
 .forEach(function (module) {
   require('./modules/' + module);
@@ -72,4 +72,4 @@ console.log('\n Testing decimal.js');
 });
 
 time = new Date() - time;
-console.log('\n\n In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.\n');
+console.log('\n In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.\n');
