@@ -1,7 +1,12 @@
+####5.0.8
+* 09/03/2016
+* Add newline to single test results.
+* Correct year.
+
 ####5.0.7
 * 29/02/2016
-* Add decimal.js-light link
-* Remove outdated example from docs
+* Add decimal.js-light link.
+* Remove outdated example from docs.
 
 ####5.0.6
 * 22/02/2016
