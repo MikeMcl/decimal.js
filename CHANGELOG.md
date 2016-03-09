@@ -1,31 +1,31 @@
 ####5.0.7
-* 29/02/2015
+* 29/02/2016
 * Add decimal.js-light link
 * Remove outdated example from docs
 
 ####5.0.6
-* 22/02/2015
+* 22/02/2016
 * Add bower.json.
 
 ####5.0.5
-* 20/02/2015
+* 20/02/2016
 * Bugfix: #26 wrong precision applied.
 
 ####5.0.4
-* 14/02/2015
+* 14/02/2016
 * Bugfix: #26 clone.
 
 ####5.0.3
-* 06/02/2015
+* 06/02/2016
 * Refactor tests.
 
 ####5.0.2
-* 05/02/2015
+* 05/02/2016
 * Added immutability tests.
 * Minor *decimal.js* clean-up.
 
 ####5.0.1
-* 28/01/2015
+* 28/01/2016
 * Bugfix: #20 cos mutates value.
 * Add pi info to docs.
 
