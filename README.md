@@ -58,7 +58,7 @@ $ npm install decimal.js
 To load with AMD loader libraries such as [requireJS](http://requirejs.org/):
 
 ```js
-require(['decimal'], function(Decimal) {
+require(['decimal.js'], function(Decimal) {
     // Use Decimal here in local scope. No global Decimal.
 });
 ```
