@@ -1,3 +1,8 @@
+####6.0.0
+* 30/06/2016
+* Removed base-88 serialization format.
+* Amended `toJSON` and removed `Decimal.fromJSON` accordingly.
+
 ####5.0.8
 * 09/03/2016
 * Add newline to single test results.

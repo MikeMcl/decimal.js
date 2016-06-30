@@ -55,7 +55,6 @@ console.log('\n Testing decimal.js\n');
   'toFixed',
   'toFraction',
   'toHex',
-  'toJSON',
   'toNearest',
   'toNumber',
   'toOctal',

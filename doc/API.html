@@ -83,7 +83,6 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#Ddiv"       >div</a></li>
       <li><a href="#Dexp"       >exp</a></li>
       <li><a href="#Dfloor"     >floor</a></li>
-      <li><a href="#DfromJSON"  >fromJSON</a></li>
       <li><a href="#Dhypot"     >hypot</a></li>
       <li><a href="#Dln"        >ln</a></li>
       <li><a href="#Dlog"       >log</a></li>
@@ -548,21 +547,6 @@ a.equals(b)                    // true</pre>
     <p>See <code><a href='#floor'>floor</a></code>.</p>
     <pre>a = Decimal.floor(x)
 b = new Decimal(x).floor()
-a.equals(b)                    // true</pre>
-
-
-
-    <h5 id="DfromJSON">fromJSON<code class='inset'>.fromJSON(s) <i>&rArr; Decimal</i></code></h5>
-    <p><code>s</code>: <i>string</i><br /></p>
-    <p>
-      Returns a new Decimal whose value is the same as the value of the Decimal that created string
-      <code>s</code> from a <a href='#toJSON'><code>toJSON</code></a> call.
-    </p>
-    <p>See <a href='#toJSON'><code>toJSON</code></a>.</p>
-    <pre>
-a = new Decimal(x)
-s = a.toJSON()
-b = Decimal.fromJSON(s)
 a.equals(b)                    // true</pre>
 
 
@@ -2183,46 +2167,7 @@ x.toHex(1)                               // '0x1p+8'</pre>
 
 
     <h5 id="toJSON">toJSON<code class='inset'>.toJSON() <i>&rArr; string</i></code></h5>
-    <p>
-      Returns a string representing the exact value of this Decimal in a compact base-88 based
-      format.
-    </p>
-    <p>
-      A Decimal instance with the same value as this Decimal can be created by passing the return
-      value to the <code><a href='#fromJSON'>fromJSON</a></code> method of a Decimal constructor.
-    </p>
-    <p>
-      The number of characters of the return value will always be equal to or less than the number
-      of characters returned by <a href='#toString'><code>toString</code></a> - usually just over
-      half as many.
-    </p>
-    <p>
-      The 7 printable ASCII characters, <code>(space) \ " & ' &lt; &gt;</code>, are not used in
-      the return value, so it should be safe for inclusion in HTML, JSON and XML.
-    </p>
-    <pre>
-x = new Decimal('177.7e+457')
-x.toJSON()                               // '25jkh'
-y = new Decimal(235.4325)
-y.toJSON()                               // '/3E1Z'
-z = new Decimal('0.0098074')
-z.toJSON()                               // '*cWG'
-
-// Serialize an array of three Decimals
-str = JSON.stringify( [x, y, z] )        // "["25jkh","/3E1Z","*cWG"]"
-
-// Return an array of three Decimals
-JSON.parse(str, function (key, val) {
-    return key === '' ? val : Decimal.fromJSON(val)
-})</pre>
-    <p>If the <code>toJSON</code> method was not present, deserialization would be difficult as the
-    array would be serialized as:</p>
-    <pre>
-/*
-"[{"s":1,"e":459,"c":[17770]},
-  {"s":1,"e":2,"c":[235,4325000]},
-  {"s":1,"e":-3,"c":[98074]}]"
-*/</pre>
+    <p>As <a href='#valueOf'><code>valueOf</code></a>.</p>
 
 
 

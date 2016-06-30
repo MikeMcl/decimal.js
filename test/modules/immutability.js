@@ -552,7 +552,6 @@ T('immutability', function () {
 // All methods tested above except:
 Decimal.clone();
 Decimal.config();
-Decimal.fromJSON();
 Decimal.noConflict();
 Decimal.random();
 */

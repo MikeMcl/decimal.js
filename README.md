@@ -16,7 +16,6 @@ continues to be supported, or see [decimal.js-light](https://github.com/MikeMcl/
   - Simple but full-featured API
   - Replicates many of the methods of JavaScript's `Number.prototype` and `Math` objects
   - Also handles hexadecimal, binary and octal values
-  - Supports serialization of Decimals to a compact base-88 format for transmission or persistence
   - Faster, smaller, and perhaps easier to use than JavaScript versions of Java's BigDecimal
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only

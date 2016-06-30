@@ -1,10 +1,10 @@
-/*! decimal.js v5.0.8 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v6.0.0 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (globalScope) {
   'use strict';
 
 
   /*
-   *  decimal.js v5.0.8
+   *  decimal.js v6.0.0
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
    *  Copyright (c) 2016 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -23,9 +23,8 @@
     // `toDecimalPlaces`, `toExponential`, `toFixed`, `toPrecision` and `toSignificantDigits`.
     MAX_DIGITS = 1e9,                        // 0 to 1e9
 
-    // The base 88 alphabet used by `toJSON` and `fromJSON`.
-    // 7 printable ASCII characters omitted (space) \ " & ' < >
-    NUMERALS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%()*+,-./:;=?@[]^_`{|}~',
+    // Base conversion alphabet.
+    NUMERALS = '0123456789abcdef',
 
     // The natural logarithm of 10 (1025 digits).
     LN10 = '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058',
@@ -38,7 +37,7 @@
     Decimal = {
 
       // These values must be integers within the stated ranges (inclusive).
-      // Most of these values can be changed during run-time using `Decimal.config`.
+      // Most of these values can be changed at run-time using `Decimal.config`.
 
       // The maximum number of significant digits of the result of a calculation or base conversion.
       // E.g. `Decimal.config({ precision: 20 });`
@@ -181,7 +180,6 @@
    *  toFixed
    *  toFraction
    *  toHexadecimal             toHex
-   *  toJSON
    *  toNearest
    *  toNumber
    *  toOctal
@@ -190,7 +188,7 @@
    *  toSignificantDigits       toSD
    *  toString
    *  truncated                 trunc
-   *  valueOf
+   *  valueOf                   toJSON
    */
 
 
@@ -2117,142 +2115,6 @@
   };
 
 
-  /*
-   * Return a string representing the exact value of this Decimal in a compact base-88 based format.
-   *
-   * The number of characters of the string will always be equal to or less than the number of
-   * characters returned by `toString` or `toExponential` - usually just over half as many.
-   *
-   * The original Decimal value can be recreated by passing the string to `Decimal.fromJSON`.
-   *
-   * Base 88 alphabet:
-   * 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%()*+,-./:;=?@[]^_`{|}~
-   *
-   * The following 7 printable ASCII characters are not used
-   * (space) \ " & ' < >
-   * so the return value is safe for strings, HTML, JSON, and XML.
-   *
-   *     0   0     g  16    w  32    M  48    $  64    ]  80
-   *     1   1     h  17    x  33    N  49    %  65    ^  81
-   *     2   2     i  18    y  34    O  50    (  66    _  82
-   *     3   3     j  19    z  35    P  51    )  67    `  83
-   *     4   4     k  20    A  36    Q  52    *  68    {  84
-   *     5   5     l  21    B  37    R  53    +  69    |  85
-   *     6   6     m  22    C  38    S  54    ,  70    }  86
-   *     7   7     n  23    D  39    T  55    -  71    ~  87
-   *     8   8     o  24    E  40    U  56    .  72
-   *     9   9     p  25    F  41    V  57    /  73
-   *     a  10     q  26    G  42    W  58    :  74
-   *     b  11     r  27    H  43    X  59    ;  75
-   *     c  12     s  28    I  44    Y  60    =  76
-   *     d  13     t  29    J  45    Z  61    ?  77
-   *     e  14     u  30    K  46    !  62    @  78
-   *     f  15     v  31    L  47    #  63    [  79
-   *
-   * If the return value is just one character, it represents:
-   * 0-81  [[0, 40][-0, -40]]
-   * 82    -Infinity
-   * 83    +Infinity
-   * 84    NaN
-   * 85-87 free
-   *
-   *   64 32 16  8  4  2  1
-   *    1  0  1  0  1  1  1 = 87
-   *
-   */
-   P.toJSON = function () {
-    var arr, e, i, k, len, n, r, str,
-      x = this,
-      isNeg = x.s < 0;
-
-    // -Infinity/Infinity/NaN.
-    if (!x.d) return NUMERALS.charAt(x.s ? isNeg ? 82 : 83 : 84);
-    e = x.e;
-
-    // Small integer.
-    if (x.d.length === 1 && e < 4 && e >= 0) {
-      n = x.d[0];
-
-      if (n < 2857) {
-
-        // One character.
-        // [[0, 40][-0, -40]]
-        if (n < 41) return NUMERALS.charAt(isNeg ? n + 41 : n);
-
-        // Two characters. High bit of first character unset.
-        // 0XXXXXX
-        // 63*88 + 87 = 5631 = 5632 values, 5632/2 = 2816
-        // [[0, 2815][2816, 5631]]  (2816 * 2 = 5632 values)
-        // [[0, 2815][-0, -2815]]
-        // [[41, 2856][-41, -2856]]
-        n -= 41;
-        if (isNeg) n += 2816;
-        k = n / 88 | 0;
-
-        return NUMERALS.charAt(k) + NUMERALS.charAt(n - k * 88);
-      }
-    }
-
-    str = digitsToString(x.d);
-    r = '';
-
-    // Values with a small exponent. Set high bit.
-    // Positive value: 100XXXX
-    // 1 0 0 {exponent [0, 15] -> [-7, 8]}
-    if (!isNeg && e <= 8 && e >= -7) {
-      k = 64 + e + 7;
-
-    // Negative value: 1010XXX
-    // 1 0 1 0 {exponent [0, 7] -> [-3, 4]}
-    } else if (isNeg && e <= 4 && e >= -3) {
-      k = 64 + 16 + e + 3;
-
-    // Integer without trailing zeros: 0X00000
-    // 0 {is negative} 0 0 0 0 0
-    } else if (str.length === e + 1) {
-      k = 32 * isNeg;
-
-    // All remaining values: 0XXXXXX
-    // Result will have at least 3 characters.
-    // 0 {is negative} {is exponent negative} {exponent character count [1, 15]}
-    } else {
-      k = 32 * isNeg + 16 * (e < 0);
-      e = Math.abs(e);
-
-      // One character to represent the exponent.
-      if (e < 88)  {
-        k += 1;
-        r = NUMERALS.charAt(e);
-
-      // Two characters to represent the exponent.
-      // 87*88 + 87 = 7743
-      } else if (e < 7744) {
-        k += 2;
-        n = e / 88 | 0;
-        r = NUMERALS.charAt(n) + NUMERALS.charAt(e - n * 88);
-
-      // More than two characters to represent the exponent.
-      } else {
-        arr = convertBase(String(e), 10, 88);
-        len = arr.length;
-        k += len;
-        for (i = 0; i < len; i++) r += NUMERALS.charAt(arr[i]);
-      }
-    }
-
-    // At this point r contains the characters in base 88 representing the exponent value.
-    // Prepend the first character, which describes the sign, the exponent sign, and the number of
-    // characters that follow which represent the exponent value.
-    r = NUMERALS.charAt(k) + r;
-    arr = convertBase(str, 10, 88);
-    len = arr.length;
-
-    // Add the base 88 characters that represent the significand.
-    for (i = 0; i < len; i++) r += NUMERALS.charAt(arr[i]);
-
-    return r;
-  };
-
 
   /*
    * Returns a new Decimal whose value is the nearest multiple of the magnitude of `y` to the value
@@ -2569,7 +2431,7 @@
    * Unlike `toString`, negative zero will include the minus sign.
    *
    */
-  P.valueOf = function () {
+  P.valueOf = P.toJSON = function () {
     var x = this,
       Ctor = x.constructor,
       str = finiteToString(x, x.e <= Ctor.toExpNeg || x.e >= Ctor.toExpPos);
@@ -2594,12 +2456,12 @@
 
 
   /*
-   *  digitsToString           P.cubeRoot, P.logarithm, P.squareRoot, P.toFraction, P.toJSON,
-   *                           P.toPower, finiteToString, naturalExponential, naturalLogarithm
+   *  digitsToString           P.cubeRoot, P.logarithm, P.squareRoot, P.toFraction, P.toPower,
+   *                           finiteToString, naturalExponential, naturalLogarithm
    *  checkInt32               P.toDecimalPlaces, P.toExponential, P.toFixed, P.toNearest,
    *                           P.toPrecision, P.toSignificantDigits, toStringBinary, random
    *  checkRoundingDigits      P.logarithm, P.toPower, naturalExponential, naturalLogarithm
-   *  convertBase              P.toJSON, toStringBinary, fromJSON, parseOther
+   *  convertBase              toStringBinary, parseOther
    *  cos                      P.cos
    *  divide                   P.atanh, P.cubeRoot, P.dividedBy, P.dividedToIntegerBy,
    *                           P.logarithm, P.modulo, P.squareRoot, P.tan, P.tanh, P.toFraction,
@@ -2635,7 +2497,7 @@
    *  truncate                 intPow
    *
    *  Throws:                  P.logarithm, P.precision, P.toFraction, checkInt32, getLn10, getPi,
-   *                           naturalLogarithm, config, fromJSON, parseOther, random, Decimal           *
+   *                           naturalLogarithm, config, parseOther, random, Decimal
    */
 
 
@@ -4062,7 +3924,6 @@
    *  div
    *  exp
    *  floor
-   *  fromJSON
    *  hypot
    *  ln
    *  log
@@ -4464,7 +4325,6 @@
     Decimal.div = div;
     Decimal.exp = exp;
     Decimal.floor = floor;
-    Decimal.fromJSON = fromJSON;
     Decimal.hypot = hypot;        // ES6
     Decimal.ln = ln;
     Decimal.log = log;
@@ -4531,83 +4391,6 @@
    */
   function floor(x) {
     return finalise(x = new this(x), x.e + 1, 3);
-  }
-
-
-  /*
-   * Return a new Decimal from `str`, a string value created by `toJSON`.
-   *
-   * Base 88 alphabet:
-   * 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%()*+,-./:;=?@[]^_`{|}~
-   *
-   * If `str` is just one character:
-   * 0-81  [[0, 40][-0, -40]]
-   * 82    -Infinity
-   * 83    +Infinity
-   * 84    NaN
-   *
-   *   64 32 16  8  4  2  1
-   *    1  0  1  0  1  1  1 = 87
-   *
-   */
-  function fromJSON(str) {
-    var e, isNeg, k, n;
-
-    if (typeof str !== 'string' || !str) throw Error(invalidArgument + str);
-    k = str.length;
-    n = NUMERALS.indexOf(str.charAt(0));
-
-    //  [0, 81] -> [[0, 40][-0, -40]]
-    if (k === 1) {
-      return new this(n > 81 ? [-1 / 0, 1 / 0, 0 / 0][n - 82] : n > 40 ? -(n - 41) : n);
-    } else if (n & 64) {
-      isNeg = n & 16;
-
-      // e = isNeg ? [-3, 4] : [-7, 8]
-      e = isNeg ? (n & 7) - 3 : (n & 15) - 7;
-      k = 1;
-    } else if (k === 2) {
-      n = n * 88 + NUMERALS.indexOf(str.charAt(1));
-
-      // [0, 5631] -> [[0, 2815][-0, -2815]] -> [[41, 2856][-41, -2856]]
-      return new this(n >= 2816 ? -(n - 2816) - 41 : n + 41);
-    } else {
-
-      // 0XXXXXX
-      // 0 {is negative} {is exponent negative} {exponent digit count [0, 15]}
-      isNeg = n & 32;
-
-      // Has an exponent been specified?
-      if (n & 31) {
-        e = n & 15;    // Exponent character count [1, 15]
-        k = e + 1;     // Index of first character of the significand.
-
-        if (e === 1)  {
-          e = NUMERALS.indexOf(str.charAt(1));
-        } else if (e === 2) {
-          e = NUMERALS.indexOf(str.charAt(1)) * 88 +
-            NUMERALS.indexOf(str.charAt(2));
-        } else {
-          e = +convertBase(str.slice(1, k), 88, 10).join('');
-        }
-
-        // Negative exponent?
-        if (n & 16) e = -e;
-      } else {
-
-        // Integer without trailing zeros.
-        // 0X00000
-        // 0 {is negative} 0 0 0 0 0
-        str = convertBase(str.slice(1), 88, 10).join('');
-        return new this(isNeg ? '-' + str : str);
-      }
-    }
-
-    str = convertBase(str.slice(k), 88, 10).join('');
-    e = e - str.length + 1;
-    str = str + 'e' + e;
-
-    return new this(isNeg ? '-' + str : str);
   }
 
 
