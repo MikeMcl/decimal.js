@@ -61,6 +61,7 @@ console.log('\n Testing decimal.js\n');
   'toPrecision',
   'toSD',
   'toString',
+  'toRadixString',  
   'trunc',
   'valueOf'
 ]

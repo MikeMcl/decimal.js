@@ -24,7 +24,7 @@
     MAX_DIGITS = 1e9,                        // 0 to 1e9
 
     // Base conversion alphabet.
-    NUMERALS = '0123456789abcdef',
+    NUMERALS = '0123456789abcdefghijklmnopqrstuvwxyz',
 
     // The natural logarithm of 10 (1025 digits).
     LN10 = '2.3025850929940456840179914546843642076011014886287729760333279009675726096773524802359972050895982983419677840422862486334095254650828067566662873690987816894829072083255546808437998948262331985283935053089653777326288461633662222876982198867465436674744042432743651550489343149393914796194044002221051017141748003688084012647080685567743216228355220114804663715659121373450747856947683463616792101806445070648000277502684916746550586856935673420670581136429224554405758925724208241314695689016758940256776311356919292033376587141660230105703089634572075440370847469940168269282808481184289314848524948644871927809676271275775397027668605952496716674183485704422507197965004714951050492214776567636938662976979522110718264549734772662425709429322582798502585509785265383207606726317164309505995087807523710333101197857547331541421808427543863591778117054309827482385045648019095610299291824318237525357709750539565187697510374970888692180205189339507238539205144634197265287286965110862571492198849978748873771345686209167058',
@@ -2206,7 +2206,26 @@
   P.toOctal = function (sd, rm) {
     return toStringBinary(this, 8, sd, rm);
   };
-
+  
+  
+  /*
+   * Return a string representing the value of this Decimal in given base (between 2 and 36), 
+   * round to `sd` significant digits using rounding mode `rm`.
+   *
+   * If the optional `sd` argument is present then return binary exponential notation.
+   *
+   * [radix] {number} Radix of the string to export to
+   * [sd] {number} Significant digits. Integer, 1 to MAX_DIGITS inclusive.
+   * [rm] {number} Rounding mode. Integer, 0 to [radix] inclusive.
+   *
+   */
+  P.toRadixString = function (radix, sd, rm) {
+    radix = parseInt(radix, 10);
+    if (radix < 2) { radix = 2; }
+    if (radix > 36) { radix = 36; }
+    return toStringBinary(this, radix, sd, rm, true);
+  };
+  
 
   /*
    * Return a new Decimal whose value is the value of this Decimal raised to the power `y`, rounded
@@ -3761,7 +3780,7 @@
    *
    * If the optional `sd` argument is present include a binary exponent suffix.
    */
-  function toStringBinary(x, baseOut, sd, rm) {
+  function toStringBinary(x, baseOut, sd, rm, skipPrefix) {
     var base, e, i, k, len, roundUp, str, xd, y,
       Ctor = x.constructor,
       isExp = sd !== void 0;
@@ -3886,7 +3905,9 @@
         }
       }
 
-      str = (baseOut == 16 ? '0x' : baseOut == 2 ? '0b' : baseOut == 8 ? '0o' : '') + str;
+      if (!skipPrefix) {
+        str = (baseOut == 16 ? '0x' : baseOut == 2 ? '0b' : baseOut == 8 ? '0o' : '') + str;
+      }
     }
 
     return x.s < 0 ? '-' + str : str;
