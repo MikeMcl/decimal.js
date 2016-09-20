@@ -187,6 +187,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#toOctal"      >toOctal                 </a>                     </li>
       <li><a href="#pow"          >toPower                 </a><span>pow</span>     </li>
       <li><a href="#toPrecision"  >toPrecision             </a>                     </li>
+      <li><a href="#toRadixString">toRadixString           </a>                     </li>
       <li><a href="#toSD"         >toSignificantDigits     </a><span>toSD</span>    </li>
       <li><a href="#toString"     >toString                </a>                     </li>
       <li><a href="#trunc"        >truncated               </a><span>trunc</span>   </li>
@@ -2362,7 +2363,45 @@ y.toPrecision(5)                         // '45.600'</pre>
 
 
 
-    <h5 id="toSD">
+      <h5 id="toRadixString">toRadixString<code class='inset'>.toRadixString(base[, sd [, rm]]) <i>&rArr; string</i></code></h5>
+      <p>Returns a string representing the value of this Decimal in given base between 2 and 36, rounded to <code>sd</code>
+          significant digits using rounding mode <code>rm</code>.
+      </p>
+      <p>
+          If <code>sd</code> is defined, the return value will use binary exponential notation.
+      </p>
+      <p>
+          If <code>sd</code> is omitted, the return value will be rounded to
+          <a href='#precision'><code>precision</code></a> significant digits.
+      </p>
+      <p>
+          If <code>rm</code> is omitted, rounding mode <a href='#rounding'><code>rounding</code></a>
+          will be used.
+      </p>
+      <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.
+          <code>base</code> values below 2 are treated as 2 and above 36 as 36.
+          Non-integer values of <code>base</code> are floored to integer.</p>
+      <p>
+          If this Decimal has a positive exponent that is equal to or greater than
+          <a href="#toExpPos"><code>toExpPos</code></a>, or a negative exponent equal to or less than
+          <a href="#toExpPos"><code>toExpNeg</code></a>, then exponential notation will be returned.
+      </p>
+    <pre>
+x = new Decimal(100)
+x.toRadixString(1)                             // '1100100'
+x.toRadixString(2)                             // '1100100'
+x.toRadixString(3)                             // '10201'
+x.toRadixString(4)                             // '1210'
+x.toRadixString(8)                             // '144'
+x.toRadixString(10)                             // '100'
+x.toRadixString(11)                             // '91'
+x.toRadixString(16)                             // '64'
+x.toRadixString(36)                             // '2s'
+x.toRadixString(37)                             // '2s'</pre>
+
+
+
+      <h5 id="toSD">
       toSignificantDigits<code class='inset'>.toSD([sd [, rm]]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>

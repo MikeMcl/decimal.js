@@ -1,3 +1,7 @@
+####6.0.1
+* 20/09/2016
+* Added toRadixString() method.
+
 ####6.0.0
 * 30/06/2016
 * Removed base-88 serialization format.
