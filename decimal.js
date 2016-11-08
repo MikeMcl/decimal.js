@@ -4780,7 +4780,8 @@
 
     if (!cryptoObject) {
       try {
-        cryptoObject = require('cry' + 'pto');
+        var pto = 'pto';
+        cryptoObject = require('cry' + pto);
       } catch (e) {
         // Ignore.
       }
