@@ -83,7 +83,8 @@
     if (!module) {
       time = new Date() - time;
       document.body.innerHTML +=
-        '<br>&nbsp;In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.<br>';
+        '<br>&nbsp;In total, ' + passed + ' of ' + total + ' tests passed in ' +
+          (time / 1e3) + ' secs.<br>';
       document.body.scrollIntoView(false);
       return;
     }

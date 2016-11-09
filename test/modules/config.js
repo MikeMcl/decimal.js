@@ -61,7 +61,7 @@ T('config', function () {
     toExpPos: 1000,
     minE: -1e9,
     maxE: 1e9,
-    crypto: true,
+    //crypto: true,    // requires crypto object
     modulo: 4
   });
 
@@ -71,7 +71,7 @@ T('config', function () {
   t(Decimal.toExpPos === 1000);
   t(Decimal.minE === -1e9);
   t(Decimal.maxE === 1e9);
-  t(Decimal.crypto === true || Decimal.crypto === false);
+  //t(Decimal.crypto === true);    // requires crypto object
   t(Decimal.modulo === 4);
 
   Decimal.config({
@@ -277,15 +277,11 @@ T('config', function () {
     T.assertEqual(expected, Decimal.crypto);
   }
 
-  // crypto was set true above, but it will have remained false if
-  // there is no crypto.getRandomValues or crypto.randomBytes.
-  var cryptoVal = Decimal.crypto;
-
-  t(void 0, {crypto: void 0});
+  t(false, {crypto: void 0});
   t(false, {crypto: 0});
-  t(cryptoVal, {crypto: 1});
+  //t(true, {crypto: 1});    // requires crypto object
   t(false, {crypto: false});
-  t(cryptoVal, {crypto: true});
+  //t(true, {crypto: true});    // requires crypto object
 
   tx(function () {Decimal.config({crypto: 'hiya'})}, "crypto: 'hiya'");
   tx(function () {Decimal.config({crypto: 'true'})}, "crypto: 'true'");
@@ -301,7 +297,7 @@ T('config', function () {
   tx(function () {Decimal.config({crypto: NaN})}, "crypto: NaN");
   tx(function () {Decimal.config({crypto: Infinity})}, "crypto: Infinity");
 
-  t(void 0, {crypto: void 0});
+  T.assertEqual(false, Decimal.crypto);
 
   // modulo
 
@@ -341,4 +337,6 @@ T('config', function () {
   tx(function () {Decimal.config({modulo: Infinity})}, "modulo: Infinity");
 
   t(9, {modulo: void 0});
+
+  T.assertEqual(Decimal.set, Decimal.config);
 });

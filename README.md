@@ -4,10 +4,6 @@ An arbitrary-precision Decimal type for JavaScript.
 
 <br>
 [![Build Status](https://travis-ci.org/MikeMcl/decimal.js.svg)](https://travis-ci.org/MikeMcl/decimal.js)
-
-*For a smaller library without the trigonometric functions see the
-[v4.x.x](https://github.com/MikeMcl/decimal.js/tree/v4.x.x) branch where version 4 of this library
-continues to be supported, or see [decimal.js-light](https://github.com/MikeMcl/decimal.js-light/), which is smaller still.*
 <br>
 
 ## Features
@@ -24,13 +20,16 @@ continues to be supported, or see [decimal.js-light](https://github.com/MikeMcl/
 ![API](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/API.png)
 
 The library is similar to [bignumber.js](https://github.com/MikeMcl/bignumber.js/), but here
-precision is specified in terms of significant digits instead of decimal places, and all
+precision is specified in terms of significant digits rather than decimal places, and all
 calculations are rounded to the precision (similar to Python's decimal module) rather than just
 those involving division.
 
 This library also adds the trigonometric functions, among others, and supports non-integer powers,
 which makes it a significantly larger library than *bignumber.js* and the even smaller
 [big.js](https://github.com/MikeMcl/big.js/).
+
+For a lighter version of this library without the trigonometric functions see the
+[v4.x.x](https://github.com/MikeMcl/decimal.js/tree/v4.x.x) branch where version 4 continues to be supported, or better, see [decimal.js-light](https://github.com/MikeMcl/decimal.js-light/), which is lighter still.
 
 ## Load
 
@@ -153,7 +152,7 @@ applies to all Decimal numbers created from it.
 
 ```js
 // Set the precision and rounding of the default Decimal constructor
-Decimal.config({ precision: 5, rounding: 4 })
+Decimal.set({ precision: 5, rounding: 4 })
 
 // Create another Decimal constructor, optionally passing in a configuration object
 Decimal10 = Decimal.clone({ precision: 10, rounding: 1 })
@@ -217,6 +216,7 @@ npm run build
 
 will create *decimal.min.js*, and a source map will also be added to the *doc* directory.
 
+
 ## Feedback
 
 <a href='mailto:M8ch88l@gmail.com'>M8ch88l@gmail.com</a>
@@ -225,6 +225,6 @@ BTC 16MjxmTB5EZxY5Uk9xyhfsu4n9gYxEJYkY
 
 ## Licence
 
-MIT Expat.
+MIT.
 
 See *LICENCE.md*

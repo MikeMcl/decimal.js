@@ -1,4 +1,4 @@
-The MIT Expat Licence.
+The MIT Licence.
 
 Copyright (c) 2016 Michael Mclaughlin
 
