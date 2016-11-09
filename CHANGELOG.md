@@ -1,3 +1,7 @@
+#### 7.1.0
+* 09/11/2016
+* Support ES6 imports.
+
 #### 7.0.0
 * 09/11/2016
 * Remove `require('crypto')` - leave it to the user
