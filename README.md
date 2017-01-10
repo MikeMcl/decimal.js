@@ -4,6 +4,7 @@ An arbitrary-precision Decimal type for JavaScript.
 
 <br>
 [![Build Status](https://travis-ci.org/MikeMcl/decimal.js.svg)](https://travis-ci.org/MikeMcl/decimal.js)
+[![CDNJS](https://img.shields.io/cdnjs/v/decimal.js.svg)](https://cdnjs.com/libraries/decimal.js)
 <br>
 
 ## Features
