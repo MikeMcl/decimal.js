@@ -1,3 +1,8 @@
+#### 7.1.1
+* 10/01/2017
+* Remove duplicated for-loop
+* Minor refactoring
+
 #### 7.1.0
 * 09/11/2016
 * Support ES6 imports.

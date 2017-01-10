@@ -221,7 +221,9 @@ will create *decimal.min.js*, and a source map will also be added to the *doc* d
 
 <a href='mailto:M8ch88l@gmail.com'>M8ch88l@gmail.com</a>
 
-BTC 16MjxmTB5EZxY5Uk9xyhfsu4n9gYxEJYkY
+**BTC** 16MjxmTB5EZxY5Uk9xyhfsu4n9gYxEJYkY
+
+**Monero** 4B7GE8BUQ5dHjHxVubTDmsTn4bUYWG6bsRXQwunDifX6hcNAfkmGxcZYQGbpYgArKLNxfA15LK2j6bUENiE9eTHRAWkEB5R
 
 ## Licence
 
