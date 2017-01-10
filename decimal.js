@@ -1909,9 +1909,6 @@
     if (carry) ++e;
     else r.shift();
 
-    // Remove trailing zeros.
-    for (i = r.length; !r[--i];) r.pop();
-
     y.d = r;
     y.e = getBase10Exponent(r, e);
 
@@ -3127,14 +3124,15 @@
 
   // Calculate the base 10 exponent from the base 1e7 exponent.
   function getBase10Exponent(digits, e) {
+    var w = digits[0];
 
-    // First get the number of digits of the first word of the digits array.
-    for (var i = 1, w = digits[0]; w >= 10; w /= 10) i++;
-    return i + e * LOG_BASE - 1;
+    // Add the number of digits of the first word of the digits array.
+    for ( e *= LOG_BASE; w >= 10; w /= 10) e++;
+    return e;
   }
 
 
-   function getLn10(Ctor, sd, pr) {
+  function getLn10(Ctor, sd, pr) {
     if (sd > LN10_PRECISION) {
 
       // Reset global state in case the exception is caught.
