@@ -1,3 +1,7 @@
+#### 7.1.2
+* 05/04/2017
+* `Decimal.default` to `Decimal['default']` IE8 issue
+
 #### 7.1.1
 * 10/01/2017
 * Remove duplicated for-loop
