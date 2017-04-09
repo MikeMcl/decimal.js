@@ -1,3 +1,7 @@
+#### 7.2.0
+* 09/04/2017
+* Add *decimal.es6.js*
+
 #### 7.1.2
 * 05/04/2017
 * `Decimal.default` to `Decimal['default']` IE8 issue

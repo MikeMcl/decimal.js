@@ -1,13 +1,13 @@
-/*! decimal.js v7.1.2 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v7.2.0 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (globalScope) {
   'use strict';
 
 
   /*
-   *  decimal.js v7.1.2
+   *  decimal.js v7.2.0
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
-   *  Copyright (c) 2016 Michael Mclaughlin <M8ch88l@gmail.com>
+   *  Copyright (c) 2017 Michael Mclaughlin <M8ch88l@gmail.com>
    *  MIT Licence
    */
 
