@@ -1,3 +1,7 @@
+#### 7.2.1
+* 04/05/2017
+* Fix *README* badges.
+
 #### 7.2.0
 * 09/04/2017
 * Add *decimal.es6.js*
