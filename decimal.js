@@ -1378,7 +1378,7 @@
     for (; xd[--len] === 0;) xd.pop();
 
     // Remove leading zeros and adjust exponent accordingly.
-    for (; xd[0] === 0; xd.shift()) --e;
+    for (; xd[0] === 0; xd.splice(0, 1)) --e;
 
     // Zero?
     if (!xd[0]) return new Ctor(rm === 3 ? -0 : 0);
@@ -1602,7 +1602,7 @@
     }
 
     if (carry) {
-      xd.unshift(carry);
+      xd = [carry].concat(xd);
       ++e;
     }
 
@@ -1907,7 +1907,7 @@
     for (; !r[--rL];) r.pop();
 
     if (carry) ++e;
-    else r.shift();
+    else r.splice(0, 1);
 
     y.d = r;
     y.e = getBase10Exponent(r, e);
@@ -2668,7 +2668,9 @@
         carry = temp / base | 0;
       }
 
-      if (carry) x.unshift(carry);
+      if (carry) {
+        x = [carry].concat(x);
+      }
 
       return x;
     }
@@ -2701,7 +2703,7 @@
       }
 
       // Remove leading zeros.
-      for (; !a[0] && a.length > 1;) a.shift();
+      for (; !a[0] && a.length > 1;) a.splice(0, 1);
     }
 
     return function (x, y, pr, rm, dp, base) {
@@ -2796,7 +2798,7 @@
           for (; remL < yL;) rem[remL++] = 0;
 
           yz = yd.slice();
-          yz.unshift(0);
+          yz = [0].concat(yz);
           yd0 = yd[0];
 
           if (yd[1] >= base / 2) ++yd0;
@@ -2853,7 +2855,9 @@
               }
 
               prodL = prod.length;
-              if (prodL < remL) prod.unshift(0);
+              if (prodL < remL) {
+                prod = [0].concat(prod);
+              }
 
               // Subtract product from remainder.
               subtract(rem, prod, remL, base);
@@ -2897,7 +2901,7 @@
         }
 
         // Leading zero?
-        if (!qd[0]) qd.shift();
+        if (!qd[0]) qd.splice(0, 1);
       }
 
       // logBase is 1 when divide is being used for base conversion.
@@ -3847,7 +3851,7 @@
             xd[sd] = 0;
             if (!sd) {
               ++e;
-              xd.unshift(1);
+              xd = [1].concat(xd);
             }
           }
         }
@@ -4632,7 +4636,7 @@
       e = -1;
 
       // Remove leading words which are zero and adjust exponent accordingly.
-      for (; rd[0] === 0; e -= LOG_BASE) rd.shift();
+      for (; rd[0] === 0; e -= LOG_BASE) rd.splice(0, 1);
 
       // Count the digits of the first word of rd to determine leading zeros.
       for (k = 1, n = rd[0]; n >= 10; n /= 10) k++;
