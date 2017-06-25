@@ -1,3 +1,7 @@
+#### 7.2.2
+* 25/06/2017
+* Bugfix: #57 Powers of -1 for integers over `Number.MAX_SAFE_INTEGER`.
+
 #### 7.2.1
 * 04/05/2017
 * Fix *README* badges.
