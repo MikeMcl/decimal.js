@@ -2281,6 +2281,11 @@ P.toPower = P.pow = function (y) {
   // Result is negative if x is negative and the last digit of integer y is odd.
   sign = sign < 0 && y.d[Math.max(e, k)] & 1 ? -1 : 1;
 
+  if (x.eq(-1)) {
+    x.s = sign;
+    return x;
+  }
+
   // Estimate result exponent.
   // x^y = 10^e,  where e = y * log10(x)
   // log10(x) = log10(x_significand) + x_exponent
