@@ -1,3 +1,7 @@
+#### 7.2.3
+* 27/06/2017
+* Bugfix: #58 `pow` sometimes throws when result is `Infinity`.
+
 #### 7.2.2
 * 25/06/2017
 * Bugfix: #57 Powers of -1 for integers over `Number.MAX_SAFE_INTEGER`.
