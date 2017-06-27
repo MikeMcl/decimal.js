@@ -1,10 +1,10 @@
-/*! decimal.js v7.2.2 https://github.com/MikeMcl/decimal.js/LICENCE */
+/*! decimal.js v7.2.3 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (globalScope) {
   'use strict';
 
 
   /*
-   *  decimal.js v7.2.2
+   *  decimal.js v7.2.3
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
    *  Copyright (c) 2017 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -2249,13 +2249,13 @@
    *
    */
   P.toPower = P.pow = function (y) {
-    var e, k, pr, r, rm, sign, yIsInt,
+    var e, k, pr, r, rm, s,
       x = this,
       Ctor = x.constructor,
       yn = +(y = new Ctor(y));
 
     // Either ±Infinity, NaN or ±0?
-    if (!x.d || !y.d || !x.d[0] || !y.d[0]) return  new Ctor(mathpow(+x, yn));
+    if (!x.d || !y.d || !x.d[0] || !y.d[0]) return new Ctor(mathpow(+x, yn));
 
     x = new Ctor(x);
 
@@ -2266,26 +2266,31 @@
 
     if (y.eq(1)) return finalise(x, pr, rm);
 
+    // y exponent
     e = mathfloor(y.e / LOG_BASE);
-    k = y.d.length - 1;
-    yIsInt = e >= k;
-    sign = x.s;
-
-    if (!yIsInt) {
-      if (sign < 0) return new Ctor(NaN);
 
     // If y is a small integer use the 'exponentiation by squaring' algorithm.
-    } else if ((k = yn < 0 ? -yn : yn) <= MAX_SAFE_INTEGER) {
+    if (e >= y.d.length - 1 && (k = yn < 0 ? -yn : yn) <= MAX_SAFE_INTEGER) {
       r = intPow(Ctor, x, k, pr);
       return y.s < 0 ? new Ctor(1).div(r) : finalise(r, pr, rm);
     }
 
-    // Result is negative if x is negative and the last digit of integer y is odd.
-    sign = sign < 0 && y.d[Math.max(e, k)] & 1 ? -1 : 1;
+    s = x.s;
 
-    if (x.eq(-1)) {
-      x.s = sign;
-      return x;
+    // if x is negative
+    if (s < 0) {
+
+      // if y is not an integer
+      if (e < y.d.length - 1) return new Ctor(NaN);
+
+      // Result is positive if x is negative and the last digit of integer y is even.
+      if ((y.d[e] & 1) == 0) s = 1;
+
+      // if x.eq(-1)
+      if (x.e == 0 && x.d[0] == 1 && x.d.length == 1) {
+        x.s = s;
+        return x;
+      }
     }
 
     // Estimate result exponent.
@@ -2293,15 +2298,14 @@
     // log10(x) = log10(x_significand) + x_exponent
     // log10(x_significand) = ln(x_significand) / ln(10)
     k = mathpow(+x, yn);
-
     e = k == 0 || !isFinite(k)
       ? mathfloor(yn * (Math.log('0.' + digitsToString(x.d)) / Math.LN10 + x.e + 1))
       : new Ctor(k + '').e;
 
-    // Estimate may be incorrect e.g. x: 0.999999999999999999, y: 2.29, e: 0, r.e: -1.
+    // Exponent estimate may be incorrect e.g. x: 0.999999999999999999, y: 2.29, e: 0, r.e: -1.
 
     // Overflow/underflow?
-    if (e > Ctor.maxE + 1 || e < Ctor.minE - 1) return new Ctor(e > 0 ? sign / 0 : 0);
+    if (e > Ctor.maxE + 1 || e < Ctor.minE - 1) return new Ctor(e > 0 ? s / 0 : 0);
 
     external = false;
     Ctor.rounding = x.s = 1;
@@ -2315,24 +2319,28 @@
     // r = x^y = exp(y*ln(x))
     r = naturalExponential(y.times(naturalLogarithm(x, pr + k)), pr);
 
-    // Truncate to the required precision plus five rounding digits.
-    r = finalise(r, pr + 5, 1);
+    // r may be Infinity, e.g. (0.9999999999999999).pow(-1e+40)
+    if (r.d) {
 
-    // If the rounding digits are [49]9999 or [50]0000 increase the precision by 10 and recalculate
-    // the result.
-    if (checkRoundingDigits(r.d, pr, rm)) {
-      e = pr + 10;
+      // Truncate to the required precision plus five rounding digits.
+      r = finalise(r, pr + 5, 1);
 
-      // Truncate to the increased precision plus five rounding digits.
-      r = finalise(naturalExponential(y.times(naturalLogarithm(x, e + k)), e), e + 5, 1);
+      // If the rounding digits are [49]9999 or [50]0000 increase the precision by 10 and recalculate
+      // the result.
+      if (checkRoundingDigits(r.d, pr, rm)) {
+        e = pr + 10;
 
-      // Check for 14 nines from the 2nd rounding digit (the first rounding digit may be 4 or 9).
-      if (+digitsToString(r.d).slice(pr + 1, pr + 15) + 1 == 1e14) {
-        r = finalise(r, pr + 1, 0);
+        // Truncate to the increased precision plus five rounding digits.
+        r = finalise(naturalExponential(y.times(naturalLogarithm(x, e + k)), e), e + 5, 1);
+
+        // Check for 14 nines from the 2nd rounding digit (the first rounding digit may be 4 or 9).
+        if (+digitsToString(r.d).slice(pr + 1, pr + 15) + 1 == 1e14) {
+          r = finalise(r, pr + 1, 0);
+        }
       }
     }
 
-    r.s = sign;
+    r.s = s;
     external = true;
     Ctor.rounding = rm;
 
