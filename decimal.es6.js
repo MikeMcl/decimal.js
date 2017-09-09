@@ -4775,6 +4775,8 @@ function trunc(x) {
 // Create and configure initial Decimal constructor.
 Decimal = clone(defaults);
 
+Decimal['default'] = Decimal.Decimal = Decimal;
+
 // Create the internal constants from their string values.
 LN10 = new Decimal(ln10);
 PI = new Decimal(pi);

@@ -4777,6 +4777,8 @@
   // Create and configure initial Decimal constructor.
   Decimal = clone(Decimal);
 
+  Decimal['default'] = Decimal.Decimal = Decimal;
+
   // Create the internal constants from their string values.
   LN10 = new Decimal(LN10);
   PI = new Decimal(PI);
@@ -4793,7 +4795,7 @@
 
   // Node and other environments that support module.exports.
   } else if (typeof module != 'undefined' && module.exports) {
-    module.exports = Decimal['default'] = Decimal.Decimal = Decimal;
+    module.exports = Decimal;
 
   // Browser.
   } else {
