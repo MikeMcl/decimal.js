@@ -1,3 +1,8 @@
+#### 7.2.4
+* 09/09/2017
+* Update docs regarding `global.crypto`.
+* Fix `import` issues.
+
 #### 7.2.3
 * 27/06/2017
 * Bugfix: #58 `pow` sometimes throws when result is `Infinity`.
