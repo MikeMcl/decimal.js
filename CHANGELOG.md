@@ -1,3 +1,8 @@
+#### 7.3.0
+* 26/09/2017
+* Rename *decimal.es6.js* to *decimal.mjs*.
+* Amend  *.travis.yml*.
+
 #### 7.2.4
 * 09/09/2017
 * Update docs regarding `global.crypto`.
