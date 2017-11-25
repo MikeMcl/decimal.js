@@ -1,3 +1,7 @@
+#### 7.4.0
+* 25/11/2017
+* Add Typescript typings.
+
 #### 7.3.0
 * 26/09/2017
 * Rename *decimal.es6.js* to *decimal.mjs*.
