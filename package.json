@@ -30,5 +30,6 @@
   "scripts": {
     "test": "node ./test/test.js",
     "build": "uglifyjs decimal.js --source-map doc/decimal.js.map -c -m -o decimal.min.js --preamble \"/* decimal.js v7.3.0 https://github.com/MikeMcl/decimal.js/LICENCE */\""
-  }
+  },
+  "types": "decimal.d.ts"
 }
