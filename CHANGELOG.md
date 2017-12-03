@@ -1,3 +1,7 @@
+#### 7.5.1
+* 03/12/2017
+* Remove typo.
+
 #### 7.5.0
 * 03/12/2017
 * Use TypeScript declarations outside modules.
