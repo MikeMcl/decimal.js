@@ -2009,7 +2009,7 @@ x.toBinary(1)                            // '0b1p+8'</pre>
     </p>
     <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
-x = new Decimal(12.24567)
+x = new Decimal(12.34567)
 x.toDecimalPlaces(0)                // '12'
 x.toDecimalPlaces(1, 0)             // '12.3'
 
@@ -2047,7 +2047,7 @@ y.toDP(1, Decimal.ROUND_DOWN)       // '9876.5'</pre>
     <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
 x = 45.6
-b = new Decimal(x)
+y = new Decimal(x)
 x.toExponential()              // '4.56e+1'
 y.toExponential()              // '4.56e+1'
 x.toExponential(0)             // '5e+1'
@@ -2095,7 +2095,7 @@ y.toExponential(3)             // '4.560e+1'</pre>
     <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
 x = 3.456
-b = new Decimal(x)
+y = new Decimal(x)
 x.toFixed()              // '3'
 y.toFixed()              // '3.456'
 y.toFixed(0)             // '3'
@@ -2353,7 +2353,7 @@ new Decimal(28).pow('6.166675020000903537297764507632802193308677149')
     <p>Throws on an invalid <code>sd</code> or <code>rm</code> value.</p>
     <pre>
 x = 45.6
-b = new Decimal(x)
+y = new Decimal(x)
 x.toPrecision()                          // '45.6'
 y.toPrecision()                          // '45.6'
 x.toPrecision(1)                         // '5e+1'
