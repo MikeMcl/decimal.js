@@ -80,7 +80,7 @@ interface DecimalConfig {
 
 // Requires `toFormat`.
 interface DecimalFormat {
-  decimalSeparator?: string;s
+  decimalSeparator?: string;
   groupSeparator?: string;
   groupSize?: number;
   secondaryGroupSize?: number;
