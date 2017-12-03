@@ -17,6 +17,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
   - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
+  - Includes a TypeScript declaration file: *decimal.d.ts*
 
 ![API](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/API.png)
 
@@ -34,7 +35,7 @@ For a lighter version of this library without the trigonometric functions see th
 
 ## Load
 
-The library is the single JavaScript file *decimal.js* (or minified, *decimal.min.js*).
+The library is the single JavaScript file *decimal.js* (or minified, *decimal.min.js*, or *decimal.mjs* if ES6 modules are supported).
 
 It can be loaded using a script tag in an HTML document for the browser
 
@@ -87,6 +88,12 @@ z = x.plus(y)                        // '427.9375'
 
 z.toBinary()                         // '0b110101011.1111'
 z.toBinary(13)                       // '0b1.101010111111p+8'
+```
+
+Using binary exponential notation to create a Decimal with the value of `Number.MAX_VALUE`:
+
+```js
+x = new Decimal('0b1.1111111111111111111111111111111111111111111111111111p+1023')
 ```
 
 A Decimal is immutable in the sense that it is not changed by its methods.
@@ -216,13 +223,6 @@ npm run build
 ```
 
 will create *decimal.min.js*, and a source map will also be added to the *doc* directory.
-
-
-## Feedback
-
-<a href='mailto:M8ch88l@gmail.com'>M8ch88l@gmail.com</a>
-
-**BTC** 16MjxmTB5EZxY5Uk9xyhfsu4n9gYxEJYkY
 
 ## Licence
 

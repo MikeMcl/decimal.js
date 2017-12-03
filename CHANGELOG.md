@@ -1,6 +1,10 @@
+#### 7.5.0
+* 03/12/2017
+* Use TypeScript declarations outside modules.
+
 #### 7.4.0
 * 25/11/2017
-* Add Typescript typings.
+* Add TypeScript typings.
 
 #### 7.3.0
 * 26/09/2017
