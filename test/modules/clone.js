@@ -105,5 +105,40 @@ T('clone', function () {
   t(new D8(1).constructor !== new D9(1).constructor);
 
   T.assertException(function () { Decimal.clone(null) }, "Decimal.clone(null)");
+
+  // defaults: true
+
+  Decimal.config({
+    precision: 100,
+    rounding: 2,
+    toExpNeg: -100,
+    toExpPos: 200,
+    defaults: true
+  });
+
+  t(Decimal.precision === 100);
+  t(Decimal.rounding === 2);
+  t(Decimal.toExpNeg === -100);
+  t(Decimal.toExpPos === 200);
+  t(Decimal.defaults === undefined);
+
+  D1 = Decimal.clone({ defaults: true });
+
+  t(D1.precision === 20);
+  t(D1.rounding === 4);
+  t(D1.toExpNeg === -7);
+  t(D1.toExpPos === 21);
+  t(D1.defaults === undefined);
+
+  D2 = Decimal.clone({ defaults: true, rounding: 5 });
+
+  t(D2.precision === 20);
+  t(D2.rounding === 5);
+  t(D2.toExpNeg === -7);
+  t(D2.toExpPos === 21);
+
+  D3 = Decimal.clone({ defaults: false });
+
+  t(D3.rounding === 2);
 });
 

@@ -1,6 +1,6 @@
 if (typeof T === 'undefined') require('../setup');
 
-T('isFinite, isInteger, isNaN, isNegative, isZero', function () {
+T('isFinite, isInteger, isNaN, isNegative, isZero, isDecimal', function () {
 
   function t(actual) {
     T.assert(actual);
@@ -257,4 +257,22 @@ T('isFinite, isInteger, isNaN, isNegative, isZero', function () {
   t(!new Decimal('0.999999999999999999999').isInteger());
   t(new Decimal('4e4').isInteger());
   t(new Decimal('-4e4').isInteger());
+
+  // Decimal.isDecimal
+
+  t(Decimal.isDecimal(new Decimal(1)));
+  t(Decimal.isDecimal(new Decimal('-2.3')));
+  t(Decimal.isDecimal(new Decimal(NaN)));
+  t(Decimal.isDecimal(new Decimal('Infinity')));
+
+  t(!Decimal.isDecimal());
+  t(!Decimal.isDecimal(0));
+  t(!Decimal.isDecimal(1));
+  t(!Decimal.isDecimal('-2.3'));
+  t(!Decimal.isDecimal(NaN));
+  t(!Decimal.isDecimal(Infinity));
+  t(!Decimal.isDecimal(undefined));
+  t(!Decimal.isDecimal({}));
+  t(!Decimal.isDecimal({isDecimal: true}));
+  t(!Decimal.isDecimal(new Number(4)));
 });

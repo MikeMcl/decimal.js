@@ -76,6 +76,7 @@ interface DecimalConfig {
 
   // Requires `toFormat` <https://github.com/MikeMcl/toFormat>.
   format?: DecimalFormat;
+  defaults?: boolean;
 }
 
 // Requires `toFormat`.
@@ -92,6 +93,7 @@ export declare class Decimal {
   readonly d: number[];
   readonly e: number;
   readonly s: number;
+  private readonly name: string;
 
   constructor(n: DecimalValue);
 
@@ -285,6 +287,7 @@ export declare class Decimal {
   static exp(n: DecimalValue): Decimal
   static floor(n: DecimalValue): Decimal
   static hypot(...n: DecimalValue[]): Decimal
+  static isDecimal(object: any): boolean
   static ln(n: DecimalValue): Decimal
   static log(n: DecimalValue, base?: DecimalValue): Decimal
   static log2(n: DecimalValue): Decimal

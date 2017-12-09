@@ -338,5 +338,36 @@ T('config', function () {
 
   t(9, {modulo: void 0});
 
+  // defaults
+
+  t = function (actual) {
+    T.assert(actual);
+  }
+
+  Decimal.config({
+    precision: 100,
+    rounding: 2,
+    toExpNeg: -100,
+    toExpPos: 200,
+  });
+
+  t(Decimal.precision === 100);
+
+  Decimal.config({ defaults: true });
+
+  t(Decimal.precision === 20);
+  t(Decimal.rounding === 4);
+  t(Decimal.toExpNeg === -7);
+  t(Decimal.toExpPos === 21);
+  t(Decimal.defaults === undefined);
+
+  Decimal.rounding = 3;
+
+  Decimal.config({ precision: 50, defaults: true });
+
+  t(Decimal.precision === 50);
+  t(Decimal.rounding === 4);
+
+  // Decimal.set is an alias for Decimal.config
   T.assertEqual(Decimal.set, Decimal.config);
 });

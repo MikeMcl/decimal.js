@@ -34,7 +34,7 @@
 
 
     // The initial configuration properties of the Decimal constructor.
-    Decimal = {
+    DEFAULTS = {
 
       // These values must be integers within the stated ranges (inclusive).
       // Most of these values can be changed at run-time using the `Decimal.config` method.
@@ -99,7 +99,7 @@
   // ----------------------------------- END OF EDITABLE DEFAULTS ------------------------------- //
 
 
-    inexact, noConflict, quadrant,
+    Decimal, inexact, noConflict, quadrant,
     external = true,
 
     decimalError = '[DecimalError] ',
@@ -123,7 +123,7 @@
     PI_PRECISION = PI.length - 1,
 
     // Decimal.prototype object
-    P = {};
+    P = { name: '[object Decimal]' };
 
 
   // Decimal prototype methods
@@ -4160,6 +4160,7 @@
    *   minE       {number}
    *   modulo     {number}
    *   crypto     {boolean|number}
+   *   defaults   {true}
    *
    * E.g. Decimal.config({ precision: 20, rounding: 4 })
    *
@@ -4167,6 +4168,7 @@
   function config(obj) {
     if (!obj || typeof obj !== 'object') throw Error(decimalError + 'Object expected');
     var i, p, v,
+      useDefaults = obj.defaults === true,
       ps = [
         'precision', 1, MAX_DIGITS,
         'rounding', 0, 8,
@@ -4178,13 +4180,15 @@
       ];
 
     for (i = 0; i < ps.length; i += 3) {
-      if ((v = obj[p = ps[i]]) !== void 0) {
+      if (p = ps[i], useDefaults) this[p] = DEFAULTS[p];
+      if ((v = obj[p]) !== void 0) {
         if (mathfloor(v) === v && v >= ps[i + 1] && v <= ps[i + 2]) this[p] = v;
         else throw Error(invalidArgument + p + ': ' + v);
       }
     }
 
-    if ((v = obj[p = 'crypto']) !== void 0) {
+    if (p = 'crypto', useDefaults) this[p] = DEFAULTS[p];
+    if ((v = obj[p]) !== void 0) {
       if (v === true || v === false || v === 0 || v === 1) {
         if (v) {
           if (typeof crypto != 'undefined' && crypto &&
@@ -4327,6 +4331,7 @@
 
     Decimal.config = Decimal.set = config;
     Decimal.clone = clone;
+    Decimal.isDecimal = isDecimalInstance;
 
     Decimal.abs = abs;
     Decimal.acos = acos;
@@ -4367,8 +4372,10 @@
 
     if (obj === void 0) obj = {};
     if (obj) {
-      ps = ['precision', 'rounding', 'toExpNeg', 'toExpPos', 'maxE', 'minE', 'modulo', 'crypto'];
-      for (i = 0; i < ps.length;) if (!obj.hasOwnProperty(p = ps[i++])) obj[p] = this[p];
+      if (obj.defaults !== true) {
+        ps = ['precision', 'rounding', 'toExpNeg', 'toExpPos', 'maxE', 'minE', 'modulo', 'crypto'];
+        for (i = 0; i < ps.length;) if (!obj.hasOwnProperty(p = ps[i++])) obj[p] = this[p];
+      }
     }
 
     Decimal.config(obj);
@@ -4442,6 +4449,16 @@
     external = true;
 
     return t.sqrt();
+  }
+
+
+  /*
+   * Return true if object is a Decimal instance (where Decimal is any Decimal constructor),
+   * otherwise return false.
+   *
+   */
+  function isDecimalInstance(obj) {
+    return obj instanceof Decimal || obj && obj.name === '[object Decimal]' || false;
   }
 
 
@@ -4775,7 +4792,7 @@
 
 
   // Create and configure initial Decimal constructor.
-  Decimal = clone(Decimal);
+  Decimal = clone(DEFAULTS);
 
   Decimal['default'] = Decimal.Decimal = Decimal;
 

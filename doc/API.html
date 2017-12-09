@@ -83,6 +83,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#Dexp"       >exp</a></li>
       <li><a href="#Dfloor"     >floor</a></li>
       <li><a href="#Dhypot"     >hypot</a></li>
+      <li><a href="#DisDecimal" >isDecimal</a></li>
       <li><a href="#Dln"        >ln</a></li>
       <li><a href="#Dlog"       >log</a></li>
       <li><a href="#Dlog2"      >log2</a></li>
@@ -195,9 +196,9 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
 
     <a href="#instance-properties">Properties</a>
     <ul>
-      <li><a href="#digits"  >d</a><span>digits</span></li>
-      <li><a href="#exponent">e</a><span>exponent</span></li>
-      <li><a href="#sign"    >s</a><span>sign</span></li>
+      <li><a href="#digits"   >d</a><span>digits</span></li>
+      <li><a href="#exponent" >e</a><span>exponent</span></li>
+      <li><a href="#sign"     >s</a><span>sign</span></li>
     </ul>
 
     <a href="#zero-nan-infinity">Zero, NaN &amp; Infinity</a>
@@ -446,22 +447,30 @@ a.equals(b)                    // true</pre>
       settings as <code>this</code> Decimal constructor if <code>object</code> is omitted.
     </p>
     <pre>Decimal.set({ precision: 5 })
-D9 = Decimal.clone({ precision: 9 })
+Decimal9 = Decimal.clone({ precision: 9 })
 
 a = new Decimal(1)
-b = new D9(1)
+b = new Decimal9(1)
 
 a.div(3)                           // 0.33333
 b.div(3)                           // 0.333333333
 
-// D9 = Decimal.clone({ precision: 9 }) is equivalent to:
-D9 = Decimal.clone()
-D9.set({ precision: 9 })</pre>
+// Decimal9 = Decimal.clone({ precision: 9 }) is equivalent to:
+Decimal9 = Decimal.clone()
+Decimal9.set({ precision: 9 })</pre>
+    <p>
+      If <code>object</code> has a <code>'defaults'</code> property with value <code>true</code>
+      then the new constructor will use the default configuration.
+    </p>
+    <pre>
+D1 = Decimal.clone({ defaults: true })
+
+// Use the defaults except for precision
+D2 = Decimal.clone({ defaults: true, precision: 50 })</pre>
     <p>
       It is not inefficient in terms of memory usage to use multiple Decimal constructors as
       functions are shared between them.
     </p>
-
 
 
     <h5 id="Dcos">cos<code class='inset'>.cos(x) <i>&rArr; Decimal</i></code></h5>
@@ -534,6 +543,22 @@ a.equals(b)                    // true</pre>
     <pre>a = Decimal.ln(x)
 b = new Decimal(x).ln()
 a.equals(b)                    // true</pre>
+
+
+
+    <h5 id="DisDecimal">
+      isDecimal<code class='inset'>.isDecimal(object) <i>&rArr; boolean</i></code>
+    </h5>
+    <p><code>object</code>: <i>any</i></p>
+    <p>
+      Returns <code>true</code> if <code>object</code> is a Decimal instance (where Decimal is any
+      Decimal constructor), or <code>false</code> if it is not.
+    </p>
+    <pre>a = new Decimal(1)
+b = {}
+a instanceof Decimal           // true
+Decimal.isDecimal(a)           // true
+Decimal.isDecimal(b)           // false</pre>
 
 
 
@@ -720,6 +745,10 @@ a.equals(b)                    // true</pre>
       The values of the configuration object properties are checked for validity and then stored as
       equivalently-named properties of <code>this</code> Decimal constructor.
     </p>
+    <p>
+      If <code>object</code> has a <code>'defaults'</code> property with value <code>true</code>
+      then any unspecified properties will be reset to their default values.
+    </p>
     <p>Throws on an invalid <code>object</code> or configuration property value.</p>
     <pre>
 // Defaults
@@ -732,7 +761,13 @@ Decimal.set({
     minE: -9e15,
     modulo: 1,
     crypto: false
-})</pre>
+})
+
+// Reset all properties to their default values
+Decimal.set({ defaults: true })
+
+// Set precision to 50 and all other properties to their default values
+Decimal.set({ precision: 50, defaults: true })</pre>
     <p>
       The properties of a Decimal constructor can also be set by direct assignment, but that will
       by-pass the validity checking that this method performs - this is not a problem if the user
@@ -2478,9 +2513,9 @@ x.valueOf()                              // '-0'</pre>
         <td><code>-1</code>, <code>1</code>, or <code>NaN</code></td>
       </tr>
     </table>
-    <p>The properties are best considered to be read-only.</p>
+    <p>All the properties are best considered to be read-only.</p>
     <p>
-      As with JavaScript numbers, the original exponent and fractional trailing zeros of a number
+      As with JavaScript numbers, the original exponent and fractional trailing zeros of a value
       are not preserved.
     </p>
     <pre>
