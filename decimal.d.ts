@@ -232,7 +232,7 @@ export declare class Decimal {
   // Requires `toFormat`.
   toFormat?(decimalPlaces: number, rounding: DecimalRounding): string;
 
-  toFraction(max_denominator?: DecimalValue): string[];
+  toFraction(max_denominator?: DecimalValue): Decimal[];
 
   toHexadecimal(significantDigits?: number): Decimal
   toHexadecimal(significantDigits: number, rounding: DecimalRounding): Decimal
