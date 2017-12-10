@@ -1,6 +1,6 @@
 /*
  *
- *  decimal.js v7.5.1
+ *  decimal.js v8.0.0
  *  An arbitrary-precision Decimal type for JavaScript.
  *  https://github.com/MikeMcl/decimal.js
  *  Copyright (c) 2017 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -97,7 +97,7 @@ var EXP_LIMIT = 9e15,                      // 0 to 9e15
 // ----------------------------------- END OF EDITABLE DEFAULTS ------------------------------- //
 
 
-  Decimal, inexact, quadrant,
+  inexact, quadrant,
   external = true,
 
   decimalError = '[DecimalError] ',
@@ -4790,9 +4790,7 @@ function trunc(x) {
 
 
 // Create and configure initial Decimal constructor.
-Decimal = clone(DEFAULTS);
-
-Decimal['default'] = Decimal.Decimal = Decimal;
+export const Decimal = clone(DEFAULTS);
 
 // Create the internal constants from their string values.
 LN10 = new Decimal(LN10);

@@ -1,3 +1,10 @@
+#### 8.0.0
+* 10/12/2017
+* Correct typings: `toFraction` returns `Decimal[]`.
+* Type-checking: add `Decimal.isDecimal` method.
+* Enable configuration reset with `defaults: true`.
+* Add named export, Decimal, to *decimal.mjs*.
+
 #### 7.5.1
 * 03/12/2017
 * Remove typo.

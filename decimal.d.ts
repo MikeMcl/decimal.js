@@ -313,8 +313,8 @@ export declare class Decimal {
   static tanh(n: DecimalValue): Decimal
   static trunc(n: DecimalValue): Decimal
 
-  static readonly default: DecimalConstructor;
-  static readonly Decimal: DecimalConstructor;
+  static readonly default?: DecimalConstructor;
+  static readonly Decimal?: DecimalConstructor;
 
   static readonly precision: number;
   static readonly rounding: DecimalRounding;

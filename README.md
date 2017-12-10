@@ -30,32 +30,36 @@ This library also adds the trigonometric functions, among others, and supports n
 which makes it a significantly larger library than *bignumber.js* and the even smaller
 [big.js](https://github.com/MikeMcl/big.js/).
 
-For a lighter version of this library without the trigonometric functions see the
-[v4.x.x](https://github.com/MikeMcl/decimal.js/tree/v4.x.x) branch where version 4 continues to be supported, or better, see [decimal.js-light](https://github.com/MikeMcl/decimal.js-light/), which is lighter still.
+For a lighter version of this library without the trigonometric functions see [decimal.js-light](https://github.com/MikeMcl/decimal.js-light/).
 
 ## Load
 
-The library is the single JavaScript file *decimal.js* (or minified, *decimal.min.js*, or *decimal.mjs* if ES6 modules are supported).
+The library is the single JavaScript file *decimal.js* (or minified, *decimal.min.js*).
 
-It can be loaded using a script tag in an HTML document for the browser
+Browser:
 
 ```html
 <script src='path/to/decimal.js'></script>
 ```
 
-or as a [Node.js](http://nodejs.org) module using `require`.
+[Node.js](http://nodejs.org):
+
+```bash
+$ npm install --save decimal.js
+```
 
 ```js
 var Decimal = require('decimal.js');
 ```
 
-For Node, the library is available from the [npm](https://npmjs.org/) registry
+ES6 module (*decimal.mjs*):
 
-```bash
-$ npm install decimal.js
+```js
+//import Decimal from 'decimal.js';
+import {Decimal} from 'decimal.js';
 ```
 
-To load with AMD loader libraries such as [requireJS](http://requirejs.org/):
+AMD loader libraries such as [requireJS](http://requirejs.org/):
 
 ```js
 require(['decimal'], function(Decimal) {
@@ -163,13 +167,13 @@ applies to all Decimal numbers created from it.
 Decimal.set({ precision: 5, rounding: 4 })
 
 // Create another Decimal constructor, optionally passing in a configuration object
-Decimal10 = Decimal.clone({ precision: 10, rounding: 1 })
+Decimal9 = Decimal.clone({ precision: 9, rounding: 1 })
 
 x = new Decimal(5)
-y = new Decimal10(5)
+y = new Decimal9(5)
 
 x.div(3)                           // '1.6667'
-y.div(3)                           // '1.666666666'
+y.div(3)                           // '1.66666666'
 ```
 
 The value of a Decimal is stored in a floating point format in terms of its digits, exponent and sign.
