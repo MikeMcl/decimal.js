@@ -14,7 +14,6 @@
 //   type      Decimal.Rounding
 //   type      Decimal.Value
 //   interface Decimal.Config
-//   interface Decimal.Format
 //
 // Example (alternative syntax commented-out):
 //
@@ -35,7 +34,6 @@ export default Decimal;
 export namespace Decimal {
   export type Config = DecimalConfig;
   export type Constructor = DecimalConstructor;
-  export type Format = DecimalFormat;
   export type Instance = DecimalInstance;
   export type Modulo = DecimalModulo;
   export type Rounding = DecimalRounding;
@@ -49,7 +47,6 @@ declare global {
   namespace Decimal {
     type Config = DecimalConfig;
     type Constructor = DecimalConstructor;
-    type Format = DecimalFormat;
     type Instance = DecimalInstance;
     type Modulo = DecimalModulo;
     type Rounding = DecimalRounding;
@@ -73,20 +70,7 @@ interface DecimalConfig {
   maxE?: number;
   crypto?: boolean;
   modulo?: DecimalModulo;
-
-  // Requires `toFormat` <https://github.com/MikeMcl/toFormat>.
-  format?: DecimalFormat;
   defaults?: boolean;
-}
-
-// Requires `toFormat`.
-interface DecimalFormat {
-  decimalSeparator?: string;
-  groupSeparator?: string;
-  groupSize?: number;
-  secondaryGroupSize?: number;
-  fractionGroupSeparator?: string;
-  fractionGroupSize?: number;
 }
 
 export declare class Decimal {
@@ -231,9 +215,6 @@ export declare class Decimal {
   toFixed(decimalPlaces?: number): string;
   toFixed(decimalPlaces: number, rounding: DecimalRounding): string;
 
-  // Requires `toFormat`.
-  toFormat?(decimalPlaces: number, rounding: DecimalRounding): string;
-
   toFraction(max_denominator?: DecimalValue): Decimal[];
 
   toHexadecimal(significantDigits?: number): Decimal
@@ -296,10 +277,7 @@ export declare class Decimal {
   static min(...n: DecimalValue[]): Decimal
   static mod(x: DecimalValue, y: DecimalValue): Decimal
   static mul(x: DecimalValue, y: DecimalValue): Decimal
-
-  // Browser only
-  static noConflict(): DecimalConstructor;
-
+  static noConflict(): DecimalConstructor;   // Browser only
   static pow(base: DecimalValue, exponent: DecimalValue): Decimal
   static random(significantDigits?: number): Decimal
   static round(n: DecimalValue): Decimal
@@ -324,9 +302,6 @@ export declare class Decimal {
   static readonly maxE: number;
   static readonly crypto: boolean;
   static readonly modulo: DecimalModulo;
-
-  // Requires `toFormat`.
-  static readonly format?: DecimalFormat;
 
   static readonly ROUND_UP: 0;
   static readonly ROUND_DOWN: 1;
