@@ -1,3 +1,7 @@
+#### 9.0.0
+* 14/12/2017
+* #78 Typings: remove `toFormat`.
+
 #### 8.0.0
 * 10/12/2017
 * Correct typings: `toFraction` returns `Decimal[]`.
