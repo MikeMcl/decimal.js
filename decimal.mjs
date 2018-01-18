@@ -1689,103 +1689,107 @@ P.sine = P.sin = function () {
 
 
 /*
- * Return a new Decimal whose value is the square root of this Decimal, rounded to `precision`
- * significant digits using rounding mode `rounding`.
- *
- *  sqrt(-n) =  N
- *  sqrt(N)  =  N
- *  sqrt(-I) =  N
- *  sqrt(I)  =  I
- *  sqrt(0)  =  0
- *  sqrt(-0) = -0
- *
- */
+* Return a new Decimal whose value is the square root of this Decimal, rounded to `precision`
+* significant digits using rounding mode `rounding`.
+*/
 P.squareRoot = P.sqrt = function () {
-  var m, n, sd, r, rep, t,
-    x = this,
-    d = x.d,
-    e = x.e,
-    s = x.s,
-    Ctor = x.constructor;
+ return this.nthRoot(2);
+};
 
-  // Negative/NaN/Infinity/zero?
-  if (s !== 1 || !d || !d[0]) {
-    return new Ctor(!s || s < 0 && (!d || d[0]) ? NaN : d ? x : 1 / 0);
-  }
+/*
+* Return a new Decimal whose value is the nth root of this Decimal, rounded to `precision`
+* significant digits using rounding mode `rounding`.
+*/
+P.nthRoot = function (root) {
+ var m, n, sd, r, rep, t,
+   x = this,
+   d = x.d,
+   e = x.e,
+   s = x.s,
+   Ctor = x.constructor;
 
-  external = false;
+ // Negative/NaN/Infinity/zero?
+ if (s !== 1 || !d || !d[0]) {
+   return new Ctor(!s || s < 0 && (!d || d[0]) ? NaN : d ? x : 1 / 0);
+ }
 
-  // Initial estimate.
-  s = Math.sqrt(+x);
+ external = false;
 
-  // Math.sqrt underflow/overflow?
-  // Pass x to Math.sqrt as integer, then adjust the exponent of the result.
-  if (s == 0 || s == 1 / 0) {
-    n = digitsToString(d);
+ // Initial estimate.
+ s = Math.pow(+x, 1/root);
 
-    if ((n.length + e) % 2 == 0) n += '0';
-    s = Math.sqrt(n);
-    e = mathfloor((e + 1) / 2) - (e < 0 || e % 2);
+ // Math.sqrt underflow/overflow?
+ // Pass x to Math.sqrt as integer, then adjust the exponent of the result.
+ if (s == 0 || s == 1 / 0) {
+   n = digitsToString(d);
 
-    if (s == 1 / 0) {
-      n = '1e' + e;
-    } else {
-      n = s.toExponential();
-      n = n.slice(0, n.indexOf('e') + 1) + e;
-    }
+   if ((n.length + e) % 2 == 0) n += '0';
+   s = Math.pow(n, 1/root);
+   e = mathfloor((e + 1) / 2) - (e < 0 || e % 2);
 
-    r = new Ctor(n);
-  } else {
-    r = new Ctor(s.toString());
-  }
+   if (s == 1 / 0) {
+     n = '1e' + e;
+   } else {
+     n = s.toExponential();
+     n = n.slice(0, n.indexOf('e') + 1) + e;
+   }
 
-  sd = (e = Ctor.precision) + 3;
+   r = new Ctor(n);
+ } else {
+   r = new Ctor(s.toString());
+ }
 
-  // Newton-Raphson iteration.
-  for (;;) {
-    t = r;
-    r = t.plus(divide(x, t, sd + 2, 1)).times(0.5);
+ sd = (e = Ctor.precision) + 3;
 
-    // TODO? Replace with for-loop and checkRoundingDigits.
-    if (digitsToString(t.d).slice(0, sd) === (n = digitsToString(r.d)).slice(0, sd)) {
-      n = n.slice(sd - 3, sd + 1);
+ root = new Ctor(root.toString());
 
-      // The 4th rounding digit may be in error by -1 so if the 4 rounding digits are 9999 or
-      // 4999, i.e. approaching a rounding boundary, continue the iteration.
-      if (n == '9999' || !rep && n == '4999') {
+ /*
+   Algorithm from https://rosettacode.org/wiki/Nth_root#JavaScript
+ */
+ for (;;) {
+   t = r;
+   r = root.minus(1).times(t).plus(x.dividedBy(t.pow(root.minus(1)))).dividedBy(root);
 
-        // On the first iteration only, check to see if rounding up gives the exact result as the
-        // nines may infinitely repeat.
-        if (!rep) {
-          finalise(t, e + 1, 0);
+   // TODO? Replace with for-loop and checkRoundingDigits.
+   if (digitsToString(t.d).slice(0, sd) === (n = digitsToString(r.d)).slice(0, sd)) {
+     n = n.slice(sd - 3, sd + 1);
 
-          if (t.times(t).eq(x)) {
-            r = t;
-            break;
-          }
-        }
+     // The 4th rounding digit may be in error by -1 so if the 4 rounding digits are 9999 or
+     // 4999, i.e. approaching a rounding boundary, continue the iteration.
+     if (n == '9999' || !rep && n == '4999') {
 
-        sd += 4;
-        rep = 1;
-      } else {
+       // On the first iteration only, check to see if rounding up gives the exact result as the
+       // nines may infinitely repeat.
+       if (!rep) {
+         finalise(t, e + 1, 0);
 
-        // If the rounding digits are null, 0{0,4} or 50{0,3}, check for an exact result.
-        // If not, then there are further digits and m will be truthy.
-        if (!+n || !+n.slice(1) && n.charAt(0) == '5') {
+         if (t.pow(root).eq(x)) {
+           r = t;
+           break;
+         }
+       }
 
-          // Truncate to the first rounding digit.
-          finalise(r, e + 1, 1);
-          m = !r.times(r).eq(x);
-        }
+       sd += 4;
+       rep = 1;
+     } else {
 
-        break;
-      }
-    }
-  }
+       // If the rounding digits are null, 0{0,4} or 50{0,3}, check for an exact result.
+       // If not, then there are further digits and m will be truthy.
+       if (!+n || !+n.slice(1) && n.charAt(0) == '5') {
 
-  external = true;
+         // Truncate to the first rounding digit.
+         finalise(r, e + 1, 1);
+         m = !r.pow(root).eq(x);
+       }
 
-  return finalise(r, e, Ctor.rounding, m);
+       break;
+     }
+   }
+ }
+
+ external = true;
+
+ return finalise(r, e, Ctor.rounding, m);
 };
 
 
@@ -4329,7 +4333,7 @@ function clone(obj) {
 
   Decimal.config = Decimal.set = config;
   Decimal.clone = clone;
-  Decimal.isDecimal = isDecimalInstance;                          
+  Decimal.isDecimal = isDecimalInstance;
 
   Decimal.abs = abs;
   Decimal.acos = acos;

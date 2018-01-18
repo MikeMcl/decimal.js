@@ -16,7 +16,7 @@
     "bigint",
     "bignum"
   ],
-  "repository" : {
+  "repository": {
     "type": "git",
     "url": "https://github.com/MikeMcl/decimal.js.git"
   },
@@ -29,7 +29,10 @@
   "license": "MIT",
   "scripts": {
     "test": "node ./test/test.js",
-    "build": "uglifyjs decimal.js --source-map doc/decimal.js.map -c -m -o decimal.min.js --preamble \"/* decimal.js v9.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */\""
+    "build": "./node_modules/.bin/uglifyjs decimal.js -c -m -o decimal.min.js --preamble \"/* decimal.js v9.0.1 https://github.com/MikeMcl/decimal.js/LICENCE */\""
   },
-  "types": "decimal.d.ts"
+  "types": "decimal.d.ts",
+  "devDependencies": {
+    "uglify-js": "^3.3.7"
+  }
 }

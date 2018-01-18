@@ -194,6 +194,7 @@ export declare class Decimal {
 
   squareRoot(): Decimal;
   sqrt(): Decimal;
+  nthRoot(root: Decimal): Decimal;
 
   tangent() : Decimal;
   tan() : Decimal;
