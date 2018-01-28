@@ -1376,7 +1376,7 @@ P.minus = P.sub = function (y) {
   for (; xd[--len] === 0;) xd.pop();
 
   // Remove leading zeros and adjust exponent accordingly.
-  for (; xd[0] === 0; xd.shift()) --e;
+    for (; xd[0] === 0; xd.splice(0, 1)) --e;
 
   // Zero?
   if (!xd[0]) return new Ctor(rm === 3 ? -0 : 0);
@@ -1600,7 +1600,7 @@ P.plus = P.add = function (y) {
   }
 
   if (carry) {
-    xd.unshift(carry);
+    xd = [carry].concat(xd);
     ++e;
   }
 
@@ -1905,7 +1905,7 @@ P.times = P.mul = function (y) {
   for (; !r[--rL];) r.pop();
 
   if (carry) ++e;
-  else r.shift();
+  else r.splice(0, 1);
 
   y.d = r;
   y.e = getBase10Exponent(r, e);
@@ -2666,7 +2666,9 @@ var divide = (function () {
       carry = temp / base | 0;
     }
 
-    if (carry) x.unshift(carry);
+    if (carry) {
+        x = [carry].concat(x);
+    }
 
     return x;
   }
@@ -2699,7 +2701,7 @@ var divide = (function () {
     }
 
     // Remove leading zeros.
-    for (; !a[0] && a.length > 1;) a.shift();
+    for (; !a[0] && a.length > 1;) a.splice(0, 1);
   }
 
   return function (x, y, pr, rm, dp, base) {
@@ -2794,7 +2796,7 @@ var divide = (function () {
         for (; remL < yL;) rem[remL++] = 0;
 
         yz = yd.slice();
-        yz.unshift(0);
+        yz = [0].concat(yz);
         yd0 = yd[0];
 
         if (yd[1] >= base / 2) ++yd0;
@@ -2851,7 +2853,9 @@ var divide = (function () {
             }
 
             prodL = prod.length;
-            if (prodL < remL) prod.unshift(0);
+            if (prodL < remL) {
+              prod = [0].concat(prod);
+            }
 
             // Subtract product from remainder.
             subtract(rem, prod, remL, base);
@@ -2895,7 +2899,7 @@ var divide = (function () {
       }
 
       // Leading zero?
-      if (!qd[0]) qd.shift();
+      if (!qd[0]) qd.splice(0, 1);
     }
 
     // logBase is 1 when divide is being used for base conversion.
@@ -3845,7 +3849,7 @@ function toStringBinary(x, baseOut, sd, rm) {
           xd[sd] = 0;
           if (!sd) {
             ++e;
-            xd.unshift(1);
+            xd = [1].concat(xd);
           }
         }
       }
