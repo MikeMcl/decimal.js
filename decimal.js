@@ -2165,7 +2165,7 @@
     // If y is not zero, calculate the nearest multiple of y to x.
     if (y.d[0]) {
       external = false;
-      if (rm < 4) rm = [4, 5, 7, 8][rm];
+      if (rm === 1 || rm === 3) rm = [4, 5, 7, 8][rm];
       x = divide(x, y, 0, rm, 1).times(y);
       external = true;
       finalise(x);
