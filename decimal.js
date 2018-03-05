@@ -2150,7 +2150,11 @@
       rm = Ctor.rounding;
     } else {
       y = new Ctor(y);
-      if (rm !== void 0) checkInt32(rm, 0, 8);
+      if (rm === void 0) {
+        rm = Ctor.rounding;
+      } else {
+        checkInt32(rm, 0, 8);
+      }
 
       // If x is not finite, return x if y is not NaN, else NaN.
       if (!x.d) return y.s ? x : y;
@@ -2165,7 +2169,6 @@
     // If y is not zero, calculate the nearest multiple of y to x.
     if (y.d[0]) {
       external = false;
-      if (rm < 4) rm = [4, 5, 7, 8][rm];
       x = divide(x, y, 0, rm, 1).times(y);
       external = true;
       finalise(x);
