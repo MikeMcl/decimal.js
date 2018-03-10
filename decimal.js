@@ -2114,14 +2114,8 @@
 
 
   /*
-   * Returns a new Decimal whose value is the nearest multiple of the magnitude of `y` to the value
-   * of this Decimal.
-   *
-   * If the value of this Decimal is equidistant from two multiples of `y`, the rounding mode `rm`,
-   * or `Decimal.rounding` if `rm` is omitted, determines the direction of the nearest multiple.
-   *
-   * In the context of this method, rounding mode 4 (ROUND_HALF_UP) is the same as rounding mode 0
-   * (ROUND_UP), and so on.
+   * Returns a new Decimal whose value is the nearest multiple of `y` in the direction of rounding
+   * mode `rm`, or `Decimal.rounding` if `rm` is omitted, to the value of this Decimal.
    *
    * The return value will always have the same sign as this Decimal, unless either this Decimal
    * or `y` is NaN, in which case the return value will be also be NaN.

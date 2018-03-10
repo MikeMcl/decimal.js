@@ -2110,16 +2110,9 @@ P.toHexadecimal = P.toHex = function (sd, rm) {
 };
 
 
-
 /*
- * Returns a new Decimal whose value is the nearest multiple of the magnitude of `y` to the value
- * of this Decimal.
- *
- * If the value of this Decimal is equidistant from two multiples of `y`, the rounding mode `rm`,
- * or `Decimal.rounding` if `rm` is omitted, determines the direction of the nearest multiple.
- *
- * In the context of this method, rounding mode 4 (ROUND_HALF_UP) is the same as rounding mode 0
- * (ROUND_UP), and so on.
+ * Returns a new Decimal whose value is the nearest multiple of `y` in the direction of rounding
+ * mode `rm`, or `Decimal.rounding` if `rm` is omitted, to the value of this Decimal.
  *
  * The return value will always have the same sign as this Decimal, unless either this Decimal
  * or `y` is NaN, in which case the return value will be also be NaN.
@@ -2148,7 +2141,11 @@ P.toNearest = function (y, rm) {
     rm = Ctor.rounding;
   } else {
     y = new Ctor(y);
-    if (rm !== void 0) checkInt32(rm, 0, 8);
+    if (rm === void 0) {
+      rm = Ctor.rounding;
+    } else {
+      checkInt32(rm, 0, 8);
+    }
 
     // If x is not finite, return x if y is not NaN, else NaN.
     if (!x.d) return y.s ? x : y;
@@ -2163,7 +2160,6 @@ P.toNearest = function (y, rm) {
   // If y is not zero, calculate the nearest multiple of y to x.
   if (y.d[0]) {
     external = false;
-    if (rm < 4) rm = [4, 5, 7, 8][rm];
     x = divide(x, y, 0, rm, 1).times(y);
     external = true;
     finalise(x);
@@ -4329,7 +4325,7 @@ function clone(obj) {
 
   Decimal.config = Decimal.set = config;
   Decimal.clone = clone;
-  Decimal.isDecimal = isDecimalInstance;                          
+  Decimal.isDecimal = isDecimalInstance;
 
   Decimal.abs = abs;
   Decimal.acos = acos;

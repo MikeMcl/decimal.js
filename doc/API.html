@@ -2045,8 +2045,8 @@ x.toBinary(1)                            // '0b1p+8'</pre>
     <p>Throws on an invalid <code>dp</code> or <code>rm</code> value.</p>
     <pre>
 x = new Decimal(12.34567)
-x.toDecimalPlaces(0)                // '12'
-x.toDecimalPlaces(1, 0)             // '12.3'
+x.toDecimalPlaces(0)                      // '12'
+x.toDecimalPlaces(1, Decimal.ROUND_UP)    // '12.3'
 
 y = new Decimal(9876.54321)
 y.toDP(3)                           // '9876.543'
@@ -2083,15 +2083,15 @@ y.toDP(1, Decimal.ROUND_DOWN)       // '9876.5'</pre>
     <pre>
 x = 45.6
 y = new Decimal(x)
-x.toExponential()              // '4.56e+1'
-y.toExponential()              // '4.56e+1'
-x.toExponential(0)             // '5e+1'
-y.toExponential(0)             // '5e+1'
-x.toExponential(1)             // '4.6e+1'
-y.toExponential(1)             // '4.6e+1'
-y.toExponential(1, 1)          // '4.5e+1'  (ROUND_DOWN)
-x.toExponential(3)             // '4.560e+1'
-y.toExponential(3)             // '4.560e+1'</pre>
+x.toExponential()                        // '4.56e+1'
+y.toExponential()                        // '4.56e+1'
+x.toExponential(0)                       // '5e+1'
+y.toExponential(0)                       // '5e+1'
+x.toExponential(1)                       // '4.6e+1'
+y.toExponential(1)                       // '4.6e+1'
+y.toExponential(1, Decimal.ROUND_DOWN)   // '4.5e+1'
+x.toExponential(3)                       // '4.560e+1'
+y.toExponential(3)                       // '4.560e+1'</pre>
 
 
 
@@ -2131,14 +2131,14 @@ y.toExponential(3)             // '4.560e+1'</pre>
     <pre>
 x = 3.456
 y = new Decimal(x)
-x.toFixed()              // '3'
-y.toFixed()              // '3.456'
-y.toFixed(0)             // '3'
-x.toFixed(2)             // '3.46'
-y.toFixed(2)             // '3.46'
-y.toFixed(2, 1)          // '3.45'  (ROUND_DOWN)
-x.toFixed(5)             // '3.45600'
-y.toFixed(5)             // '3.45600'</pre>
+x.toFixed()                       // '3'
+y.toFixed()                       // '3.456'
+y.toFixed(0)                      // '3'
+x.toFixed(2)                      // '3.46'
+y.toFixed(2)                      // '3.46'
+y.toFixed(2, Decimal.ROUND_DOWN)  // '3.45'
+x.toFixed(5)                      // '3.45600'
+y.toFixed(5)                      // '3.45600'</pre>
 
 
 
@@ -2210,25 +2210,16 @@ x.toHex(1)                               // '0x1p+8'</pre>
 
 
     <h5 id="toNearest">
-      toNearest<code class='inset'>.toNearest(n [, rm]) <i>&rArr; Decimal</i></code>
+      toNearest<code class='inset'>.toNearest(x [, rm]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
       <code>x</code>: <i>number|string|Decimal</i><br />
       <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
-      Returns a new Decimal whose value is the nearest multiple of <code>x</code> to the value of
-      this Decimal.
-    </p>
-     <p>
-      If the value of this Decimal is equidistant from two multiples of <code>x</code>, the rounding
-      mode <code>rm</code>, or <a href='#rounding'><code>rounding</code></a> if <code>rm</code> is
-      omitted, determines the direction of the nearest.
-    </p>
-    <p>
-      In this context, rounding mode <a href='#rounding'><code>ROUND_HALF_UP</code></a> is
-      interpreted the same as rounding mode <a href='#rounding'><code>ROUND_UP</code></a>, and so
-      on, i.e. the rounding is either up, down, to ceil, to floor or to even.
+      Returns a new Decimal whose value is the nearest multiple of <code>x</code> in the direction
+      of rounding mode <code>rm</code>, or <a href='#rounding'><code>rounding</code></a> if
+      <code>rm</code> is omitted, to the value of this Decimal.
     </p>
     <p>
       The return value will always have the same sign as this Decimal, unless either this Decimal
@@ -2241,11 +2232,11 @@ x.toHex(1)                               // '0x1p+8'</pre>
     </p>
     <pre>
 x = new Decimal(1.39)
-x.toNearest(0.25)              // '1.5'
+x.toNearest(0.25)                        // '1.5'
 
-y = new Decimal(0.75)          // equidistant from 0.5 and 1
-y.toNearest(0.5, 0)            // '1'    (ROUND_UP)
-y.toNearest(0.5, 1)            // '0.5'  (ROUND_DOWN)</pre>
+y = new Decimal(9.499)
+y.toNearest(0.5, Decimal.ROUND_UP)       // '9.5'    
+y.toNearest(0.5, Decimal.ROUND_DOWN)     // '9'</pre>
 
 
 
@@ -2393,8 +2384,8 @@ x.toPrecision()                          // '45.6'
 y.toPrecision()                          // '45.6'
 x.toPrecision(1)                         // '5e+1'
 y.toPrecision(1)                         // '5e+1'
-y.toPrecision(2, 0)                      // '4.6e+1'  (ROUND_UP)
-y.toPrecision(2, 1)                      // '4.5e+1'  (ROUND_DOWN)
+y.toPrecision(2, Decimal.ROUND_UP)       // '4.6e+1'
+y.toPrecision(2, Decimal.DOWN)           // '4.5e+1'
 x.toPrecision(5)                         // '45.600'
 y.toPrecision(5)                         // '45.600'</pre>
 
