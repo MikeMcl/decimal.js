@@ -916,6 +916,9 @@ Decimal.precision = 0
       <a href='#toNearest'><code>toNearest</code></a> and
       <a href='#trunc'><code>truncated</code></a>.
     </p>
+    <p>
+      See <code><a href='#Pi'>Pi</a></code> for the precision limit of the trigonometric methods.
+    </p>
     <pre>Decimal.set({ precision: 5 })
 Decimal.precision                  // 5</pre>
 
@@ -1281,7 +1284,7 @@ y.cmp(NaN)                     // NaN</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-1, 1</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0.25)
 x.cosine()                      // '0.96891242171064478414'
@@ -1431,7 +1434,7 @@ new Decimal(1).gte(x)                    // true</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>1, Infinity</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(1)
 x.hyperbolicCosine()                     // '1.5430806348152437785'
@@ -1450,7 +1453,7 @@ y.cosh()                                 // '1.1276259652063807852'</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-Infinity, Infinity</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(1)
 x.hyperbolicSine()                       // '1.1752011936438014569'
@@ -1469,7 +1472,7 @@ y.sinh()                                 // '0.52109530549374736162'</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-1, 1</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(1)
 x.hyperbolicTangent()                    // '0.76159415595576488812'
@@ -1488,7 +1491,7 @@ y.tanh()                                 // '0.4621171572600097585'</pre>
       Domain: [<code>-1, 1</code>]<br />
       Range: [<code>0, pi</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0)
 x.inverseCosine()                        // '1.5707963267948966192'
@@ -1509,7 +1512,7 @@ y.acos()                                 // '1.0471975511965977462'</pre>
       Domain: [<code>1, Infinity</code>]<br />
       Range: [<code>0, Infinity</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(5)
 x.inverseHyperbolicCosine()              // '2.2924316695611776878'
@@ -1530,7 +1533,7 @@ y.acosh()                                // '4.6050701709847571595'</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-Infinity, Infinity</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(5)
 x.inverseHyperbolicSine()                // '2.3124383412727526203'
@@ -1551,7 +1554,7 @@ y.asinh()                                // '4.6052701709914238266'</pre>
       Domain: [<code>-1, 1</code>]<br />
       Range: [<code>-Infinity, Infinity</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0.5)
 x.inverseHyperbolicTangent()             // '0.5493061443340548457'
@@ -1570,7 +1573,7 @@ y.atanh()                                // '0.97295507452765665255'</pre>
       Domain: [<code>-1, 1</code>]<br />
       Range: [<code>-pi/2, pi/2</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0.5)
 x.inverseSine()                          // '0.52359877559829887308'
@@ -1589,7 +1592,7 @@ y.asin()                                 // '0.84806207898148100805'</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-pi/2, pi/2</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0.5)
 x.inverseTangent()                       // '0.46364760900080611621'
@@ -1741,7 +1744,8 @@ y.log(2)                                 // '8'</pre>
     <p>Logarithms to base <code>2</code> or <code>10</code> will always be correctly rounded.</p>
     <p>
       See <a href='#pow'><code>toPower</code></a> for the circumstances in which this method may
-      return an incorrectly rounded result.
+      return an incorrectly rounded result, and see <a href='#ln'><code>naturalLogarithm</code></a>
+      for the precision limit.
     </p>
     <p>The performance of this method degrades exponentially with increasing digits.</p>
 
@@ -1928,7 +1932,7 @@ x                                        // '1234.5'</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-1, 1</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0.5)
 x.sine()                                 // '0.47942553860420300027'
@@ -1970,7 +1974,7 @@ y.sqrt().eq( y.pow(0.5) )                // true</pre>
       Domain: [<code>-Infinity, Infinity</code>]<br />
       Range: [<code>-Infinity, Infinity</code>]
     </p>
-    <p>See <a href='#Pi'><code>Pi</code></a>.</p>
+    <p>See <a href='#Pi'><code>Pi</code></a> for the precision limit of this method.</p>
     <pre>
 x = new Decimal(0.5)
 x.tangent()                              // '0.54630248984379051326'
@@ -2235,7 +2239,7 @@ x = new Decimal(1.39)
 x.toNearest(0.25)                        // '1.5'
 
 y = new Decimal(9.499)
-y.toNearest(0.5, Decimal.ROUND_UP)       // '9.5'    
+y.toNearest(0.5, Decimal.ROUND_UP)       // '9.5'
 y.toNearest(0.5, Decimal.ROUND_DOWN)     // '9'</pre>
 
 
@@ -2594,13 +2598,27 @@ try {
     </p>
     <p>
       It has a precision of <code>1025</code> digits, meaning that the trigonometric methods
-      can accurately calculate up to at least <code>1000</code> digits.
+      can calculate up to just over <code>1000</code> digits, but the actual figure depends on the
+      precision of the argument passed to them. To calculate the actual figure use:
+    </p>
+    <p><b>maximum_result_precision = 1000 - argument_precision</b></p>
+      For example, the following both work fine:
+    <pre>
+Decimal.set({precision: 991}).tan(123456789)
+Decimal.set({precision: 9}).tan(991_digit_number)</pre>
+    <p>
+      as, for each, the result precision plus the argument precision, i.e. <code>991 + 9</code> and
+      <code>9 + 991</code>, is less than or equal to <code>1000</code>.
     </p>
     <p>
       If greater precision is required then the value of <code>PI</code> will need to be extended to
-      about <code>25</code> digits more than the precision required.
+      about <code>25</code> digits more than the precision required. The time taken by the methods
+      will then be the limiting factor.
     </p>
-    <p>The value can also be shortened to reduce the size of the source file.</p>
+    <p>
+      The value can also be shortened to reduce the size of the source file if such high precision
+      is not required.
+    </p>
     <p>To get the value of pi:</p>
     <pre>
 pi = Decimal.acos(-1)</pre>
