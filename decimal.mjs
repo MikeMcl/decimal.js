@@ -4786,7 +4786,7 @@ function trunc(x) {
 
 
 // Create and configure initial Decimal constructor.
-export const Decimal = clone(DEFAULTS);
+export var Decimal = clone(DEFAULTS);
 
 // Create the internal constants from their string values.
 LN10 = new Decimal(LN10);
