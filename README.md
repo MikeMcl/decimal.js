@@ -159,7 +159,7 @@ pi.toFraction(1000)          // [ '355', '113' ]
 All calculations are rounded according to the number of significant digits and rounding mode
 specified by the `precision` and `rounding` properties of the Decimal constructor.
 
-Multiple Decimal constructors can be created, each with their own independent configuration which
+For advanced usage, multiple Decimal constructors can be created, each with their own independent configuration which
 applies to all Decimal numbers created from it.
 
 ```js
