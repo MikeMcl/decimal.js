@@ -5,7 +5,7 @@
 //
 // Documentation: http://mikemcl.github.io/decimal.js/
 //
-// Exports (available globally or when using import):
+// Exports:
 //
 //   class     Decimal (default export)
 //   type      Decimal.Constructor

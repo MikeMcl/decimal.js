@@ -1,3 +1,10 @@
+#### 10.0.0
+* 10/03/2018
+* #88 `toNearest` to return the nearest multiple in the direction of the rounding mode.
+* #82 #91 `const` to `var`.
+* Add trigonometric precision limit explanantion to documentation.
+* Put global ts definitions in separate file (see *bignumber.js* #143)
+
 #### 9.0.1
 * 15/12/2017
 * #80 Typings: correct return type.
