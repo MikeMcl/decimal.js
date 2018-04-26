@@ -4814,8 +4814,7 @@
   // Browser.
   } else {
     if (!globalScope) {
-      globalScope = typeof self != 'undefined' && self && self.self == self
-        ? self : Function('return this')();
+      globalScope = typeof self != 'undefined' && self && self.self == self ? self : window;
     }
 
     noConflict = globalScope.Decimal;
