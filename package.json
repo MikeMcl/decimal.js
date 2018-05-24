@@ -20,8 +20,9 @@
     "type": "git",
     "url": "https://github.com/MikeMcl/decimal.js.git"
   },
-  "main": "./decimal",
-  "module": "./decimal.mjs",
+  "main": "decimal",
+  "module": "decimal.mjs",
+  "browser": "decimal.js",
   "author": {
     "name": "Michael Mclaughlin",
     "email": "M8ch88l@gmail.com"
