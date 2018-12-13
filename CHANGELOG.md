@@ -1,6 +1,11 @@
+#### 10.0.2
+* 13/12/2018
+* #114 Remove soureMappingURL from *decimal.min.js*.
+* Remove *bower.json*.
+
 #### 10.0.1
 * 24/05/2018
-* Add `browser` field to *package.json*
+* Add `browser` field to *package.json*.
 
 #### 10.0.0
 * 10/03/2018

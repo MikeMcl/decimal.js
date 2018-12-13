@@ -1,6 +1,6 @@
 /*
  *
- *  decimal.js v10.0.1
+ *  decimal.js v10.0.2
  *  An arbitrary-precision Decimal type for JavaScript.
  *  https://github.com/MikeMcl/decimal.js
  *  Copyright (c) 2018 Michael Mclaughlin <M8ch88l@gmail.com>
