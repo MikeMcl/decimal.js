@@ -4367,6 +4367,7 @@
     Decimal.tanh = tanh;          // ES6
     Decimal.trunc = trunc;        // ES6
 
+
     if (obj === void 0) obj = {};
     if (obj) {
       if (obj.defaults !== true) {
@@ -4809,6 +4810,9 @@
 
   // Node and other environments that support module.exports.
   } else if (typeof module != 'undefined' && module.exports) {
+    Decimal.prototype[Symbol.for('nodejs.util.inspect.custom')] = function() {
+        return this.toString();
+    };
     module.exports = Decimal;
 
   // Browser.
