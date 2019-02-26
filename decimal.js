@@ -1,13 +1,12 @@
-/*! decimal.js v10.0.2 https://github.com/MikeMcl/decimal.js/LICENCE */
 ;(function (globalScope) {
   'use strict';
 
 
   /*
-   *  decimal.js v10.0.2
+   *  decimal.js v10.1.0
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
-   *  Copyright (c) 2018 Michael Mclaughlin <M8ch88l@gmail.com>
+   *  Copyright (c) 2019 Michael Mclaughlin <M8ch88l@gmail.com>
    *  MIT Licence
    */
 
@@ -2110,7 +2109,6 @@
   P.toHexadecimal = P.toHex = function (sd, rm) {
     return toStringBinary(this, 16, sd, rm);
   };
-
 
 
   /*
@@ -4259,8 +4257,27 @@
       // Duplicate.
       if (v instanceof Decimal) {
         x.s = v.s;
-        x.e = v.e;
-        x.d = (v = v.d) ? v.slice() : v;
+
+        if (external) {
+          if (!v.d || v.e > Decimal.maxE) {
+
+            // Infinity.
+            x.e = NaN;
+            x.d = null;
+          } else if (v.e < Decimal.minE) {
+
+            // Zero.
+            x.e = 0;
+            x.d = [0];
+          } else {
+            x.e = v.e;
+            x.d = v.d.slice();
+          }
+        } else {
+          x.e = v.e;
+          x.d = v.d ? v.d.slice() : v.d;
+        }
+
         return;
       }
 
@@ -4284,8 +4301,23 @@
         // Fast path for small integers.
         if (v === ~~v && v < 1e7) {
           for (e = 0, i = v; i >= 10; i /= 10) e++;
-          x.e = e;
-          x.d = [v];
+
+          if (external) {
+            if (e > Decimal.maxE) {
+              x.e = NaN;
+              x.d = null;
+            } else if (e < Decimal.minE) {
+              x.e = 0;
+              x.d = [0];
+            } else {
+              x.e = e;
+              x.d = [v];
+            }
+          } else {
+            x.e = e;
+            x.d = [v];
+          }
+
           return;
 
         // Infinity, NaN.
@@ -4366,7 +4398,6 @@
     Decimal.tan = tan;
     Decimal.tanh = tanh;          // ES6
     Decimal.trunc = trunc;        // ES6
-
 
     if (obj === void 0) obj = {};
     if (obj) {
@@ -4810,9 +4841,11 @@
 
   // Node and other environments that support module.exports.
   } else if (typeof module != 'undefined' && module.exports) {
-    Decimal.prototype[Symbol.for('nodejs.util.inspect.custom')] = function() {
-        return this.toString();
-    };
+    if (Symbol && typeof Symbol.iterator == 'symbol') {
+      P[Symbol.for('nodejs.util.inspect.custom')] = P.toString;
+      P[Symbol.toStringTag] = 'Decimal';
+    }
+
     module.exports = Decimal;
 
   // Browser.

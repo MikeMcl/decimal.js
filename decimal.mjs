@@ -1,12 +1,9 @@
 /*
- *
- *  decimal.js v10.0.2
+ *  decimal.js v10.1.0
  *  An arbitrary-precision Decimal type for JavaScript.
  *  https://github.com/MikeMcl/decimal.js
- *  Copyright (c) 2018 Michael Mclaughlin <M8ch88l@gmail.com>
+ *  Copyright (c) 2019 Michael Mclaughlin <M8ch88l@gmail.com>
  *  MIT Licence
- *  https://github.com/MikeMcl/decimal.js/LICENCE
- *
  */
 
 
@@ -4256,8 +4253,27 @@ function clone(obj) {
     // Duplicate.
     if (v instanceof Decimal) {
       x.s = v.s;
-      x.e = v.e;
-      x.d = (v = v.d) ? v.slice() : v;
+
+      if (external) {
+        if (!v.d || v.e > Decimal.maxE) {
+
+          // Infinity.
+          x.e = NaN;
+          x.d = null;
+        } else if (v.e < Decimal.minE) {
+
+          // Zero.
+          x.e = 0;
+          x.d = [0];
+        } else {
+          x.e = v.e;
+          x.d = v.d.slice();
+        }
+      } else {
+        x.e = v.e;
+        x.d = v.d ? v.d.slice() : v.d;
+      }
+
       return;
     }
 
@@ -4281,8 +4297,23 @@ function clone(obj) {
       // Fast path for small integers.
       if (v === ~~v && v < 1e7) {
         for (e = 0, i = v; i >= 10; i /= 10) e++;
-        x.e = e;
-        x.d = [v];
+
+        if (external) {
+          if (e > Decimal.maxE) {
+            x.e = NaN;
+            x.d = null;
+          } else if (e < Decimal.minE) {
+            x.e = 0;
+            x.d = [0];
+          } else {
+            x.e = e;
+            x.d = [v];
+          }
+        } else {
+          x.e = e;
+          x.d = [v];
+        }
+
         return;
 
       // Infinity, NaN.
@@ -4784,6 +4815,9 @@ function trunc(x) {
   return finalise(x = new this(x), x.e + 1, 1);
 }
 
+
+P[Symbol.for('nodejs.util.inspect.custom')] = P.toString;
+P[Symbol.toStringTag] = 'Decimal';
 
 // Create and configure initial Decimal constructor.
 export var Decimal = clone(DEFAULTS);

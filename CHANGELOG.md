@@ -1,3 +1,11 @@
+#### 10.1.0
+* 26/02/2019
+* #122 Add custom `util.inspect()` function.
+* Add `Symbol.toStringTag`.
+* #121 Constructor: add range check for arguments of type number and Decimal.
+* Remove premable from uglifyjs build script. 
+* Move *decimal.min.js.map* to root directory.
+
 #### 10.0.2
 * 13/12/2018
 * #114 Remove soureMappingURL from *decimal.min.js*.
