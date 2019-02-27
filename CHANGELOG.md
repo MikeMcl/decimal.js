@@ -1,3 +1,7 @@
+#### 10.1.1
+* 27/02/2019
+* Check `Symbol` properly.
+
 #### 10.1.0
 * 26/02/2019
 * #122 Add custom `util.inspect()` function.
