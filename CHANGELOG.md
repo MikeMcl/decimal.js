@@ -1,3 +1,9 @@
+#### 10.2.0
+* 08/05/2019
+* #128 Workaround V8 `Math.pow` change.
+* #93 Accept `+` prefix when parsing string values.
+* #129 Fix typo.
+
 #### 10.1.1
 * 27/02/2019
 * Check `Symbol` properly.
@@ -7,7 +13,7 @@
 * #122 Add custom `util.inspect()` function.
 * Add `Symbol.toStringTag`.
 * #121 Constructor: add range check for arguments of type number and Decimal.
-* Remove premable from uglifyjs build script. 
+* Remove premable from uglifyjs build script.
 * Move *decimal.min.js.map* to root directory.
 
 #### 10.0.2
