@@ -3,7 +3,7 @@
 
 
   /*
-   *  decimal.js v10.1.1
+   *  decimal.js v10.2.0
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
    *  Copyright (c) 2019 Michael Mclaughlin <M8ch88l@gmail.com>
@@ -4341,10 +4341,12 @@
       }
 
       // Minus sign?
-      if (v.charCodeAt(0) === 45) {
+      if ((i = v.charCodeAt(0)) === 45) {
         v = v.slice(1);
         x.s = -1;
       } else {
+        // Plus sign?
+        if (i === 43) v = v.slice(1);
         x.s = 1;
       }
 
@@ -4460,6 +4462,8 @@
    * rounded to `precision` significant digits using rounding mode `rounding`.
    *
    * hypot(a, b, ...) = sqrt(a^2 + b^2 + ...)
+   *
+   * arguments {number|string|Decimal}
    *
    */
   function hypot() {
@@ -4734,6 +4738,8 @@
    *   0    if x is 0,
    *  -0    if x is -0,
    *   NaN  otherwise
+   *
+   * x {number|string|Decimal}
    *
    */
   function sign(x) {
