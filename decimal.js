@@ -4289,7 +4289,7 @@
 
       t = typeof v;
 
-      if (t === 'number') {
+      if (t === 'number' || v instanceof Number) {
         if (v === 0) {
           x.s = 1 / v < 0 ? -1 : 1;
           x.e = 0;
