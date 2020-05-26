@@ -1659,7 +1659,15 @@ y = new Decimal(2)
 y.isNeg                                  // false</pre>
     <p>Note: <code>n &lt; 0</code> can be used if <code>n &lt;= -Number.MIN_VALUE</code>.</p>
 
+    <p>Also note that signed zeroes are implemented, following the IEEE Standard
+      for Floating-Point Arithmetic (IEEE 754).</p>
 
+    <pre>
+Decimal(0).valueOf()                 // '0'
+Decimal(0).isNegative()              // false
+Decimal(0).negated().valueOf()       // '-0'
+Decimal(0).negated().isNegative()    // true
+    </pre>
 
      <h5 id="isPos">isPositive<code class='inset'>.isPos() <i>&rArr; boolean</i></code></h5>
     <p>
