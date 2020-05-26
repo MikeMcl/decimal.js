@@ -139,17 +139,6 @@ Decimal.sqrt('6.98372465832e+9823')      // '8.3568682281821340204e+4911'
 Decimal.pow(2, 0.0979843)                // '1.0702770511687781839'
 ```
 
-Note that signed zeroes are implemented, following the IEEE Standard
-for Floating-Point Arithmetic (IEEE 754).
-
-```js
-Decimal(0).valueOf()                 // '0'
-Decimal(0).isNegative()              // false
-
-Decimal(0).negated().valueOf()       // '-0'
-Decimal(0).negated().isNegative()    // true
-```
-
 There are `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` values,
 
 ```js
