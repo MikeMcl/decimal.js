@@ -3,10 +3,10 @@
 
 
   /*
-   *  decimal.js v10.2.0
+   *  decimal.js v10.2.1
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
-   *  Copyright (c) 2019 Michael Mclaughlin <M8ch88l@gmail.com>
+   *  Copyright (c) 2020 Michael Mclaughlin <M8ch88l@gmail.com>
    *  MIT Licence
    */
 
