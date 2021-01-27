@@ -4252,7 +4252,8 @@
     function Decimal(v) {
       var e, i, t,
         x = this;
-
+      if (typeof v !== "undefined" && v && v.constructor === String) v = v.trim();
+      if (typeof v === "undefined" || !v) v = "0";
       // Decimal called without new.
       if (!(x instanceof Decimal)) return new Decimal(v);
 
