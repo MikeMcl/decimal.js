@@ -254,6 +254,65 @@
     return xdL === ydL ? 0 : xdL > ydL ^ xs < 0 ? 1 : -1;
   };
 
+  // operator - The operator. Valid options are ==, <=, <, >=, >, <>, eq, lt, lte, gt, gte, ne
+  P.Mcompare = function (val = '', operator='==') {
+	if (typeof val !== "undefined" && val && val.constructor === String) val = val.trim();
+	if (typeof val === "undefined" || !val) val = "0";
+	switch (operator) {
+		// equal
+		case "==":
+		case "eq": {
+			if (this.comparedTo(val)==0) {
+				return true;
+			}
+			break;
+		}
+		// less than
+		case "<":
+		case "lt": {
+			if (this.comparedTo(val)==-1) {
+				return true;
+			}
+			break;	
+		}
+		// less than or equal
+		case "<=":
+		case "lte": {
+			if (this.Mcompare(val, '<') || this.Mcompare(val, '==')) {
+				return true;
+			}
+			break;
+		}
+		// greater than
+		case ">":
+		case "gt": {
+			if (this.comparedTo(val)==1) {
+				return true;
+			}
+			break;	
+		}
+		// greater than or equal
+		case ">=":
+		case "gte": {
+			if (this.Mcompare(val, '>') || this.Mcompare(val, '==')) {
+				return true;
+			}
+			break;
+		}
+		case "<>":
+		case "!=":
+		case "ne": {
+			if (this.comparedTo(val)!=0) {
+				return true;
+			}
+			break;	
+		}
+		default: {
+			throw Error("Operador desconccido "+operator+" en Mcompare()");
+		}
+	}
+	return false;
+  }
 
   /*
    * Return a new Decimal whose value is the cosine of the value in radians of this Decimal.
@@ -4225,7 +4284,7 @@
   /*
    * Return a new Decimal whose value is the hyperbolic cosine of `x`, rounded to precision
    * significant digits using rounding mode `rounding`.
-   *
+   * 
    * x {number|string|Decimal} A value in radians.
    *
    */
