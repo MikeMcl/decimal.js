@@ -18,7 +18,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - Faster, smaller, and perhaps easier to use than JavaScript versions of Java's BigDecimal
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
-  - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
+  - Comprehensive [documentation](https://mikemcl.github.io/decimal.js/) and test set
   - Includes a TypeScript declaration file: *decimal.d.ts*
 
 ![API](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/API.png)
@@ -51,7 +51,7 @@ import Decimal from './path/to/decimal.mjs';
 </script>
 ```
 
-[Node.js](http://nodejs.org):
+[Node.js](https://nodejs.org):
 
 ```bash
 $ npm install decimal.js
@@ -68,7 +68,7 @@ ES module:
 import {Decimal} from 'decimal.js';
 ```
 
-AMD loader libraries such as [requireJS](http://requirejs.org/):
+AMD loader libraries such as [requireJS](https://requirejs.org/):
 
 ```js
 require(['decimal'], function(Decimal) {
