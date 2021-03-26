@@ -2,6 +2,8 @@
 
 An arbitrary-precision Decimal type for JavaScript.
 
+[![npm version](https://img.shields.io/npm/v/decimal.js.svg)](https://www.npmjs.com/package/decimal.js)
+[![npm downloads](https://img.shields.io/npm/dw/decimal.js)](https://www.npmjs.com/package/decimal.js)
 [![Build Status](https://travis-ci.org/MikeMcl/decimal.js.svg)](https://travis-ci.org/MikeMcl/decimal.js)
 [![CDNJS](https://img.shields.io/cdnjs/v/decimal.js.svg)](https://cdnjs.com/libraries/decimal.js)
 
@@ -16,7 +18,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - Faster, smaller, and perhaps easier to use than JavaScript versions of Java's BigDecimal
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
-  - Comprehensive [documentation](http://mikemcl.github.io/decimal.js/) and test set
+  - Comprehensive [documentation](https://mikemcl.github.io/decimal.js/) and test set
   - Includes a TypeScript declaration file: *decimal.d.ts*
 
 ![API](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/API.png)
@@ -34,7 +36,7 @@ For a lighter version of this library without the trigonometric functions see [d
 
 ## Load
 
-The library is the single JavaScript file *decimal.js* (or minified, *decimal.min.js*).
+The library is the single JavaScript file *decimal.js* or ES module *decimal.mjs*.
 
 Browser:
 
@@ -42,24 +44,31 @@ Browser:
 <script src='path/to/decimal.js'></script>
 ```
 
-[Node.js](http://nodejs.org):
+```html
+<script type="module">
+import Decimal from './path/to/decimal.mjs';
+...
+</script>
+```
+
+[Node.js](https://nodejs.org):
 
 ```bash
-$ npm install --save decimal.js
+$ npm install decimal.js
 ```
 
 ```js
 var Decimal = require('decimal.js');
 ```
 
-ES6 module (*decimal.mjs*):
+ES module:
 
 ```js
 //import Decimal from 'decimal.js';
 import {Decimal} from 'decimal.js';
 ```
 
-AMD loader libraries such as [requireJS](http://requirejs.org/):
+AMD loader libraries such as [requireJS](https://requirejs.org/):
 
 ```js
 require(['decimal'], function(Decimal) {

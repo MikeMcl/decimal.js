@@ -1,3 +1,7 @@
+#### 10.2.1
+* 28/09/2020
+* Correct `sqrt` initial estimate.
+
 #### 10.2.0
 * 08/05/2019
 * #128 Workaround V8 `Math.pow` change.
