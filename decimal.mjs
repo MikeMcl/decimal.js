@@ -4257,7 +4257,7 @@ function clone(obj) {
     x.constructor = Decimal;
 
     // Duplicate.
-    if (v instanceof Decimal) {
+    if (isDecimalInstance(v)) {
       x.s = v.s;
 
       if (external) {
