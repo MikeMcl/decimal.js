@@ -2628,13 +2628,15 @@
    *
    */
   function cosine(Ctor, x) {
-    var k, y,
-      len = x.d.length;
-
+    var k, len, y;
+    
+    if (x.isZero()) return x;
+    
     // Argument reduction: cos(4x) = 8*(cos^4(x) - cos^2(x)) + 1
     // i.e. cos(x) = 8*(cos^4(x/4) - cos^2(x/4)) + 1
 
     // Estimate the optimum number of times to use the argument reduction.
+    len = x.d.length;
     if (len < 32) {
       k = Math.ceil(len / 3);
       y = (1 / tinyPow(4, k)).toString();
@@ -3663,8 +3665,10 @@
   function sine(Ctor, x) {
     var k,
       len = x.d.length;
-
-    if (len < 3) return taylorSeries(Ctor, 2, x, x);
+    
+    if (len < 3) {
+      return x.isZero() ? x : taylorSeries(Ctor, 2, x, x);
+    }  
 
     // Argument reduction: sin(5x) = 16*sin^5(x) - 20*sin^3(x) + 5*sin(x)
     // i.e. sin(x) = 16*sin^5(x/5) - 20*sin^3(x/5) + 5*sin(x/5)
