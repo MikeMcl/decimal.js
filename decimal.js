@@ -4858,7 +4858,7 @@
   // Node and other environments that support module.exports.
   } else if (typeof module != 'undefined' && module.exports) {
     if (typeof Symbol == 'function' && typeof Symbol.iterator == 'symbol') {
-      P[Symbol.for('nodejs.util.inspect.custom')] = P.toString;
+      P[Symbol['for']('nodejs.util.inspect.custom')] = P.toString;
       P[Symbol.toStringTag] = 'Decimal';
     }
 
