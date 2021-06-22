@@ -131,6 +131,7 @@
   /*
    *  absoluteValue             abs
    *  ceil
+   *  clampedTo                 clamp
    *  comparedTo                cmp
    *  cosine                    cos
    *  cubeRoot                  cbrt
@@ -209,6 +210,26 @@
    */
   P.ceil = function () {
     return finalise(new this.constructor(this), this.e + 1, 2);
+  };
+
+
+  /*
+   * Return a new Decimal whose value is the value of this Decimal clamped to the range
+   * delineated by `min` and `max`.
+   *
+   * min {number|string|Decimal}
+   * max {number|string|Decimal}
+   *
+   */
+  P.clampedTo = P.clamp = function (min, max) {
+    var k,
+      x = this,
+      Ctor = x.constructor;
+    min = new Ctor(min);
+    max = new Ctor(max);
+    if (!min.s || !max.s || min.gt(max)) return new Ctor(NaN);
+    k = x.cmp(min);
+    return k < 0 ? min : x.cmp(max) > 0 ? max : new Ctor(x);
   };
 
 
@@ -2445,18 +2466,6 @@
   };
 
 
-  /*
-  // Add aliases to match BigDecimal method names.
-  // P.add = P.plus;
-  P.subtract = P.minus;
-  P.multiply = P.times;
-  P.divide = P.div;
-  P.remainder = P.mod;
-  P.compareTo = P.cmp;
-  P.negate = P.neg;
-   */
-
-
   // Helper functions for Decimal.prototype (P) and/or Decimal methods, and their callers.
 
 
@@ -3934,6 +3943,7 @@
    *  atan2
    *  cbrt
    *  ceil
+   *  clamp
    *  clone
    *  config
    *  cos
@@ -4150,6 +4160,19 @@
    */
   function ceil(x) {
     return finalise(x = new this(x), x.e + 1, 2);
+  }
+
+
+  /*
+   * Return a new Decimal whose value is `x` clamped to the range delineated by `min` and `max`.
+   *
+   * x {number|string|Decimal}
+   * min {number|string|Decimal}
+   * max {number|string|Decimal}
+   *
+   */
+  function clamp(x, min, max) {
+    return new this(x).clamp(min, max);
   }
 
 
@@ -4386,6 +4409,7 @@
     Decimal.atan2 = atan2;
     Decimal.cbrt = cbrt;          // ES6
     Decimal.ceil = ceil;
+    Decimal.clamp = clamp;
     Decimal.cos = cos;
     Decimal.cosh = cosh;          // ES6
     Decimal.div = div;

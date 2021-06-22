@@ -76,6 +76,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#Datan2"     >atan2</a></li>
       <li><a href="#Dcbrt"      >cbrt</a></li>
       <li><a href="#Dceil"      >ceil</a></li>
+      <li><a href="#Dclamp"     >clamp</a></li>
       <li><a href="#Dclone"     >clone</a></li>
       <li><a href="#Dcos"       >cos</a></li>
       <li><a href="#Dcosh"      >cosh</a></li>
@@ -138,6 +139,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#abs"          >absoluteValue           </a><span>abs</span>     </li>
       <li><a href="#ceil"         >ceil                    </a>                     </li>
       <li><a href="#cmp"          >comparedTo              </a><span>cmp</span>     </li>
+      <li><a href="#clamp"        >clampedTo               </a><span>clamp</span>   </li>
       <li><a href="#cos"          >cosine                  </a><span>cos</span>     </li>
       <li><a href="#cbrt"         >cubeRoot                </a><span>cbrt</span>    </li>
       <li><a href="#dp"           >decimalPlaces           </a><span>dp</span>      </li>
@@ -434,6 +436,16 @@ a.equals(b)                    // true</pre>
     <pre>a = Decimal.ceil(x)
 b = new Decimal(x).ceil()
 a.equals(b)                    // true</pre>
+
+
+  
+    <h5 id="Dclamp">clamp<code class='inset'>.clamp(min, max) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>min</code>: <i>number|string|Decimal</i><br />
+      <code>max</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>See <code><a href='#clamp'>clampedTo</a></code>.</p>
+    <pre>Decimal.clamp(10.1, 0, 10)     // '10'</pre>
 
 
 
@@ -1261,6 +1273,28 @@ x = new Decimal(1.3)
 x.ceil()                      // '2'
 y = new Decimal(-1.8)
 y.ceil()                      // '-1'</pre>
+
+
+
+    <h5 id="clamp">clampedTo<code class='inset'>.clamp(min, max) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>min</code>: <i>number|string|Decimal</i><br />
+      <code>max</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>
+      Returns a new Decimal whose value is the value of this Decimal clamped to the range
+      delineated by <code>min</code> and <code>max</code>.
+    </p>
+    <p>
+      The return value is not affected by the value of the
+      <a href='#precision'><code>precision</code></a> setting.
+    </p>
+    <pre>
+x = new Decimal(5)
+min = new Decimal(100)
+max = new Decimal(Infinity)
+x.clampedTo(min, max)         // '100'
+x.clamp(-10, -0.1)            // '-0.1'</pre>
 
 
 

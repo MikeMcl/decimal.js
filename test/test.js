@@ -15,6 +15,7 @@ console.log('\n Testing decimal.js\n');
   'atanh',
   'cbrt',
   'ceil',
+  'clamp',
   'clone',
   'cmp',
   'config',
