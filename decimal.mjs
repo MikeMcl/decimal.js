@@ -4861,6 +4861,7 @@ P[Symbol.toStringTag] = 'Decimal';
 
 // Create and configure initial Decimal constructor.
 export var Decimal = clone(DEFAULTS);
+Decimal.prototype.constructor = Decimal;
 
 // Create the internal constants from their string values.
 LN10 = new Decimal(LN10);

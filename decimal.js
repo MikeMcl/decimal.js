@@ -4862,7 +4862,7 @@
 
   // Create and configure initial Decimal constructor.
   Decimal = clone(DEFAULTS);
-
+  Decimal.prototype.constructor = Decimal;
   Decimal['default'] = Decimal.Decimal = Decimal;
 
   // Create the internal constants from their string values.
