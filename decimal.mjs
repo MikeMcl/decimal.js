@@ -1,8 +1,8 @@
 /*
- *  decimal.js v10.2.1
+ *  decimal.js v10.3.0
  *  An arbitrary-precision Decimal type for JavaScript.
  *  https://github.com/MikeMcl/decimal.js
- *  Copyright (c) 2020 Michael Mclaughlin <M8ch88l@gmail.com>
+ *  Copyright (c) 2021 Michael Mclaughlin <M8ch88l@gmail.com>
  *  MIT Licence
  */
 
@@ -101,6 +101,7 @@ var EXP_LIMIT = 9e15,                      // 0 to 9e15
   invalidArgument = decimalError + 'Invalid argument: ',
   precisionLimitExceeded = decimalError + 'Precision limit exceeded',
   cryptoUnavailable = decimalError + 'crypto unavailable',
+  tag = '[object Decimal]',
 
   mathfloor = Math.floor,
   mathpow = Math.pow,
@@ -118,7 +119,7 @@ var EXP_LIMIT = 9e15,                      // 0 to 9e15
   PI_PRECISION = PI.length - 1,
 
   // Decimal.prototype object
-  P = { name: '[object Decimal]' };
+  P = { toStringTag: tag };
 
 
 // Decimal prototype methods
@@ -127,7 +128,7 @@ var EXP_LIMIT = 9e15,                      // 0 to 9e15
 /*
  *  absoluteValue             abs
  *  ceil
- *  clampedTo                 clamp                                   
+ *  clampedTo                 clamp
  *  comparedTo                cmp
  *  cosine                    cos
  *  cubeRoot                  cbrt
@@ -223,7 +224,8 @@ P.clampedTo = P.clamp = function (min, max) {
     Ctor = x.constructor;
   min = new Ctor(min);
   max = new Ctor(max);
-  if (!min.s || !max.s || min.gt(max)) return new Ctor(NaN);
+  if (!min.s || !max.s) return new Ctor(NaN);
+  if (min.gt(max)) throw Error(invalidArgument + max);
   k = x.cmp(min);
   return k < 0 ? min : x.cmp(max) > 0 ? max : new Ctor(x);
 };
@@ -2634,7 +2636,7 @@ function convertBase(str, baseIn, baseOut) {
  */
 function cosine(Ctor, x) {
   var k, len, y;
-  
+
   if (x.isZero()) return x;
 
   // Argument reduction: cos(4x) = 8*(cos^4(x) - cos^2(x)) + 1
@@ -3676,7 +3678,7 @@ function sine(Ctor, x) {
 
   if (len < 3) {
     return x.isZero() ? x : taylorSeries(Ctor, 2, x, x);
-  }                                                       
+  }
 
   // Argument reduction: sin(5x) = 16*sin^5(x) - 20*sin^3(x) + 5*sin(x)
   // i.e. sin(x) = 16*sin^5(x/5) - 20*sin^3(x/5) + 5*sin(x/5)
@@ -3942,7 +3944,7 @@ function truncate(arr, len) {
  *  atan2
  *  cbrt
  *  ceil
- *  clamp         
+ *  clamp
  *  clone
  *  config
  *  cos
@@ -3968,7 +3970,7 @@ function truncate(arr, len) {
  *  sinh
  *  sqrt
  *  sub
- *  sum     
+ *  sum
  *  tan
  *  tanh
  *  trunc
@@ -4408,7 +4410,7 @@ function clone(obj) {
   Decimal.atan2 = atan2;
   Decimal.cbrt = cbrt;          // ES6
   Decimal.ceil = ceil;
-  Decimal.clamp = clamp;                      
+  Decimal.clamp = clamp;
   Decimal.cos = cos;
   Decimal.cosh = cosh;          // ES6
   Decimal.div = div;
@@ -4431,7 +4433,7 @@ function clone(obj) {
   Decimal.sinh = sinh;          // ES6
   Decimal.sqrt = sqrt;
   Decimal.sub = sub;
-  Decimal.sum = sum;                    
+  Decimal.sum = sum;
   Decimal.tan = tan;
   Decimal.tanh = tanh;          // ES6
   Decimal.trunc = trunc;        // ES6
@@ -4526,7 +4528,7 @@ function hypot() {
  *
  */
 function isDecimalInstance(obj) {
-  return obj instanceof Decimal || obj && obj.name === '[object Decimal]' || false;
+  return obj instanceof Decimal || obj && obj.toStringTag === tag || false;
 }
 
 
@@ -4887,8 +4889,7 @@ P[Symbol.for('nodejs.util.inspect.custom')] = P.toString;
 P[Symbol.toStringTag] = 'Decimal';
 
 // Create and configure initial Decimal constructor.
-export var Decimal = clone(DEFAULTS);
-Decimal.prototype.constructor = Decimal;
+export var Decimal = P.constructor = clone(DEFAULTS);
 
 // Create the internal constants from their string values.
 LN10 = new Decimal(LN10);

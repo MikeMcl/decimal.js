@@ -56,7 +56,7 @@ export declare class Decimal {
   readonly d: number[];
   readonly e: number;
   readonly s: number;
-  private readonly name: string;
+  private readonly toStringTag: string;
 
   constructor(n: Decimal.Value);
 

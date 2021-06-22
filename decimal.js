@@ -3,10 +3,10 @@
 
 
   /*
-   *  decimal.js v10.2.1
+   *  decimal.js v10.3.0
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
-   *  Copyright (c) 2020 Michael Mclaughlin <M8ch88l@gmail.com>
+   *  Copyright (c) 2021 Michael Mclaughlin <M8ch88l@gmail.com>
    *  MIT Licence
    */
 
@@ -105,6 +105,7 @@
     invalidArgument = decimalError + 'Invalid argument: ',
     precisionLimitExceeded = decimalError + 'Precision limit exceeded',
     cryptoUnavailable = decimalError + 'crypto unavailable',
+    tag = '[object Decimal]',
 
     mathfloor = Math.floor,
     mathpow = Math.pow,
@@ -122,7 +123,7 @@
     PI_PRECISION = PI.length - 1,
 
     // Decimal.prototype object
-    P = { name: '[object Decimal]' };
+    P = { toStringTag: tag };
 
 
   // Decimal prototype methods
@@ -227,7 +228,8 @@
       Ctor = x.constructor;
     min = new Ctor(min);
     max = new Ctor(max);
-    if (!min.s || !max.s || min.gt(max)) return new Ctor(NaN);
+    if (!min.s || !max.s) return new Ctor(NaN);
+    if (min.gt(max)) throw Error(invalidArgument + max);
     k = x.cmp(min);
     return k < 0 ? min : x.cmp(max) > 0 ? max : new Ctor(x);
   };
@@ -3596,7 +3598,7 @@
    */
   function parseOther(x, str) {
     var base, Ctor, divisor, i, isFloat, len, p, xd, xe;
-    
+
     if (str.indexOf('_') > -1) {
       str = str.replace(/(\d)_(?=\d)/g, '$1');
       if (isDecimal.test(str)) return parseDecimal(x, str);
@@ -4530,7 +4532,7 @@
    *
    */
   function isDecimalInstance(obj) {
-    return obj instanceof Decimal || obj && obj.name === '[object Decimal]' || false;
+    return obj instanceof Decimal || obj && obj.toStringTag === tag || false;
   }
 
 

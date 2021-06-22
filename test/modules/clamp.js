@@ -24,11 +24,9 @@ T('clamp', function () {
   t(1, 0, 1, '1');
   t(2, 0, 1, '1');
   
-  t(0, 0, -1, 'NaN');
   t(1, 1, 1, '1');
   t(-1, 1, 1, '1');
   t(-1, -1, 1, '-1');
-  t(1, 1, -1, 'NaN');
   t(2, 1, 2, '2');
   t(3, 1, 2, '2');
   t(1, 0, 1, '1');
@@ -39,8 +37,6 @@ T('clamp', function () {
   t(-Infinity, 0, 1, '0');
   t(-Infinity, -Infinity, Infinity, '-Infinity');
   t(Infinity, -Infinity, Infinity, 'Infinity');
-  t(Infinity, Infinity, -Infinity, 'NaN');
-  t(0, Infinity, 0, 'NaN');
   t(0, 1, Infinity, '1');
   
   t(0, NaN, 1, 'NaN');

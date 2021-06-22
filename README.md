@@ -32,7 +32,8 @@ This library also adds the trigonometric functions, among others, and supports n
 which makes it a significantly larger library than *bignumber.js* and the even smaller
 [big.js](https://github.com/MikeMcl/big.js/).
 
-For a lighter version of this library without the trigonometric functions see [decimal.js-light](https://github.com/MikeMcl/decimal.js-light/).
+For a lighter version of this library without the trigonometric functions see
+[decimal.js-light](https://github.com/MikeMcl/decimal.js-light/).
 
 ## Load
 
@@ -43,7 +44,7 @@ Browser:
 ```html
 <script src='path/to/decimal.js'></script>
 ```
-
+or
 ```html
 <script type="module">
 import Decimal from './path/to/decimal.mjs';
@@ -54,26 +55,18 @@ import Decimal from './path/to/decimal.mjs';
 [Node.js](https://nodejs.org):
 
 ```bash
-$ npm install decimal.js
+npm install decimal.js
 ```
-
 ```js
 var Decimal = require('decimal.js');
 ```
-
-ES module:
-
+or
 ```js
-//import Decimal from 'decimal.js';
-import {Decimal} from 'decimal.js';
+import Decimal from 'decimal.js';
 ```
-
-AMD loader libraries such as [requireJS](https://requirejs.org/):
-
+or
 ```js
-require(['decimal'], function(Decimal) {
-    // Use Decimal here in local scope. No global Decimal.
-});
+import {Decimal} from 'decimal.js';
 ```
 
 ## Use
@@ -165,11 +158,11 @@ pi.toFraction()              // [ '7853982301', '2500000000' ]
 pi.toFraction(1000)          // [ '355', '113' ]
 ```
 
-All calculations are rounded according to the number of significant digits and rounding mode
-specified by the `precision` and `rounding` properties of the Decimal constructor.
+All calculations are rounded according to the number of significant digits and rounding mode specified
+by the `precision` and `rounding` properties of the Decimal constructor.
 
-For advanced usage, multiple Decimal constructors can be created, each with their own independent configuration which
-applies to all Decimal numbers created from it.
+For advanced usage, multiple Decimal constructors can be created, each with their own independent
+configuration which applies to all Decimal numbers created from it.
 
 ```js
 // Set the precision and rounding of the default Decimal constructor
@@ -206,36 +199,42 @@ and the file *test.html* which runs all the tests when opened in a browser.
 To run all the tests, from a command-line at the root directory using npm
 
 ```bash
-$ npm test
+npm test
 ```
 
 or at the *test* directory using Node
 
 ```bash
-$ node test
+node test
 ```
 
 Each separate test module can also be executed individually, for example, at the *test/modules* directory
 
 ```bash
-$ node toFraction
+node toFraction
 ```
 
-## Build
+## Minify
 
-For Node, if [uglify-js](https://github.com/mishoo/UglifyJS2) is installed
+The minified version of *decimal.js* and its associated source map found in this repository was created with
+[uglify-js](https://github.com/mishoo/UglifyJS) using
 
 ```bash
 npm install uglify-js -g
+uglifyjs decimal.js --source-map url=decimal.min.js.map --compress --mangle --output decimal.min.js
 ```
 
-then
+The minified version of *decimal.mjs* and its associated source map found in this repository was created with
+[terser](https://github.com/terser/terser) using
 
 ```bash
-npm run build
+npm install terser -g
+terser decimal.mjs --source-map url=decimal.min.mjs.map -c -m --toplevel -o decimal.min.mjs
 ```
 
-will create *decimal.min.js* and a source map.
+```js
+import Decimal from './decimal.min.mjs';
+```
 
 ## Licence
 

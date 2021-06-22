@@ -439,7 +439,7 @@ b = new Decimal(x).ceil()
 a.equals(b)                    // true</pre>
 
 
-  
+
     <h5 id="Dclamp">clamp<code class='inset'>.clamp(min, max) <i>&rArr; Decimal</i></code></h5>
     <p>
       <code>min</code>: <i>number|string|Decimal</i><br />
@@ -943,8 +943,11 @@ Decimal.precision = 0
       All functions which return a Decimal will round the return value to <code>precision</code>
       significant digits except <a href='#decimal'><code>Decimal</code></a>,
       <a href='#abs'><code>absoluteValue</code></a>,
-      <a href='#ceil'><code>ceil</code></a>, <a href='#floor'><code>floor</code></a>,
-      <a href='#neg'><code>negated</code></a>, <a href='#round'><code>round</code></a>,
+      <a href='#ceil'><code>ceil</code></a>,
+      <a href='#clamp'><code>clampedTo</code></a>,
+      <a href='#floor'><code>floor</code></a>,
+      <a href='#neg'><code>negated</code></a>,
+      <a href='#round'><code>round</code></a>,
       <a href='#toDP'><code>toDecimalPlaces</code></a>,
       <a href='#toNearest'><code>toNearest</code></a> and
       <a href='#trunc'><code>truncated</code></a>.
@@ -1668,10 +1671,6 @@ x = new Decimal(1)
 x.isFinite()                             // true
 y = new Decimal(Infinity)
 y.isFinite()                             // false</pre>
-    <p>
-      Note: The native method <code>isFinite()</code> can be used if
-      <code>n &lt;= Number.MAX_VALUE</code>.
-    </p>
 
 
 
@@ -1698,7 +1697,6 @@ x = new Decimal(NaN)
 x.isNaN()                                // true
 y = new Decimal('Infinity')
 y.isNaN()                                // false</pre>
-    <p>Note: The native method <code>isNaN()</code> can also be used.</p>
 
 
 
@@ -1712,17 +1710,16 @@ x = new Decimal(-0)
 x.isNegative()                           // true
 y = new Decimal(2)
 y.isNeg                                  // false</pre>
-    <p>Note: <code>n &lt; 0</code> can be used if <code>n &lt;= -Number.MIN_VALUE</code>.</p>
-
-    <p>Also note that signed zeroes are implemented, following the IEEE Standard
-      for Floating-Point Arithmetic (IEEE 754).</p>
-
+    <p>Note that zero is signed.</p>
     <pre>
-Decimal(0).valueOf()                 // '0'
-Decimal(0).isNegative()              // false
-Decimal(0).negated().valueOf()       // '-0'
-Decimal(0).negated().isNegative()    // true
+new Decimal(0).valueOf()                 // '0'
+new Decimal(0).isNegative()              // false
+new Decimal(0).negated().valueOf()       // '-0'
+new Decimal(0).negated().isNegative()    // true
+new Decimal(-0).isNegative()             // true
     </pre>
+
+
 
      <h5 id="isPos">isPositive<code class='inset'>.isPos() <i>&rArr; boolean</i></code></h5>
     <p>
@@ -1734,7 +1731,6 @@ x = new Decimal(0)
 x.isPositive()                           // true
 y = new Decimal(-2)
 y.isPos                                  // false</pre>
-    <p>Note: <code>n &lt; 0</code> can be used if <code>n &lt;= -Number.MIN_VALUE</code>.</p>
 
 
 
@@ -1748,7 +1744,6 @@ x = new Decimal(-0)
 x.isZero() && x.isNeg()                  // true
 y = new Decimal(Infinity)
 y.isZero()                               // false</pre>
-    <p>Note: <code>n == 0</code> can be used if <code>n &gt;= Number.MIN_VALUE</code>.</p>
 
 
 

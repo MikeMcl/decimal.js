@@ -1,3 +1,17 @@
+#### 10.3.0
+* 22/06/2021
+* Support underscores as separators.
+* #101 Add `Decimal.clamp` method.
+* #161 Fix Decimal instances deemed plain objects.
+* #100 Add `Decimal.sum` method.
+* #146 `Symbol.for` to `Symbol['for']` for IE8.
+* #132 Fix possible infinite loop when `minE` is very low.
+* #180 Accept Decimals of different origin.
+* Update Typescript definitions.
+* Update minification examples in *README*.
+* Add minified versions for both *decimal.js* and *decimal.mjs*.
+* Add *files* field to *package.json*, and remove build script.
+
 #### 10.2.1
 * 28/09/2020
 * Correct `sqrt` initial estimate.
