@@ -46,6 +46,7 @@ console.log('\n Testing decimal.js\n');
   'sin',
   'sinh',
   'sqrt',
+  'sum',
   'tan',
   'tanh',
   'times',

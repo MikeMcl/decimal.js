@@ -2624,13 +2624,15 @@ function convertBase(str, baseIn, baseOut) {
  *
  */
 function cosine(Ctor, x) {
-  var k, y,
-    len = x.d.length;
+  var k, len, y;
+  
+  if (x.isZero()) return x;
 
   // Argument reduction: cos(4x) = 8*(cos^4(x) - cos^2(x)) + 1
   // i.e. cos(x) = 8*(cos^4(x/4) - cos^2(x/4)) + 1
 
   // Estimate the optimum number of times to use the argument reduction.
+  len = x.d.length;
   if (len < 32) {
     k = Math.ceil(len / 3);
     y = (1 / tinyPow(4, k)).toString();
@@ -3660,7 +3662,9 @@ function sine(Ctor, x) {
   var k,
     len = x.d.length;
 
-  if (len < 3) return taylorSeries(Ctor, 2, x, x);
+  if (len < 3) {
+    return x.isZero() ? x : taylorSeries(Ctor, 2, x, x);
+  }                                                       
 
   // Argument reduction: sin(5x) = 16*sin^5(x) - 20*sin^3(x) + 5*sin(x)
   // i.e. sin(x) = 16*sin^5(x/5) - 20*sin^3(x/5) + 5*sin(x/5)
@@ -3951,6 +3955,7 @@ function truncate(arr, len) {
  *  sinh
  *  sqrt
  *  sub
+ *  sum     
  *  tan
  *  tanh
  *  trunc
@@ -4399,6 +4404,7 @@ function clone(obj) {
   Decimal.sinh = sinh;          // ES6
   Decimal.sqrt = sqrt;
   Decimal.sub = sub;
+  Decimal.sum = sum;                    
   Decimal.tan = tan;
   Decimal.tanh = tanh;          // ES6
   Decimal.trunc = trunc;        // ES6
@@ -4790,6 +4796,28 @@ function sqrt(x) {
  */
 function sub(x, y) {
   return new this(x).sub(y);
+}
+
+
+/*
+ * Return a new Decimal whose value is the sum of the arguments, rounded to `precision`
+ * significant digits using rounding mode `rounding`.
+ *
+ * Only the result is rounded, not the intermediate calculations.
+ *
+ * arguments {number|string|Decimal}
+ *
+ */
+function sum() {
+  var i = 0,
+    args = arguments,
+    x = new this(args[i]);
+
+  external = false;
+  for (; x.s && ++i < args.length;) x = x.plus(args[i]);
+  external = true;
+
+  return finalise(x, this.precision, this.rounding);
 }
 
 

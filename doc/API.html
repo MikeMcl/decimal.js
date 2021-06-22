@@ -102,6 +102,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       <li><a href="#Dsinh"      >sinh</a></li>
       <li><a href="#Dsqrt"      >sqrt</a></li>
       <li><a href="#Dsub"       >sub</a></li>
+      <li><a href="#Dsum"       >sum</a></li>
       <li><a href="#Dtan"       >tan</a></li>
       <li><a href="#Dtanh"      >tanh</a></li>
       <li><a href="#Dtrunc"     >trunc</a></li>
@@ -601,7 +602,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dmax">
-      max<code class='inset'>.max([x [, y, ...]]) <i>&rArr; Decimal</i></code>
+      max<code class='inset'>.max(x [, y, ...]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
       <code>x</code>: <i>number|string|Decimal</i><br />
@@ -613,7 +614,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dmin">
-      min<code class='inset'>.min([x [, y, ...]]) <i>&rArr; Decimal</i></code>
+      min<code class='inset'>.min(x [, y, ...]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
       <code>x</code>: <i>number|string|Decimal</i><br />
@@ -833,7 +834,7 @@ a.equals(b)                    // true</pre>
 
 
 
-      <h5 id="Dsub">sub<code class='inset'>.sub(x, y) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="Dsub">sub<code class='inset'>.sub(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
       <code>x</code>: <i>number|string|Decimal</i><br />
       <code>y</code>: <i>number|string|Decimal</i>
@@ -845,7 +846,26 @@ a.equals(b)                    // true</pre>
 
 
 
-     <h5 id="Dtan">tan<code class='inset'>.tan(x) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="Dsum">sum<code class='inset'>.sum(x [, y, ...]) <i>&rArr; Decimal</i></code></h5>
+    <p>
+      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>y</code>: <i>number|string|Decimal</i>
+    </p>
+    <p>
+      Returns a new Decimal whose value is the sum of the <code>arguments</code>,
+      rounded to <a href='#precision'><code>precision</code></a> significant digits using
+      rounding mode <a href='#rounding'><code>rounding</code></a>.<br />
+      Only the result is rounded, not the intermediate summations.
+    </p>
+    <pre>
+x = 5
+y = '16'
+z = new Decimal(-11)
+Decimal.sum(x, y, z)           // '10'</pre>
+
+
+
+    <h5 id="Dtan">tan<code class='inset'>.tan(x) <i>&rArr; Decimal</i></code></h5>
     <p><code>x</code>: <i>number|string|Decimal</i></p>
     <p>See <code><a href='#tan'>tangent</a></code>.</p>
     <pre>a = Decimal.tan(x)
