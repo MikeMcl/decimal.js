@@ -85,6 +85,9 @@ export declare class Decimal {
   abs(): Decimal;
 
   ceil(): Decimal;
+  
+  clampedTo(min: Decimal.Value, max: Decimal.Value): Decimal;
+  clamp(min: Decimal.Value, max: Decimal.Value): Decimal;
 
   comparedTo(n: DecimalValue): number;
   cmp(n: DecimalValue): number;
@@ -260,6 +263,7 @@ export declare class Decimal {
   static atan2(y: DecimalValue, x: DecimalValue): Decimal;
   static cbrt(n: DecimalValue): Decimal;
   static ceil(n: DecimalValue): Decimal;
+  static clamp(n: Decimal.Value, min: Decimal.Value, max: Decimal.Value): Decimal;
   static clone(object?: DecimalConfig): DecimalConstructor;
   static config(object: DecimalConfig): DecimalConstructor;
   static cos(n: DecimalValue): Decimal;
@@ -287,6 +291,7 @@ export declare class Decimal {
   static sinh(n: DecimalValue): Decimal;
   static sqrt(n: DecimalValue): Decimal;
   static sub(x: DecimalValue, y: DecimalValue): Decimal;
+  static sum(...n: Decimal.Value[]): Decimal;
   static tan(n: DecimalValue): Decimal;
   static tanh(n: DecimalValue): Decimal;
   static trunc(n: DecimalValue): Decimal;
