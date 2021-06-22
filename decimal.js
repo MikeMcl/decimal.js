@@ -3596,8 +3596,11 @@
    */
   function parseOther(x, str) {
     var base, Ctor, divisor, i, isFloat, len, p, xd, xe;
-
-    if (str === 'Infinity' || str === 'NaN') {
+    
+    if (str.indexOf('_') > -1) {
+      str = str.replace(/(\d)_(?=\d)/g, '$1');
+      if (isDecimal.test(str)) return parseDecimal(x, str);
+    } else if (str === 'Infinity' || str === 'NaN') {
       if (!+str) x.s = NaN;
       x.e = NaN;
       x.d = null;

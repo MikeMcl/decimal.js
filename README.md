@@ -122,7 +122,7 @@ The methods that return a Decimal can be chained.
 
 ```js
 x.dividedBy(y).plus(z).times(9).floor()
-x.times('1.23456780123456789e+9').plus(9876.5432321).dividedBy('4444562598.111772').ceil()
+x.times('1.23456780123456789e+9').plus(9876.5432321).dividedBy('4_444_562_598.111772').ceil()
 ```
 
 Many method names have a shorter alias.
@@ -235,7 +235,7 @@ then
 npm run build
 ```
 
-will create *decimal.min.js*, and a source map will also be added to the *doc* directory.
+will create *decimal.min.js* and a source map.
 
 ## Licence
 
