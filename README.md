@@ -152,7 +152,7 @@ Decimal.pow(2, 0.0979843)                // '1.0702770511687781839'
 // Using `toFixed()` to avoid exponential notation:
 x = new Decimal('0.0000001')
 x.toString()                             // '1e-7'
-x.toFixed()                              // ''0.0000001'
+x.toFixed()                              // '0.0000001'
 ```
 
 And there are `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` values.

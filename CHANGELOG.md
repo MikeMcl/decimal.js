@@ -1,3 +1,7 @@
+#### 10.3.1
+* 25/06/2021
+* Remove minified versions. Refresh *README*.
+
 #### 10.3.0
 * 22/06/2021
 * Support underscores as separators.
