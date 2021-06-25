@@ -19,6 +19,7 @@ An arbitrary-precision Decimal type for JavaScript.
   - No dependencies
   - Wide platform compatibility: uses JavaScript 1.5 (ECMAScript 3) features only
   - Comprehensive [documentation](https://mikemcl.github.io/decimal.js/) and test set
+  - Used under the hood by [math.js](https://github.com/josdejong/mathjs)
   - Includes a TypeScript declaration file: *decimal.d.ts*
 
 ![API](https://raw.githubusercontent.com/MikeMcl/decimal.js/gh-pages/API.png)
@@ -43,12 +44,10 @@ Browser:
 
 ```html
 <script src='path/to/decimal.js'></script>
-```
-or
-```html
+
 <script type="module">
-import Decimal from './path/to/decimal.mjs';
-...
+  import Decimal from './path/to/decimal.mjs';
+  ...
 </script>
 ```
 
@@ -58,25 +57,19 @@ import Decimal from './path/to/decimal.mjs';
 npm install decimal.js
 ```
 ```js
-var Decimal = require('decimal.js');
-```
-or
-```js
+const Decimal = require('decimal.js');
+
 import Decimal from 'decimal.js';
-```
-or
-```js
+
 import {Decimal} from 'decimal.js';
 ```
 
 ## Use
 
-*In all examples below, `var`, semicolons and `toString` calls are not shown.
+*In all examples below, semicolons and `toString` calls are not shown.
 If a commented-out value is in quotes it means `toString` has been called on the preceding expression.*
 
-The library exports a single function object, `Decimal`, the constructor of Decimal instances.
-
-It accepts a value of type number, string or Decimal.
+The library exports a single constructor function, `Decimal`, which expects a single argument that is a number, string or Decimal instance.
 
 ```js
 x = new Decimal(123.4567)
@@ -85,7 +78,29 @@ z = new Decimal(x)
 x.equals(y) && y.equals(z) && x.equals(z)        // true
 ```
 
-A value can also be in binary, hexadecimal or octal if the appropriate prefix is included.
+If using values with more than a few digits, it is recommended to pass strings rather than numbers to avoid a potential loss of precision.
+
+```js
+// Precision loss from using numeric literals with more than 15 significant digits.
+new Decimal(1.0000000000000001)         // '1'
+new Decimal(88259496234518.57)          // '88259496234518.56'
+new Decimal(99999999999999999999)       // '100000000000000000000'
+
+// Precision loss from using numeric literals outside the range of Number values.
+new Decimal(2e+308)                     // 'Infinity'
+new Decimal(1e-324)                     // '0'
+
+// Precision loss from the unexpected result of arithmetic with Number values.
+new Decimal(0.7 + 0.1)                  // '0.7999999999999999'
+```
+
+As with JavaScript numbers, strings can contain underscores as separators to improve readability.
+
+```js
+x = new Decimal('2_147_483_647')
+```
+
+String values in binary, hexadecimal or octal notation are also accepted if the appropriate prefix is included.
 
 ```js
 x = new Decimal('0xff.f')            // '255.9375'
@@ -94,15 +109,13 @@ z = x.plus(y)                        // '427.9375'
 
 z.toBinary()                         // '0b110101011.1111'
 z.toBinary(13)                       // '0b1.101010111111p+8'
-```
 
-Using binary exponential notation to create a Decimal with the value of `Number.MAX_VALUE`:
-
-```js
+// Using binary exponential notation to create a Decimal with the value of `Number.MAX_VALUE`.
 x = new Decimal('0b1.1111111111111111111111111111111111111111111111111111p+1023')
+// '1.7976931348623157081e+308'
 ```
 
-A Decimal is immutable in the sense that it is not changed by its methods.
+Decimal instances are immutable in the sense that they are not changed by their methods.
 
 ```js
 0.3 - 0.1                     // 0.19999999999999998
@@ -115,33 +128,34 @@ The methods that return a Decimal can be chained.
 
 ```js
 x.dividedBy(y).plus(z).times(9).floor()
-x.times('1.23456780123456789e+9').plus(9876.5432321).dividedBy('4_444_562_598.111772').ceil()
+x.times('1.23456780123456789e+9').plus(9876.5432321).dividedBy('4444562598.111772').ceil()
 ```
 
 Many method names have a shorter alias.
 
 ```js
-x.squareRoot().dividedBy(y).toPower(3).equals(x.sqrt().div(y).pow(3))         // true
-x.cmp(y.mod(z).neg()) == 1 && x.comparedTo(y.modulo(z).negated()) == 1        // true
+x.squareRoot().dividedBy(y).toPower(3).equals(x.sqrt().div(y).pow(3))     // true
+x.comparedTo(y.modulo(z).negated() === x.cmp(y.mod(z).neg())              // true
 ```
 
-Like JavaScript's Number type, there are `toExponential`, `toFixed` and `toPrecision` methods,
+Most of the methods of JavaScript's `Number.prototype` and `Math` objects are replicated.
 
 ```js
 x = new Decimal(255.5)
-x.toExponential(5)              // '2.55500e+2'
-x.toFixed(5)                    // '255.50000'
-x.toPrecision(5)                // '255.50'
-```
+x.toExponential(5)                       // '2.55500e+2'
+x.toFixed(5)                             // '255.50000'
+x.toPrecision(5)                         // '255.50'
 
-and almost all of the methods of JavaScript's Math object are also replicated.
-
-```js
 Decimal.sqrt('6.98372465832e+9823')      // '8.3568682281821340204e+4911'
 Decimal.pow(2, 0.0979843)                // '1.0702770511687781839'
+
+// Using `toFixed()` to avoid exponential notation:
+x = new Decimal('0.0000001')
+x.toString()                             // '1e-7'
+x.toFixed()                              // ''0.0000001'
 ```
 
-There are `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` values,
+And there are `isNaN` and `isFinite` methods, as `NaN` and `Infinity` are valid `Decimal` values.
 
 ```js
 x = new Decimal(NaN)                                           // 'NaN'
@@ -149,7 +163,7 @@ y = new Decimal(Infinity)                                      // 'Infinity'
 x.isNaN() && !y.isNaN() && !x.isFinite() && !y.isFinite()      // true
 ```
 
-and a `toFraction` method with an optional *maximum denominator* argument
+There is also a `toFraction` method with an optional *maximum denominator* argument.
 
 ```js
 z = new Decimal(355)
@@ -169,16 +183,16 @@ configuration which applies to all Decimal numbers created from it.
 Decimal.set({ precision: 5, rounding: 4 })
 
 // Create another Decimal constructor, optionally passing in a configuration object
-Decimal9 = Decimal.clone({ precision: 9, rounding: 1 })
+Dec = Decimal.clone({ precision: 9, rounding: 1 })
 
 x = new Decimal(5)
-y = new Decimal9(5)
+y = new Dec(5)
 
 x.div(3)                           // '1.6667'
 y.div(3)                           // '1.66666666'
 ```
 
-The value of a Decimal is stored in a floating point format in terms of its digits, exponent and sign.
+The value of a Decimal is stored in a floating point format in terms of its digits, exponent and sign, but these properties should be considered read-only.
 
 ```js
 x = new Decimal(-12345.67);
@@ -191,41 +205,32 @@ For further information see the [API](http://mikemcl.github.io/decimal.js/) refe
 
 ## Test
 
-The library can be tested using Node.js or a browser.
-
-The *test* directory contains the file *test.js* which runs all the tests when executed by Node,
-and the file *test.html* which runs all the tests when opened in a browser.
-
-To run all the tests, from a command-line at the root directory using npm
+To run the tests using Node.js from the root directory:
 
 ```bash
 npm test
 ```
 
-or at the *test* directory using Node
+Each separate test module can also be executed individually, for example:
 
 ```bash
-node test
+node test/modules/toFraction
 ```
 
-Each separate test module can also be executed individually, for example, at the *test/modules* directory
-
-```bash
-node toFraction
-```
+To run the tests in a browser, open *test/test.html*.
 
 ## Minify
 
-The minified version of *decimal.js* and its associated source map found in this repository was created with
-[uglify-js](https://github.com/mishoo/UglifyJS) using
+Two minification examples:
+
+Using [uglify-js](https://github.com/mishoo/UglifyJS) to minify the *decimal.js* file:
 
 ```bash
 npm install uglify-js -g
-uglifyjs decimal.js --source-map url=decimal.min.js.map --compress --mangle --output decimal.min.js
+uglifyjs decimal.js --source-map url=decimal.min.js.map -c -m -o decimal.min.js
 ```
 
-The minified version of *decimal.mjs* and its associated source map found in this repository was created with
-[terser](https://github.com/terser/terser) using
+Using [terser](https://github.com/terser/terser) to minify the ES module version, *decimal.mjs*:
 
 ```bash
 npm install terser -g
@@ -238,6 +243,4 @@ import Decimal from './decimal.min.mjs';
 
 ## Licence
 
-MIT.
-
-See *LICENCE.md*
+[The MIT Licence (Expat).](LICENCE.md)
