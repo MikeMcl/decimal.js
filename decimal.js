@@ -2467,6 +2467,14 @@
     return x.isNeg() ? '-' + str : str;
   };
 
+  /*
+   * The toPrimitive method is used when attempting to perform comparison operations.
+   * This implementation provides a sensible and user-expected implementation of how
+   * a Decimal should be transformed into a comparable number
+   */
+  P[Symbol.toPrimitive] = function () {
+    return Number(this.toString());
+  };
 
   // Helper functions for Decimal.prototype (P) and/or Decimal methods, and their callers.
 
