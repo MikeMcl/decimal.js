@@ -251,7 +251,7 @@ export declare class Decimal {
   static exp(n: Decimal.Value): Decimal;
   static floor(n: Decimal.Value): Decimal;
   static hypot(...n: Decimal.Value[]): Decimal;
-  static isDecimal(object: any): boolean
+  static isDecimal(object: any): object is Decimal;
   static ln(n: Decimal.Value): Decimal;
   static log(n: Decimal.Value, base?: Decimal.Value): Decimal;
   static log2(n: Decimal.Value): Decimal;
