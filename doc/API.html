@@ -1009,7 +1009,7 @@ new Decimal('1e-500')              // '1e-500'
 new Decimal('9.9e-501')            // '0'
 
 Decimal.set({ minE: -3 })
-new Decimal(0.001)                 // '0.01'       e is -3
+new Decimal(0.001)                 // '0.001'       e is -3
 new Decimal(0.0001)                // '0'          e is -4</pre>
     <p>
       The smallest possible magnitude of a non-zero Decimal is <code>1e-9000000000000000</code>
