@@ -23,6 +23,15 @@
   "main": "decimal",
   "module": "decimal.mjs",
   "browser": "decimal.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./decimal.d.ts",
+        "default": "./decimal.mjs"
+      },
+      "require": "./decimal.js"
+    }
+  },
   "author": {
     "name": "Michael Mclaughlin",
     "email": "M8ch88l@gmail.com"
