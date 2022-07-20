@@ -2,7 +2,7 @@
   'use strict';
 
 
-  /*
+  /*!
    *  decimal.js v10.3.1
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
