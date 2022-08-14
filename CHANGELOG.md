@@ -1,3 +1,9 @@
+#### 10.4.0
+* 14/08/2022
+* #201 Add `exports` field to *package.json*.
+* #203 Preserve license comment after bundling.
+* #198 Use type predicate on `isDecimal`.
+
 #### 10.3.1
 * 25/06/2021
 * Remove minified versions. Refresh *README*.
