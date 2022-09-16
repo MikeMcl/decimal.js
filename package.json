@@ -31,7 +31,12 @@
     },
     "./decimal.mjs": "./decimal.mjs",
     "./decimal.js": "./decimal.js",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./decimal": {
+      "types": "./decimal.d.ts",
+      "import": "./decimal.mjs",
+      "require": "./decimal.js"
+    }
   },
   "author": {
     "name": "Michael Mclaughlin",
