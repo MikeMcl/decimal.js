@@ -286,7 +286,7 @@ export declare class Decimal {
   static random(significantDigits?: number): Decimal;
   static round(n: DecimalValue): Decimal;
   static set(object: DecimalConfig): DecimalConstructor;
-  static sign(n: DecimalValue): Decimal;
+  static sign(n: DecimalValue): number;
   static sin(n: DecimalValue): Decimal;
   static sinh(n: DecimalValue): Decimal;
   static sqrt(n: DecimalValue): Decimal;
