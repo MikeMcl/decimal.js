@@ -265,7 +265,7 @@ export declare class Decimal {
   static random(significantDigits?: number): Decimal;
   static round(n: Decimal.Value): Decimal;
   static set(object: Decimal.Config): Decimal.Constructor;
-  static sign(n: Decimal.Value): Decimal;
+  static sign(n: Decimal.Value): number;
   static sin(n: Decimal.Value): Decimal;
   static sinh(n: Decimal.Value): Decimal;
   static sqrt(n: Decimal.Value): Decimal;
