@@ -1,3 +1,7 @@
+#### 10.4.2
+* 12/10/2022
+* #209 Correct return type.
+
 #### 10.4.1
 * 16/09/2022
 * #205 Add './decimal' subpath to *package.json* `exports`.

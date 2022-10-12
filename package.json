@@ -1,7 +1,7 @@
 {
   "name": "decimal.js",
   "description": "An arbitrary-precision Decimal type for JavaScript.",
-  "version": "10.4.1",
+  "version": "10.4.2",
   "keywords": [
     "arbitrary",
     "precision",

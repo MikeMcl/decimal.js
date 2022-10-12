@@ -3,7 +3,7 @@
 
 
   /*!
-   *  decimal.js v10.4.1
+   *  decimal.js v10.4.2
    *  An arbitrary-precision Decimal type for JavaScript.
    *  https://github.com/MikeMcl/decimal.js
    *  Copyright (c) 2022 Michael Mclaughlin <M8ch88l@gmail.com>
