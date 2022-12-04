@@ -77,7 +77,6 @@ export declare class Decimal {
   readonly d: number[];
   readonly e: number;
   readonly s: number;
-  private readonly toStringTag: string;
 
   constructor(n: DecimalValue);
 
