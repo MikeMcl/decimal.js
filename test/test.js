@@ -64,7 +64,8 @@ console.log('\n Testing decimal.js\n');
   'toSD',
   'toString',
   'trunc',
-  'valueOf'
+  'valueOf',
+  'toPrimitive',
 ]
 .forEach(function (module) {
   require('./modules/' + module);
