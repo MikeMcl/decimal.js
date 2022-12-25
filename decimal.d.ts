@@ -57,13 +57,13 @@ export declare class Decimal {
   readonly e: number;
   readonly s: number;
 
-  constructor(n: Decimal.Value);
+  constructor(n?: Decimal.Value);
 
   absoluteValue(): Decimal;
   abs(): Decimal;
 
   ceil(): Decimal;
-  
+
   clampedTo(min: Decimal.Value, max: Decimal.Value): Decimal;
   clamp(min: Decimal.Value, max: Decimal.Value): Decimal;
 

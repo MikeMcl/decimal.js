@@ -278,7 +278,6 @@ T('Decimal', function () {
   t('123.456789', '123.456789');
   t('123.456789', '+123.456789');
 
-  tx(function () {new Decimal(void 0)}, "void 0");
   tx(function () {new Decimal('undefined')}, "'undefined'");
   tx(function () {new Decimal(null)}, "null");
   tx(function () {new Decimal('null')}, "'null'");
