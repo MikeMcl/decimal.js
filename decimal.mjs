@@ -4279,6 +4279,7 @@ function clone(obj) {
    *
    */
   function Decimal(v) {
+    if (typeof v === 'undefined') v = 0
     var e, i, t,
       x = this;
 
