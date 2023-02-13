@@ -39,11 +39,12 @@ def assert_matches(x, mpfunc, jsfunc=None):
         integers(min_value=-99, max_value=99),
     ).map(lambda tup: tup[0] * Decimal(10) ** tup[1])
 )
+@settings(max_examples=1000)
 def test_matches(x, fn):
     assert_matches(x, fn)
 
 
-@pytest.mark.parametrize("fn", "ln log10".split())
+@pytest.mark.parametrize("fn", "ln log10 sqrt".split())
 @given(
     x=tuples(
         decimals(
@@ -56,6 +57,7 @@ def test_matches(x, fn):
         integers(min_value=-99, max_value=99),
     ).map(lambda tup: tup[0] * Decimal(10) ** tup[1])
 )
+@settings(max_examples=1000)
 def test_positive_domain(x, fn):
     assert_matches(x, fn)
 
@@ -66,11 +68,12 @@ def test_positive_domain(x, fn):
         allow_nan=False, allow_infinity=False, min_value=-1, max_value=1, places=14
     )
 )
+@settings(max_examples=1000)
 def test_inverse_trig(x, fn):
     assert_matches(x, fn)
 
 
-@pytest.mark.parametrize("fn", "sinh cosh tanh".split())
+@pytest.mark.parametrize("fn", "sinh cosh tanh exp".split())
 @given(
     x=tuples(
         decimals(
@@ -79,5 +82,6 @@ def test_inverse_trig(x, fn):
         integers(min_value=-99, max_value=3),
     ).map(lambda tup: tup[0] * Decimal(10) ** tup[1])
 )
+@settings(max_examples=1000)
 def test_small_domain(x, fn):
     assert_matches(x, fn)
