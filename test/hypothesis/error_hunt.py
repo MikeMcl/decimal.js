@@ -95,5 +95,5 @@ def test_small_domain(x, fn):
     ).map(lambda tup: tup[0] * Decimal(10) ** tup[1])
 )
 @settings(max_examples=1000)
-def test_acosh(x, fn):
+def test_acosh(x):
     assert_matches(x, 'acosh')
