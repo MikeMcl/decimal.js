@@ -744,14 +744,13 @@
 
     Ctor.precision = pr + 6;
     Ctor.rounding = 1;
-
-    x = x.asin();
-    halfPi = getPi(Ctor, pr + 4, rm).times(0.5);
+    
+    x = (new Ctor(1)).minus(x).div(x.plus(1)).sqrt().atan();
 
     Ctor.precision = pr;
     Ctor.rounding = rm;
 
-    return halfPi.minus(x);
+    return x.times(2);
   };
 
 
