@@ -30,7 +30,7 @@ def assert_matches(x, mpfunc, jsfunc=None):
     assert y == z
 
 
-@pytest.mark.parametrize("fn", "sin cos tan atan".split())
+@pytest.mark.parametrize("fn", "sin cos tan atan asinh".split())
 @given(
     x=tuples(
         decimals(
@@ -62,7 +62,7 @@ def test_positive_domain(x, fn):
     assert_matches(x, fn)
 
 
-@pytest.mark.parametrize("fn", "asin acos".split())
+@pytest.mark.parametrize("fn", "asin acos atanh".split())
 @given(
     x=decimals(
         allow_nan=False, allow_infinity=False, min_value=-1, max_value=1, places=14
@@ -85,3 +85,15 @@ def test_inverse_trig(x, fn):
 @settings(max_examples=1000)
 def test_small_domain(x, fn):
     assert_matches(x, fn)
+
+@given(
+    x=tuples(
+        decimals(
+            allow_nan=False, allow_infinity=False, min_value=1, max_value=10, places=14
+        ),
+        integers(min_value=0, max_value=99),
+    ).map(lambda tup: tup[0] * Decimal(10) ** tup[1])
+)
+@settings(max_examples=1000)
+def test_acosh(x, fn):
+    assert_matches(x, 'acosh')
