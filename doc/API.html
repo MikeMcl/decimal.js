@@ -254,7 +254,7 @@ li span{float:right;margin-right:10px;color:#c0c0c0}
       Decimal<code class='inset'>Decimal(value) <i>&rArr; Decimal</i></code>
     </h5>
     <dl>
-      <dt><code>value</code>: <i>number|string|Decimal</i></dt>
+      <dt><code>value</code>: <i>number|string|bigInt|Decimal</i></dt>
       <dd>
         A legitimate <code>value</code> is an integer or float, including <code>&plusmn;0</code>, or
         is <code>&plusmn;Infinity</code>, or <code>NaN</code>.
@@ -312,7 +312,9 @@ new Decimal('0x0.0c')                    // '0.046875'
 
 new Decimal('0b1.1p-5')                  // '0.046875'
 new Decimal('0o1.4p-5')                  // '0.046875'
-new Decimal('0x1.8p-5')                  // '0.046875'</pre>
+
+new Decimal(123456000n)                  // '123456000'
+new Decimal(BigInt('-1'))                // '-1'</pre>
 
 
 
@@ -322,7 +324,7 @@ new Decimal('0x1.8p-5')                  // '0.046875'</pre>
 
 
     <h5 id="Dabs">abs<code class='inset'>.abs(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#abs'>absoluteValue</a></code>.</p>
     <pre>a = Decimal.abs(x)
 b = new Decimal(x).abs()
@@ -331,7 +333,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dacos">acos<code class='inset'>.acos(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#acos'>inverseCosine</a></code>.</p>
     <pre>a = Decimal.acos(x)
 b = new Decimal(x).acos()
@@ -340,7 +342,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dacosh">acosh<code class='inset'>.acosh(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#acos'>inverseHyperbolicCosine</a></code>.</p>
     <pre>a = Decimal.acosh(x)
 b = new Decimal(x).acosh()
@@ -350,8 +352,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dadd">add<code class='inset'>.add(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#add'>plus</a></code>.</p>
     <pre>a = Decimal.add(x, y)
@@ -361,7 +363,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dasin">asin<code class='inset'>.asin(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#asin'>inverseSine</a></code>.</p>
     <pre>a = Decimal.asin(x)
 b = new Decimal(x).asin()
@@ -370,7 +372,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dasinh">asinh<code class='inset'>.asinh(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#asin'>inverseHyperbolicSine</a></code>.</p>
     <pre>a = Decimal.asinh(x)
 b = new Decimal(x).asinh()
@@ -379,7 +381,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Datan">atan<code class='inset'>.atan(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#atan'>inverseTangent</a></code>.</p>
     <pre>a = Decimal.atan(x)
 b = new Decimal(x).atan()
@@ -388,7 +390,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Datanh">atanh<code class='inset'>.atanh(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#atan'>inverseHyperbolicTangent</a></code>.</p>
     <pre>a = Decimal.atanh(x)
 b = new Decimal(x).atanh()
@@ -398,8 +400,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Datan2">atan2<code class='inset'>.atan2(y, x) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>y</code>: <i>number|string|Decimal</i><br />
-      <code>x</code>: <i>number|string|Decimal</i>
+      <code>y</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>x</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>
       Returns a new Decimal whose value is the inverse tangent in radians of the quotient of
@@ -423,7 +425,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dcbrt">cbrt<code class='inset'>.cbrt(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#cbrt'>cubeRoot</a></code>.</p>
     <pre>a = Decimal.cbrt(x)
 b = new Decimal(x).cbrt()
@@ -432,7 +434,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dceil">ceil<code class='inset'>.ceil(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#ceil'>ceil</a></code>.</p>
     <pre>a = Decimal.ceil(x)
 b = new Decimal(x).ceil()
@@ -442,8 +444,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dclamp">clamp<code class='inset'>.clamp(min, max) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>min</code>: <i>number|string|Decimal</i><br />
-      <code>max</code>: <i>number|string|Decimal</i>
+      <code>min</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>max</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#clamp'>clampedTo</a></code>.</p>
     <pre>Decimal.clamp(10.1, 0, 10)     // '10'</pre>
@@ -488,7 +490,7 @@ D2 = Decimal.clone({ defaults: true, precision: 50 })</pre>
 
 
     <h5 id="Dcos">cos<code class='inset'>.cos(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#cos'>cosine</a></code>.</p>
     <pre>a = Decimal.cos(x)
 b = new Decimal(x).cos()
@@ -497,7 +499,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dcosh">cosh<code class='inset'>.cosh(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#cos'>hyperbolicCosine</a></code>.</p>
     <pre>a = Decimal.cosh(x)
 b = new Decimal(x).cosh()
@@ -507,8 +509,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Ddiv">div<code class='inset'>.div(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#div'>dividedBy</a></code>.</p>
     <pre>a = Decimal.div(x, y)
@@ -518,7 +520,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dexp">exp<code class='inset'>.exp(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#exp'>naturalExponential</a></code>.</p>
     <pre>a = Decimal.exp(x)
 b = new Decimal(x).exp()
@@ -527,7 +529,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dfloor">floor<code class='inset'>.floor(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#floor'>floor</a></code>.</p>
     <pre>a = Decimal.floor(x)
 b = new Decimal(x).floor()
@@ -539,8 +541,8 @@ a.equals(b)                    // true</pre>
       hypot<code class='inset'>.hypot([x [, y, ...]]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>
       Returns a new Decimal whose value is the square root of the sum of the squares of the
@@ -552,7 +554,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dln">ln<code class='inset'>.ln(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#ln'>naturalLogarithm</a></code>.</p>
     <pre>a = Decimal.ln(x)
 b = new Decimal(x).ln()
@@ -578,8 +580,8 @@ Decimal.isDecimal(b)           // false</pre>
 
     <h5 id="Dlog">log<code class='inset'>.log(x [, base]) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>base</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>base</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#log'>logarithm</a></code>.</p>
     <p>
@@ -593,7 +595,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dlog2">log2<code class='inset'>.log2(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the base <code>2</code> logarithm of <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
@@ -604,7 +606,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dlog10">log10<code class='inset'>.log10(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the base <code>10</code> logarithm of <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
@@ -618,8 +620,8 @@ a.equals(b)                    // true</pre>
       max<code class='inset'>.max(x [, y, ...]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>Returns a new Decimal whose value is the maximum of the <code>arguments</code>.</p>
     <pre>r = Decimal.max(x, y, z)</pre>
@@ -630,8 +632,8 @@ a.equals(b)                    // true</pre>
       min<code class='inset'>.min(x [, y, ...]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>Returns a new Decimal whose value is the minimum of the <code>arguments</code>.</p>
     <pre>r = Decimal.min(x, y, z)</pre>
@@ -640,8 +642,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dmod">mod<code class='inset'>.mod(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#mod'>modulo</a></code>.</p>
     <pre>a = Decimal.mod(x, y)
@@ -652,8 +654,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dmul">mul<code class='inset'>.mul(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#mul'>times</a></code>.</p>
     <pre>a = Decimal.mul(x, y)
@@ -685,8 +687,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dpow">pow<code class='inset'>.pow(base, exponent) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>base</code>: <i>number|string|Decimal</i><br />
-      <code>exponent</code>: <i>number|string|Decimal</i>
+      <code>base</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>exponent</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href="#pow">toPower</a></code>.</p>
     <pre>a = Decimal.pow(x, y)
@@ -735,7 +737,7 @@ Decimal.random(20)                  // '0.78193327636914089009'</pre>
 
 
     <h5 id="Dround">round<code class='inset'>.round(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#round'>round</a></code>.</p>
     <pre>a = Decimal.round(x)
 b = new Decimal(x).round()
@@ -792,7 +794,7 @@ Decimal.set({ precision: 50, defaults: true })</pre>
 
 
     <h5 id="Dsign">sign<code class='inset'>.sign(x) <i>&rArr; number</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <table>
       <tr><th>Returns</th><th>&nbsp;</th></tr>
       <tr>
@@ -821,7 +823,7 @@ Decimal.set({ precision: 50, defaults: true })</pre>
 
 
     <h5 id="Dsin">sin<code class='inset'>.sin(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#sin'>sine</a></code>.</p>
     <pre>a = Decimal.sin(x)
 b = new Decimal(x).sin()
@@ -830,7 +832,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dsinh">sinh<code class='inset'>.sinh(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#sin'>hyperbolicSine</a></code>.</p>
     <pre>a = Decimal.sinh(x)
 b = new Decimal(x).sinh()
@@ -839,7 +841,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dsqrt">sqrt<code class='inset'>.sqrt(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <a href='#sqrt'>squareRoot</a>.</p>
     <pre>a = Decimal.sqrt(x)
 b = new Decimal(x).sqrt()
@@ -849,8 +851,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dsub">sub<code class='inset'>.sub(x, y) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>See <code><a href='#sub'>minus</a></code>.</p>
     <pre>a = Decimal.sub(x, y)
@@ -861,8 +863,8 @@ a.equals(b)                    // true</pre>
 
     <h5 id="Dsum">sum<code class='inset'>.sum(x [, y, ...]) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
-      <code>y</code>: <i>number|string|Decimal</i>
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>y</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>
       Returns a new Decimal whose value is the sum of the <code>arguments</code>,
@@ -879,7 +881,7 @@ Decimal.sum(x, y, z)           // '10'</pre>
 
 
     <h5 id="Dtan">tan<code class='inset'>.tan(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#tan'>tangent</a></code>.</p>
     <pre>a = Decimal.tan(x)
 b = new Decimal(x).tan()
@@ -888,7 +890,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dtanh">tanh<code class='inset'>.tanh(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#tan'>hyperbolicTangent</a></code>.</p>
     <pre>a = Decimal.tanh(x)
 b = new Decimal(x).tanh()
@@ -897,7 +899,7 @@ a.equals(b)                    // true</pre>
 
 
     <h5 id="Dtrunc">trunc<code class='inset'>.trunc(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>See <code><a href='#trunc'>truncated</a></code>.</p>
     <pre>a = Decimal.trunc(x)
 b = new Decimal(x).trunc()
@@ -1282,8 +1284,8 @@ y.ceil()                      // '-1'</pre>
 
     <h5 id="clamp">clampedTo<code class='inset'>.clamp(min, max) <i>&rArr; Decimal</i></code></h5>
     <p>
-      <code>min</code>: <i>number|string|Decimal</i><br />
-      <code>max</code>: <i>number|string|Decimal</i>
+      <code>min</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>max</code>: <i>number|string|bigInt|Decimal</i>
     </p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal clamped to the range
@@ -1303,7 +1305,7 @@ x.clamp(-10, -0.1)            // '-0.1'</pre>
 
 
     <h5 id="cmp">comparedTo<code class='inset'>.cmp(x) <i>&rArr; number</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <table>
       <tr><th>Returns</th><th>&nbsp;</th></tr>
       <tr>
@@ -1383,7 +1385,7 @@ y.dp()                         // '6'</pre>
 
 
     <h5 id="div">dividedBy<code class='inset'>.div(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal divided by <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
@@ -1400,7 +1402,7 @@ x.div(5)                   // '71'</pre>
     <h5 id="divToInt">
       dividedToIntegerBy<code class='inset'>.divToInt(x) <i>&rArr; Decimal</i></code>
     </h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Return a new Decimal whose value is the integer part of dividing this Decimal by
       <code>x</code>, rounded to <code><a href='#precision'>precision</a></code> significant digits
@@ -1415,7 +1417,7 @@ x.divToInt(0.7)             // '7'</pre>
 
 
     <h5 id="eq">equals<code class='inset'>.eq(x) <i>&rArr; boolean</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal equals the value of <code>x</code>,
       otherwise returns <code>false</code>.<br /> As with JavaScript, <code>NaN</code> does not
@@ -1451,7 +1453,7 @@ y.floor()                   // '-2'</pre>
 
 
     <h5 id="gt">greaterThan<code class='inset'>.gt(x) <i>&rArr; boolean</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is greater than the value of
       <code>x</code>, otherwise returns <code>false</code>.
@@ -1468,7 +1470,7 @@ new Decimal(0).gt(x)                         // false</pre>
     <h5 id="gte">
       greaterThanOrEqualTo<code class='inset'>.gte(x) <i>&rArr; boolean</i></code>
     </h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is greater than or equal to the value
       of <code>x</code>, otherwise returns <code>false</code>.
@@ -1748,7 +1750,7 @@ y.isZero()                               // false</pre>
 
 
     <h5 id="lt">lessThan<code class='inset'>.lt(x) <i>&rArr; boolean</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is less than the value of
       <code>x</code>, otherwise returns <code>false</code>.
@@ -1763,7 +1765,7 @@ new Decimal(0).lt(x)                     // true</pre>
 
 
     <h5 id="lte">lessThanOrEqualTo<code class='inset'>.lte(x) <i>&rArr; boolean</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns <code>true</code> if the value of this Decimal is less than or equal to the value of
       <code>x</code>, otherwise returns <code>false</code>.
@@ -1778,7 +1780,7 @@ new Decimal(-1).lte(x)                          // true</pre>
 
 
     <h5 id="log">logarithm<code class='inset'>.log(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the base <code>x</code> logarithm of the value of this
       Decimal, rounded to <a href='#precision'><code>precision</code></a> significant digits using
@@ -1810,7 +1812,7 @@ y.log(2)                                 // '8'</pre>
 
 
     <h5 id="sub">minus<code class='inset'>.minus(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal minus <code>x</code>, rounded
       to <a href='#precision'><code>precision</code></a> significant digits using rounding mode
@@ -1824,7 +1826,7 @@ x.minus(0.1)                             // '0.2'</pre>
 
 
     <h5 id="mod">modulo<code class='inset'>.mod(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal modulo <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
@@ -1931,7 +1933,7 @@ y.neg()                                  // '1.3'</pre>
 
 
     <h5 id="add">plus<code class='inset'>.plus(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal plus <code>x</code>, rounded to
       <a href='#precision'><code>precision</code></a> significant digits using rounding mode
@@ -2042,7 +2044,7 @@ y.tan()                                  // '0.93159645994407246117'</pre>
 
 
     <h5 id="mul">times<code class='inset'>.times(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i></p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i></p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal times <code>x</code>,
       rounded to <a href='#precision'><code>precision</code></a> significant digits using rounding
@@ -2209,7 +2211,7 @@ y.toFixed(5)                      // '3.45600'</pre>
       <code class='inset'>.toFraction([max_denominator]) <i>&rArr; [Decimal, Decimal]</i></code>
     </h5>
     <p>
-      <code>max_denominator</code>: <i>number|string|Decimal</i>: <code>1</code> &gt;= integer &lt;
+      <code>max_denominator</code>: <i>number|string|bigInt|Decimal</i>: <code>1</code> &gt;= integer &lt;
       <code>Infinity</code>
     </p>
     <p>
@@ -2275,7 +2277,7 @@ x.toHex(1)                               // '0x1p+8'</pre>
       toNearest<code class='inset'>.toNearest(x [, rm]) <i>&rArr; Decimal</i></code>
     </h5>
     <p>
-      <code>x</code>: <i>number|string|Decimal</i><br />
+      <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
       <code>rm</code>: <i>number</i>: integer, <code>0</code> to <code>8</code> inclusive
     </p>
     <p>
@@ -2353,7 +2355,7 @@ x.toOctal(1)                             // '0o1p+8'</pre>
 
 
     <h5 id="pow">toPower<code class='inset'>.pow(x) <i>&rArr; Decimal</i></code></h5>
-    <p><code>x</code>: <i>number|string|Decimal</i>: integer or non-integer</p>
+    <p><code>x</code>: <i>number|string|bigInt|Decimal</i>: integer or non-integer</p>
     <p>
       Returns a new Decimal whose value is the value of this Decimal raised to the power
       <code>x</code>, rounded to <a href='#precision'><code>precision</code></a> significant digits

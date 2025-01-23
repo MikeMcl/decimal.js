@@ -218,8 +218,8 @@
    * Return a new Decimal whose value is the value of this Decimal clamped to the range
    * delineated by `min` and `max`.
    *
-   * min {number|string|Decimal}
-   * max {number|string|Decimal}
+   * min {number|string|bigInt|Decimal}
+   * max {number|string|bigInt|Decimal}
    *
    */
   P.clampedTo = P.clamp = function (min, max) {
@@ -1124,7 +1124,7 @@
    * log[b](Infinity) = Infinity
    * log[b](NaN)      = NaN
    *
-   * [base] {number|string|Decimal} The base of the logarithm.
+   * [base] {number|string|bigInt|Decimal} The base of the logarithm.
    *
    */
   P.logarithm = P.log = function (base) {
@@ -1218,7 +1218,7 @@
   /*
    * Return a new Decimal whose value is the maximum of the arguments and the value of this Decimal.
    *
-   * arguments {number|string|Decimal}
+   * arguments {number|string|bigInt|Decimal}
    *
   P.max = function () {
     Array.prototype.push.call(arguments, this);
@@ -1230,7 +1230,7 @@
   /*
    * Return a new Decimal whose value is the minimum of the arguments and the value of this Decimal.
    *
-   * arguments {number|string|Decimal}
+   * arguments {number|string|bigInt|Decimal}
    *
   P.min = function () {
     Array.prototype.push.call(arguments, this);
@@ -2053,7 +2053,7 @@
    * denominator. If a maximum denominator is not specified, the denominator will be the lowest
    * value necessary to represent the number exactly.
    *
-   * [maxD] {number|string|Decimal} Maximum denominator. Integer >= 1 and < Infinity.
+   * [maxD] {number|string|bigInt|Decimal} Maximum denominator. Integer >= 1 and < Infinity.
    *
    */
   P.toFraction = function (maxD) {
@@ -2141,7 +2141,7 @@
    *
    * The return value is not affected by the value of `precision`.
    *
-   * y {number|string|Decimal} The magnitude to round to a multiple of.
+   * y {number|string|bigInt|Decimal} The magnitude to round to a multiple of.
    * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
    *
    * 'toNearest() rounding mode not an integer: {rm}'
@@ -2261,7 +2261,7 @@
    *
    * If a result is incorrectly rounded the maximum error will be 1 ulp (unit in last place).
    *
-   * y {number|string|Decimal} The power to which to raise this Decimal.
+   * y {number|string|bigInt|Decimal} The power to which to raise this Decimal.
    *
    */
   P.toPower = P.pow = function (y) {
@@ -3254,15 +3254,15 @@
 
     for (; ++i < args.length;) {
       y = new Ctor(args[i]);
-      
+
       // NaN?
       if (!y.s) {
         x = y;
         break;
       }
-      
+
       k = x.cmp(y);
-      
+
       if (k === n || k === 0 && x.s === n) {
         x = y;
       }
@@ -3521,6 +3521,8 @@
    */
   function parseDecimal(x, str) {
     var e, i, len;
+
+    // TODO BigInt str: no need to check for decimal point, exponential form or leading zeros.
 
     // Decimal point?
     if ((e = str.indexOf('.')) > -1) str = str.replace('.', '');
@@ -3989,7 +3991,7 @@
   /*
    * Return a new Decimal whose value is the absolute value of `x`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function abs(x) {
@@ -4000,7 +4002,7 @@
   /*
    * Return a new Decimal whose value is the arccosine in radians of `x`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function acos(x) {
@@ -4012,7 +4014,7 @@
    * Return a new Decimal whose value is the inverse of the hyperbolic cosine of `x`, rounded to
    * `precision` significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function acosh(x) {
@@ -4024,8 +4026,8 @@
    * Return a new Decimal whose value is the sum of `x` and `y`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
-   * y {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
+   * y {number|string|bigInt|Decimal}
    *
    */
   function add(x, y) {
@@ -4037,7 +4039,7 @@
    * Return a new Decimal whose value is the arcsine in radians of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function asin(x) {
@@ -4049,7 +4051,7 @@
    * Return a new Decimal whose value is the inverse of the hyperbolic sine of `x`, rounded to
    * `precision` significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function asinh(x) {
@@ -4061,7 +4063,7 @@
    * Return a new Decimal whose value is the arctangent in radians of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function atan(x) {
@@ -4073,7 +4075,7 @@
    * Return a new Decimal whose value is the inverse of the hyperbolic tangent of `x`, rounded to
    * `precision` significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function atanh(x) {
@@ -4088,8 +4090,8 @@
    * Domain: [-Infinity, Infinity]
    * Range: [-pi, pi]
    *
-   * y {number|string|Decimal} The y-coordinate.
-   * x {number|string|Decimal} The x-coordinate.
+   * y {number|string|bigInt|Decimal} The y-coordinate.
+   * x {number|string|bigInt|Decimal} The x-coordinate.
    *
    * atan2(±0, -0)               = ±pi
    * atan2(±0, +0)               = ±0
@@ -4154,7 +4156,7 @@
    * Return a new Decimal whose value is the cube root of `x`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function cbrt(x) {
@@ -4165,7 +4167,7 @@
   /*
    * Return a new Decimal whose value is `x` rounded to an integer using `ROUND_CEIL`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function ceil(x) {
@@ -4176,9 +4178,9 @@
   /*
    * Return a new Decimal whose value is `x` clamped to the range delineated by `min` and `max`.
    *
-   * x {number|string|Decimal}
-   * min {number|string|Decimal}
-   * max {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
+   * min {number|string|bigInt|Decimal}
+   * max {number|string|bigInt|Decimal}
    *
    */
   function clamp(x, min, max) {
@@ -4252,7 +4254,7 @@
    * Return a new Decimal whose value is the cosine of `x`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function cos(x) {
@@ -4264,7 +4266,7 @@
    * Return a new Decimal whose value is the hyperbolic cosine of `x`, rounded to precision
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function cosh(x) {
@@ -4284,7 +4286,7 @@
      * The Decimal constructor and exported function.
      * Return a new Decimal instance.
      *
-     * v {number|string|Decimal} A numeric value.
+     * v {number|string|bigInt|Decimal} A numeric value.
      *
      */
     function Decimal(v) {
@@ -4362,9 +4364,10 @@
           }
 
           return;
+        }
 
-        // Infinity, NaN.
-        } else if (v * 0 !== 0) {
+        // Infinity or NaN?
+        if (v * 0 !== 0) {
           if (!v) x.s = NaN;
           x.e = NaN;
           x.d = null;
@@ -4372,22 +4375,32 @@
         }
 
         return parseDecimal(x, v.toString());
-
-      } else if (t !== 'string') {
-        throw Error(invalidArgument + v);
       }
 
-      // Minus sign?
-      if ((i = v.charCodeAt(0)) === 45) {
-        v = v.slice(1);
-        x.s = -1;
-      } else {
-        // Plus sign?
-        if (i === 43) v = v.slice(1);
-        x.s = 1;
+      if (t === 'string') {
+        if ((i = v.charCodeAt(0)) === 45) {  // minus sign
+          v = v.slice(1);
+          x.s = -1;
+        } else {
+          if (i === 43) v = v.slice(1);  // plus sign
+          x.s = 1;
+        }
+
+        return isDecimal.test(v) ? parseDecimal(x, v) : parseOther(x, v);
       }
 
-      return isDecimal.test(v) ? parseDecimal(x, v) : parseOther(x, v);
+      if (t === 'bigint') {
+        if (v < 0) {
+          v = -v;
+          x.s = -1;
+        } else {
+          x.s = 1;
+        }
+
+        return parseDecimal(x, v.toString());
+      }
+
+      throw Error(invalidArgument + v);
     }
 
     Decimal.prototype = P;
@@ -4464,8 +4477,8 @@
    * Return a new Decimal whose value is `x` divided by `y`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
-   * y {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
+   * y {number|string|bigInt|Decimal}
    *
    */
   function div(x, y) {
@@ -4477,7 +4490,7 @@
    * Return a new Decimal whose value is the natural exponential of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} The power to which to raise the base of the natural log.
+   * x {number|string|bigInt|Decimal} The power to which to raise the base of the natural log.
    *
    */
   function exp(x) {
@@ -4488,7 +4501,7 @@
   /*
    * Return a new Decimal whose value is `x` round to an integer using `ROUND_FLOOR`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function floor(x) {
@@ -4502,7 +4515,7 @@
    *
    * hypot(a, b, ...) = sqrt(a^2 + b^2 + ...)
    *
-   * arguments {number|string|Decimal}
+   * arguments {number|string|bigInt|Decimal}
    *
    */
   function hypot() {
@@ -4544,7 +4557,7 @@
    * Return a new Decimal whose value is the natural logarithm of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function ln(x) {
@@ -4558,8 +4571,8 @@
    *
    * log[y](x)
    *
-   * x {number|string|Decimal} The argument of the logarithm.
-   * y {number|string|Decimal} The base of the logarithm.
+   * x {number|string|bigInt|Decimal} The argument of the logarithm.
+   * y {number|string|bigInt|Decimal} The base of the logarithm.
    *
    */
   function log(x, y) {
@@ -4571,7 +4584,7 @@
    * Return a new Decimal whose value is the base 2 logarithm of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function log2(x) {
@@ -4583,7 +4596,7 @@
    * Return a new Decimal whose value is the base 10 logarithm of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function log10(x) {
@@ -4594,7 +4607,7 @@
   /*
    * Return a new Decimal whose value is the maximum of the arguments.
    *
-   * arguments {number|string|Decimal}
+   * arguments {number|string|bigInt|Decimal}
    *
    */
   function max() {
@@ -4605,7 +4618,7 @@
   /*
    * Return a new Decimal whose value is the minimum of the arguments.
    *
-   * arguments {number|string|Decimal}
+   * arguments {number|string|bigInt|Decimal}
    *
    */
   function min() {
@@ -4617,8 +4630,8 @@
    * Return a new Decimal whose value is `x` modulo `y`, rounded to `precision` significant digits
    * using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
-   * y {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
+   * y {number|string|bigInt|Decimal}
    *
    */
   function mod(x, y) {
@@ -4630,8 +4643,8 @@
    * Return a new Decimal whose value is `x` multiplied by `y`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
-   * y {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
+   * y {number|string|bigInt|Decimal}
    *
    */
   function mul(x, y) {
@@ -4643,8 +4656,8 @@
    * Return a new Decimal whose value is `x` raised to the power `y`, rounded to precision
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} The base.
-   * y {number|string|Decimal} The exponent.
+   * x {number|string|bigInt|Decimal} The base.
+   * y {number|string|bigInt|Decimal} The exponent.
    *
    */
   function pow(x, y) {
@@ -4762,7 +4775,7 @@
    *
    * To emulate `Math.round`, set rounding to 7 (ROUND_HALF_CEIL).
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function round(x) {
@@ -4778,7 +4791,7 @@
    *  -0    if x is -0,
    *   NaN  otherwise
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function sign(x) {
@@ -4791,7 +4804,7 @@
    * Return a new Decimal whose value is the sine of `x`, rounded to `precision` significant digits
    * using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function sin(x) {
@@ -4803,7 +4816,7 @@
    * Return a new Decimal whose value is the hyperbolic sine of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function sinh(x) {
@@ -4815,7 +4828,7 @@
    * Return a new Decimal whose value is the square root of `x`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function sqrt(x) {
@@ -4827,8 +4840,8 @@
    * Return a new Decimal whose value is `x` minus `y`, rounded to `precision` significant digits
    * using rounding mode `rounding`.
    *
-   * x {number|string|Decimal}
-   * y {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
+   * y {number|string|bigInt|Decimal}
    *
    */
   function sub(x, y) {
@@ -4842,7 +4855,7 @@
    *
    * Only the result is rounded, not the intermediate calculations.
    *
-   * arguments {number|string|Decimal}
+   * arguments {number|string|bigInt|Decimal}
    *
    */
   function sum() {
@@ -4862,7 +4875,7 @@
    * Return a new Decimal whose value is the tangent of `x`, rounded to `precision` significant
    * digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function tan(x) {
@@ -4874,7 +4887,7 @@
    * Return a new Decimal whose value is the hyperbolic tangent of `x`, rounded to `precision`
    * significant digits using rounding mode `rounding`.
    *
-   * x {number|string|Decimal} A value in radians.
+   * x {number|string|bigInt|Decimal} A value in radians.
    *
    */
   function tanh(x) {
@@ -4885,7 +4898,7 @@
   /*
    * Return a new Decimal whose value is `x` truncated to an integer.
    *
-   * x {number|string|Decimal}
+   * x {number|string|bigInt|Decimal}
    *
    */
   function trunc(x) {
