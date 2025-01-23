@@ -1222,7 +1222,7 @@
    *
   P.max = function () {
     Array.prototype.push.call(arguments, this);
-    return maxOrMin(this.constructor, arguments, 'lt');
+    return maxOrMin(this.constructor, arguments, -1);
   };
    */
 
@@ -1234,7 +1234,7 @@
    *
   P.min = function () {
     Array.prototype.push.call(arguments, this);
-    return maxOrMin(this.constructor, arguments, 'gt');
+    return maxOrMin(this.constructor, arguments, 1);
   };
    */
 
@@ -3245,19 +3245,25 @@
 
 
   /*
-   * Handle `max` and `min`. `ltgt` is 'lt' or 'gt'.
+   * Handle `max` (`n` is -1) and `min` (`n` is 1).
    */
-  function maxOrMin(Ctor, args, ltgt) {
-    var y,
+  function maxOrMin(Ctor, args, n) {
+    var k, y,
       x = new Ctor(args[0]),
       i = 0;
 
     for (; ++i < args.length;) {
       y = new Ctor(args[i]);
+      
+      // NaN?
       if (!y.s) {
         x = y;
         break;
-      } else if (x[ltgt](y)) {
+      }
+      
+      k = x.cmp(y);
+      
+      if (k === n || k === 0 && x.s === n) {
         x = y;
       }
     }
@@ -4292,7 +4298,6 @@
       // which points to Object.
       x.constructor = Decimal;
 
-      // Duplicate.
       if (isDecimalInstance(v)) {
         x.s = v.s;
 
@@ -4593,7 +4598,7 @@
    *
    */
   function max() {
-    return maxOrMin(this, arguments, 'lt');
+    return maxOrMin(this, arguments, -1);
   }
 
 
@@ -4604,7 +4609,7 @@
    *
    */
   function min() {
-    return maxOrMin(this, arguments, 'gt');
+    return maxOrMin(this, arguments, 1);
   }
 
 

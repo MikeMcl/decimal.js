@@ -28,18 +28,23 @@ T('min and max', function () {
   t(NaN, NaN, [Infinity, -2, NaN, 0, -1, -Infinity]);
 
   t(0, 0, [0, 0, 0]);
-  t(-2, Infinity, [-2, 0, -1, Infinity]);
+  t(-0, 0, [-0, 0, 0]);
+  t(-0, 0, [0, -0, 0]);
+  t(-0, 0, [0, 0, -0]);
+  t(-0, 1, [1, 0, -0]);
+  t(-2, 0, [0, -1, -0, -2]);
+  t(-2, Infinity, [-2, -1, -0, 0, Infinity]);
   t(-Infinity, 0, [-2, 0, -1, -Infinity]);
   t(-Infinity, Infinity, [-Infinity, -2, 0, -1, Infinity]);
   t(-Infinity, Infinity, [Infinity, -2, 0, -1, -Infinity]);
   t(-Infinity, Infinity, [-Infinity, -2, 0, new Decimal(Infinity)]);
 
   t(-2, 0, [-2, 0, -1]);
-  t(-2, 0, [-2, -1, 0]);
+  t(-2, 0, [-2, -1, -0, 0]);
   t(-2, 0, [0, -2, -1]);
   t(-2, 0, [0, -1, -2]);
   t(-2, 0, [-1, -2, 0]);
-  t(-2, 0, [-1, 0, -2]);
+  t(-2, 0, [-1, 0, -0, -2]);
 
   t(-1, 1, [-1, 0, 1]);
   t(-1, 1, [-1, 1, 0]);
