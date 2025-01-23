@@ -5,6 +5,7 @@ An arbitrary-precision Decimal type for JavaScript.
 [![npm version](https://img.shields.io/npm/v/decimal.js.svg)](https://www.npmjs.com/package/decimal.js)
 [![npm downloads](https://img.shields.io/npm/dw/decimal.js)](https://www.npmjs.com/package/decimal.js)
 [![CDNJS](https://img.shields.io/cdnjs/v/decimal.js.svg)](https://cdnjs.com/libraries/decimal.js)
+[![](https://data.jsdelivr.com/v1/package/npm/decimal.js/badge)](https://www.jsdelivr.com/package/npm/decimal.js)
 
 <br>
 

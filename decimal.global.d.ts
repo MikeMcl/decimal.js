@@ -56,7 +56,7 @@ declare global {
 
 type DecimalInstance = Decimal;
 type DecimalConstructor = typeof Decimal;
-type DecimalValue = string | number | Decimal;
+type DecimalValue = string | number | bigint |Decimal;
 type DecimalRounding = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 type DecimalModulo = DecimalRounding | 9;
 
@@ -84,7 +84,7 @@ export declare class Decimal {
   abs(): Decimal;
 
   ceil(): Decimal;
-  
+
   clampedTo(min: Decimal.Value, max: Decimal.Value): Decimal;
   clamp(min: Decimal.Value, max: Decimal.Value): Decimal;
 

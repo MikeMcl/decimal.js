@@ -36,7 +36,7 @@ export namespace Decimal {
   export type Instance = Decimal;
   export type Rounding = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
   export type Modulo = Rounding | 9;
-  export type Value = string | number | Decimal;
+  export type Value = string | number | bigint | Decimal;
 
   // http://mikemcl.github.io/decimal.js/#constructor-properties
   export interface Config {
@@ -63,7 +63,7 @@ export declare class Decimal {
   abs(): Decimal;
 
   ceil(): Decimal;
-  
+
   clampedTo(min: Decimal.Value, max: Decimal.Value): Decimal;
   clamp(min: Decimal.Value, max: Decimal.Value): Decimal;
 
