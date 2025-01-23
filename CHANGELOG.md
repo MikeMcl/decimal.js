@@ -1,3 +1,10 @@
+#### 10.5.0
+* 23/01/2025
+* #216 TypeScript: instantiation without `new` keyword
+* #181 Support `BigInt`
+* #241 Match `Math.max` and `Math.min` negative zero handling
+* #217 Compute `acos` with less cancellation near `x = 1`
+
 #### 10.4.3
 * 04/12/2022
 * #211 Remove `toStringTag` declaration for type compatibility.
