@@ -4458,6 +4458,7 @@
     Decimal.tan = tan;
     Decimal.tanh = tanh;          // ES6
     Decimal.trunc = trunc;        // ES6
+    Decimal.zero = new Decimal(0);
 
     if (obj === void 0) obj = {};
     if (obj) {
