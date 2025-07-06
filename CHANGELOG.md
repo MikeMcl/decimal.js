@@ -1,3 +1,7 @@
+#### 10.6.0
+* 06/07/2025
+* Add `BigInt` support to TypeScript definitions
+
 #### 10.5.0
 * 23/01/2025
 * #216 TypeScript: instantiation without `new` keyword
