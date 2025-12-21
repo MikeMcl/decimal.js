@@ -4851,11 +4851,12 @@ function sub(x, y) {
  * Only the result is rounded, not the intermediate calculations.
  *
  * arguments {number|string|bigint|Decimal}
+ * arguments {(number|string|bigint|Decimal)[]}
  *
  */
 function sum() {
   var i = 0,
-    args = arguments,
+    args = arguments.length === 1 && Array.isArray(arguments[0]) ? arguments[0] : arguments,
     x = new this(args[i]);
 
   external = false;
