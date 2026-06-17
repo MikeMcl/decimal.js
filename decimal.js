@@ -894,6 +894,9 @@
    *
    * asin(x) = 2*atan(x/(1 + sqrt(1 - x^2)))
    *
+   * 1 - x^2 is computed as (1 - x)*(1 + x) to avoid loss of significant digits when |x| is
+   * close to 1.
+   *
    * asin(0)       = 0
    * asin(-0)      = -0
    * asin(1/2)     = pi/6
@@ -936,7 +939,7 @@
     Ctor.precision = pr + 6;
     Ctor.rounding = 1;
 
-    x = x.div(new Ctor(1).minus(x.times(x)).sqrt().plus(1)).atan();
+    x = x.div(new Ctor(1).minus(x).times(new Ctor(1).plus(x)).sqrt().plus(1)).atan();
 
     Ctor.precision = pr;
     Ctor.rounding = rm;
