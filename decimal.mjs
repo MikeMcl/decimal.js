@@ -865,15 +865,13 @@ P.inverseHyperbolicTangent = P.atanh = function () {
 
   if (Math.max(xsd, pr) < 2 * -x.e - 1) return finalise(new Ctor(x), pr, rm, true);
 
-  Ctor.precision = wpr = xsd - x.e;
-
-  x = divide(x.plus(1), new Ctor(1).minus(x), wpr + pr, 1);
-
-  Ctor.precision = pr + 4;
+  Ctor.precision = wpr = pr + 2 * Math.max(xsd, -x.e) + 6;
   Ctor.rounding = 1;
+  external = false;
 
-  x = x.ln();
+  x = divide(x.plus(1), new Ctor(1).minus(x), wpr, 1).ln();
 
+  external = true;
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
