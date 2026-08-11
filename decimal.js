@@ -469,6 +469,8 @@
     return divide(this, new this.constructor(y));
   };
 
+  P[Symbol.for('/')] = P.div;
+
 
   /*
    * Return a new Decimal whose value is the integer part of dividing the value of this Decimal
@@ -490,6 +492,8 @@
     return this.cmp(y) === 0;
   };
 
+  P[Symbol.for('==')] = P.eq;
+
 
   /*
    * Return a new Decimal whose value is the value of this Decimal rounded to a whole number in the
@@ -510,6 +514,7 @@
     return this.cmp(y) > 0;
   };
 
+  P[Symbol.for('>')] = P.gt;
 
   /*
    * Return true if the value of this Decimal is greater than or equal to the value of `y`,
@@ -521,6 +526,7 @@
     return k == 1 || k === 0;
   };
 
+  P[Symbol.for('>=')] = P.gte;
 
   /*
    * Return a new Decimal whose value is the hyperbolic cosine of the value in radians of this
@@ -1088,6 +1094,8 @@
     return this.cmp(y) < 0;
   };
 
+  P[Symbol.for('<')] = P.lt;
+
 
   /*
    * Return true if the value of this Decimal is less than or equal to `y`, otherwise return false.
@@ -1097,6 +1105,7 @@
     return this.cmp(y) < 1;
   };
 
+  P[Symbol.for('<=')] = P.lte;
 
   /*
    * Return the logarithm of the value of this Decimal to the specified base, rounded to `precision`
@@ -1410,6 +1419,8 @@
     return external ? finalise(y, pr, rm) : y;
   };
 
+  P[Symbol.for('-')] = P.sub;
+
 
   /*
    *   n % 0 =  N
@@ -1469,6 +1480,8 @@
 
     return x.minus(q);
   };
+
+  P[Symbol.for('%')] = P.mod;
 
 
   /*
@@ -1636,6 +1649,8 @@
 
     return external ? finalise(y, pr, rm) : y;
   };
+
+  P[Symbol.for('+')] = P.add;
 
 
   /*
@@ -1935,6 +1950,8 @@
 
     return external ? finalise(y, Ctor.precision, Ctor.rounding) : y;
   };
+
+  P[Symbol.for('*')] = P.mul;
 
 
   /*
@@ -2363,6 +2380,8 @@
 
     return finalise(r, pr, rm);
   };
+
+  P[Symbol.for('**')] = P.pow;
 
 
   /*
