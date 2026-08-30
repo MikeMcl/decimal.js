@@ -196,7 +196,7 @@ export declare class Decimal {
   toFixed(decimalPlaces?: number): string;
   toFixed(decimalPlaces: number, rounding: Decimal.Rounding): string;
 
-  toFraction(max_denominator?: Decimal.Value): Decimal[];
+  toFraction(max_denominator?: Decimal.Value): [numerator: Decimal, denominator: Decimal];
 
   toHexadecimal(significantDigits?: number): string;
   toHexadecimal(significantDigits: number, rounding: Decimal.Rounding): string;

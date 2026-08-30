@@ -217,7 +217,7 @@ export declare class Decimal {
   toFixed(decimalPlaces?: number): string;
   toFixed(decimalPlaces: number, rounding: DecimalRounding): string;
 
-  toFraction(max_denominator?: DecimalValue): Decimal[];
+  toFraction(max_denominator?: DecimalValue): [numerator: Decimal, denominator: Decimal];
 
   toHexadecimal(significantDigits?: number): string;
   toHexadecimal(significantDigits: number, rounding: DecimalRounding): string;
