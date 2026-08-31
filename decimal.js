@@ -4862,7 +4862,8 @@
   function sum() {
     var i = 0,
       args = arguments,
-      x = new this(args[i]);
+      firstArg = args[i],
+      x = new this(firstArg === undefined ? 0 : firstArg);
 
     external = false;
     for (; x.s && ++i < args.length;) x = x.plus(args[i]);
