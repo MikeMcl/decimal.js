@@ -861,22 +861,25 @@ a.equals(b)                    // true</pre>
 
 
 
-    <h5 id="Dsum">sum<code class='inset'>.sum(x [, y, ...]) <i>&rArr; Decimal</i></code></h5>
+    <h5 id="Dsum">sum<code class='inset'>.sum(x [, y, ...]) <i>&rArr; Decimal</i></code><br />
+      <code class='inset'>.sum([x, y, ...]) <i>&rArr; Decimal</i></code></h5>
     <p>
       <code>x</code>: <i>number|string|bigInt|Decimal</i><br />
-      <code>y</code>: <i>number|string|bigInt|Decimal</i>
+      <code>y</code>: <i>number|string|bigInt|Decimal</i><br />
+      <code>[x, y, ...]</code>: <i>Array&lt;number|string|bigInt|Decimal&gt;</i>
     </p>
     <p>
-      Returns a new Decimal whose value is the sum of the <code>arguments</code>,
-      rounded to <a href='#precision'><code>precision</code></a> significant digits using
-      rounding mode <a href='#rounding'><code>rounding</code></a>.<br />
+      Returns a new Decimal whose value is the sum of the arguments (either passed as
+      variadic arguments or as an array), rounded to <a href='#precision'><code>precision</code></a>
+      significant digits using rounding mode <a href='#rounding'><code>rounding</code></a>.<br />
       Only the result is rounded, not the intermediate summations.
     </p>
     <pre>
 x = 5
 y = '16'
 z = new Decimal(-11)
-Decimal.sum(x, y, z)           // '10'</pre>
+Decimal.sum(x, y, z)           // '10'
+Decimal.sum([x, y, z])         // '10'</pre>
 
 
 

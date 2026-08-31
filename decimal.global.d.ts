@@ -291,6 +291,7 @@ export declare class Decimal {
   static sqrt(n: DecimalValue): Decimal;
   static sub(x: DecimalValue, y: DecimalValue): Decimal;
   static sum(...n: Decimal.Value[]): Decimal;
+  static sum(n: Decimal.Value[]): Decimal;
   static tan(n: DecimalValue): Decimal;
   static tanh(n: DecimalValue): Decimal;
   static trunc(n: DecimalValue): Decimal;
