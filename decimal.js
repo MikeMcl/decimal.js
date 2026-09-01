@@ -2595,11 +2595,13 @@
         if (i == 0) rd = rd / 1000 | 0;
         else if (i == 1) rd = rd / 100 | 0;
         else if (i == 2) rd = rd / 10 | 0;
-        r = (repeating || rm < 4) && rd == 9999 || !repeating && rm > 3 && rd == 4999;
+        r = (repeating || rm < 4) && rd == 9999 || !repeating && rm > 3 && rd == 4999
+          || rd == 5000 || rd == 0;
       } else {
         r = ((repeating || rm < 4) && rd + 1 == k ||
         (!repeating && rm > 3) && rd + 1 == k / 2) &&
-          (d[di + 1] / k / 1000 | 0) == mathpow(10, i - 3) - 1;
+          (d[di + 1] / k / 1000 | 0) == mathpow(10, i - 3) - 1
+          || (rd == k / 2 || rd == 0) && (d[di + 1] / k / 1000 | 0) == 0;
       }
     }
 
