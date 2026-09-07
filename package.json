@@ -20,22 +20,37 @@
     "type": "git",
     "url": "https://github.com/MikeMcl/decimal.js.git"
   },
-  "main": "decimal",
+  "main": "decimal.js",
   "module": "decimal.mjs",
   "browser": "decimal.js",
   "exports": {
     ".": {
-      "types": "./decimal.d.ts",
-      "import": "./decimal.mjs",
-      "require": "./decimal.js"
+      "import": {
+        "types": "./decimal.d.mts",
+        "default": "./decimal.mjs"
+      },
+      "require": {
+        "types": "./decimal.d.ts",
+        "default": "./decimal.js"
+      }
     },
-    "./decimal.mjs": "./decimal.mjs",
+    "./decimal.mjs": {
+      "import": {
+        "types": "./decimal.d.mts",
+        "default": "./decimal.mjs"
+      }
+    },
     "./decimal.js": "./decimal.js",
     "./package.json": "./package.json",
     "./decimal": {
-      "types": "./decimal.d.ts",
-      "import": "./decimal.mjs",
-      "require": "./decimal.js"
+      "import": {
+        "types": "./decimal.d.mts",
+        "default": "./decimal.mjs"
+      },
+      "require": {
+        "types": "./decimal.d.ts",
+        "default": "./decimal.js"
+      }
     }
   },
   "author": {
@@ -50,6 +65,7 @@
   "files": [
     "decimal.js",
     "decimal.mjs",
-    "decimal.d.ts"
+    "decimal.d.ts",
+    "decimal.d.mts"
   ]
 }
