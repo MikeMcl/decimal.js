@@ -120,4 +120,36 @@ T('cos', function () {
   t('0.10859933721171128209598967066', 80, 4, '0.99410888528803407646108267824473898405842663808987770888683180574685964084716924');
   t('2813920.875088303362819', 33, 2, '-0.866254989781355498995879756871368');
   t('35999999999999999999999999999999999999999.999999999999999999999999919', 38, 3, '-0.9562598584240982386154988349219959087');
+
+  // A precision high enough that the internal pi lookup exceeds its hard-coded digit limit and
+  // throws must not leave Decimal.precision/Decimal.rounding corrupted for later calls, since cos
+  // raises the constructor's precision before doing that lookup and only lowers it again once the
+  // lookup has returned. See issue #97.
+  (function () {
+    var precisionBefore = 1030,
+      roundingBefore = 4,
+      threw = false;
+
+    Decimal.precision = precisionBefore;
+    Decimal.rounding = roundingBefore;
+
+    try {
+      new Decimal(1).cos();
+    } catch (e) {
+      threw = /Precision limit exceeded/.test(e.message);
+    }
+
+    T.assert(threw);
+    T.assertEqual(precisionBefore, Decimal.precision);
+    T.assertEqual(roundingBefore, Decimal.rounding);
+  })();
+
+  Decimal.config({
+    precision: 40,
+    rounding: 4,
+    toExpNeg: -9e15,
+    toExpPos: 9e15,
+    minE: -9e15,
+    maxE: 9e15
+  });
 });

@@ -118,4 +118,36 @@ T('tan', function () {
   t('6587685840713754402278094276205491723366077405819490595067025408026873250375623638673063957701601231', 107, 3, '0.88106648906135934944047838538886082156746682725824571546159607795133625640190620741982638843180493222615294');
   t('0.524217411165998018391262237830297491516856805040463896080592290487405064611025001607311512479709354535407130581948832593516281243820812174844723190311545869854968531247730387537943969800839367585396013641826800875467649274673709974876292276089324234102809573076731030535244688816', 76, 3, '0.5781754114340578960371795632804762026798421163023137415437904934165060267084');
   t('323646192595.4845', 127, 6, '-0.3747612268270038347175054875779625030989108207803221587812055629899198693615407534041949990189331417585285760850333254670480789');
+
+  // A precision high enough that the internal pi lookup exceeds its hard-coded digit limit and
+  // throws must not leave Decimal.precision/Decimal.rounding corrupted for later calls, since tan
+  // raises the constructor's precision before delegating to sin and only lowers it again once
+  // that call has returned. See issue #97.
+  (function () {
+    var precisionBefore = 1030,
+      roundingBefore = 4,
+      threw = false;
+
+    Decimal.precision = precisionBefore;
+    Decimal.rounding = roundingBefore;
+
+    try {
+      new Decimal(1).tan();
+    } catch (e) {
+      threw = /Precision limit exceeded/.test(e.message);
+    }
+
+    T.assert(threw);
+    T.assertEqual(precisionBefore, Decimal.precision);
+    T.assertEqual(roundingBefore, Decimal.rounding);
+  })();
+
+  Decimal.config({
+    precision: 40,
+    rounding: 4,
+    toExpNeg: -9e15,
+    toExpPos: 9e15,
+    minE: -9e15,
+    maxE: 9e15
+  });
 });

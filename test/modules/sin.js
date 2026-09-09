@@ -124,4 +124,36 @@ T('sin', function () {
   // Actual:          0.08887912368108
   // Expected:
   //t('5900', 14, 4, '0.088879123681079');
+
+  // A precision high enough that the internal pi lookup exceeds its hard-coded digit limit and
+  // throws must not leave Decimal.precision/Decimal.rounding corrupted for later calls, since sin
+  // raises the constructor's precision before doing that lookup and only lowers it again once the
+  // lookup has returned. See issue #97.
+  (function () {
+    var precisionBefore = 1030,
+      roundingBefore = 4,
+      threw = false;
+
+    Decimal.precision = precisionBefore;
+    Decimal.rounding = roundingBefore;
+
+    try {
+      new Decimal(1).sin();
+    } catch (e) {
+      threw = /Precision limit exceeded/.test(e.message);
+    }
+
+    T.assert(threw);
+    T.assertEqual(precisionBefore, Decimal.precision);
+    T.assertEqual(roundingBefore, Decimal.rounding);
+  })();
+
+  Decimal.config({
+    precision: 40,
+    rounding: 4,
+    toExpNeg: -9e15,
+    toExpPos: 9e15,
+    minE: -9e15,
+    maxE: 9e15
+  });
 });
