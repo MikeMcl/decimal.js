@@ -4135,10 +4135,13 @@ function atan2(y, x) {
   } else if (x.s < 0) {
     this.precision = wpr;
     this.rounding = 1;
-    r = this.atan(divide(y, x, wpr, 1));
-    x = getPi(this, wpr, 1);
-    this.precision = pr;
-    this.rounding = rm;
+    try {
+      r = this.atan(divide(y, x, wpr, 1));
+      x = getPi(this, wpr, 1);
+    } finally {
+      this.precision = pr;
+      this.rounding = rm;
+    }
     r = y.s < 0 ? r.minus(x) : r.plus(x);
   } else {
     r = this.atan(divide(y, x, wpr, 1));

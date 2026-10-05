@@ -1053,4 +1053,38 @@ T('atan2', function () {
   t('67381111111111111111', '2', 235, 5, '1.570796326794896619201639782763211693075565254889511026429926110525705919896593801691189227911950841228275003643935654428367121002853687190621360713931591682143109405062846172592007176046070894191718933231800595180657008817073239215772');
   t('811522222222222222222222222222222222222422222222222222222222222222282.422222222', '-5222222222416415910444444444444.729788169848249155', 35, 1, '1.5707963267948966192313216916397514');
   */
+
+  function assertPiLimitRestoresSettings(Ctor, pr, rm, y) {
+    var message, Fresh,
+      savedPrecision = Ctor.precision,
+      savedRounding = Ctor.rounding;
+    try {
+      Ctor.precision = pr;
+      Ctor.rounding = rm;
+      try {
+        Ctor.atan2(y, -1);
+      } catch (e) {
+        message = e.message;
+      }
+      T.assertEqual('[DecimalError] Precision limit exceeded', message);
+      T.assertEqual(pr, Ctor.precision);
+      T.assertEqual(rm, Ctor.rounding);
+      Fresh = Ctor.clone({ precision: pr, rounding: rm });
+      T.assertEqual(new Fresh(1).div(3).valueOf(), new Ctor(1).div(3).valueOf());
+    } finally {
+      Ctor.precision = savedPrecision;
+      Ctor.rounding = savedRounding;
+    }
+  }
+
+  // atan2 must restore constructor settings when calculating pi exceeds its fixed limit.
+  assertPiLimitRestoresSettings(Decimal, 1030, 4, 1);
+  assertPiLimitRestoresSettings(Decimal, 1030, 4, -1);
+  assertPiLimitRestoresSettings(Decimal, 1030, 4, 1);
+
+  // Exercise every rounding mode on an isolated constructor as well.
+  var Ctor = Decimal.clone({ precision: 40, rounding: 4 });
+  for (var rm = 0; rm <= 8; rm++) {
+    assertPiLimitRestoresSettings(Ctor, 1022, rm, 1);
+  }
 });
