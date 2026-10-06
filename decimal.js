@@ -922,7 +922,7 @@
 
       // |x| is 1
       if (k === 0) {
-        halfPi = getPi(Ctor, pr + 4, rm).times(0.5);
+        halfPi = getPi(Ctor, pr + 4, rm, x.s).times(0.5);
         halfPi.s = x.s;
         return halfPi;
       }
@@ -974,14 +974,14 @@
     if (!x.isFinite()) {
       if (!x.s) return new Ctor(NaN);
       if (pr + 4 <= PI_PRECISION) {
-        r = getPi(Ctor, pr + 4, rm).times(0.5);
+        r = getPi(Ctor, pr + 4, rm, x.s).times(0.5);
         r.s = x.s;
         return r;
       }
     } else if (x.isZero()) {
       return new Ctor(x);
     } else if (x.abs().eq(1) && pr + 4 <= PI_PRECISION) {
-      r = getPi(Ctor, pr + 4, rm).times(0.25);
+      r = getPi(Ctor, pr + 4, rm, x.s).times(0.25);
       r.s = x.s;
       return r;
     }
@@ -3165,9 +3165,14 @@
   }
 
 
-  function getPi(Ctor, sd, rm) {
+  function getPi(Ctor, sd, rm, s) {
+    var pi;
     if (sd > PI_PRECISION) throw Error(precisionLimitExceeded);
-    return finalise(new Ctor(PI), sd, rm, true);
+    pi = new Ctor(PI);
+    // Apply the sign early only for the caller's ROUND_CEIL or ROUND_FLOOR.
+    // Other modes retain their original guard rounding around intermediate ties.
+    pi.s = s < 0 && (Ctor.rounding === 2 || Ctor.rounding === 3) ? -1 : 1;
+    return finalise(pi, sd, rm, true);
   }
 
 
@@ -4123,17 +4128,17 @@
 
     // Both ±Infinity
     } else if (!y.d && !x.d) {
-      r = getPi(this, wpr, 1).times(x.s > 0 ? 0.25 : 0.75);
+      r = getPi(this, wpr, 1, y.s).times(x.s > 0 ? 0.25 : 0.75);
       r.s = y.s;
 
     // x is ±Infinity or y is ±0
     } else if (!x.d || y.isZero()) {
-      r = x.s < 0 ? getPi(this, pr, rm) : new this(0);
+      r = x.s < 0 ? getPi(this, pr, rm, y.s) : new this(0);
       r.s = y.s;
 
     // y is ±Infinity or x is ±0
     } else if (!y.d || x.isZero()) {
-      r = getPi(this, wpr, 1).times(0.5);
+      r = getPi(this, wpr, 1, y.s).times(0.5);
       r.s = y.s;
 
     // Both non-zero and finite
