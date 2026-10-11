@@ -4685,7 +4685,12 @@ function random(sd) {
 
   // Browsers supporting crypto.getRandomValues.
   } else if (crypto.getRandomValues) {
-    d = crypto.getRandomValues(new Uint32Array(k));
+    d = new Uint32Array(k);
+
+    // Web Crypto limits each call to 65536 bytes (16384 Uint32 values).
+    for (n = 0; n < k; n += 16384) {
+      crypto.getRandomValues(d.subarray(n, n + 16384));
+    }
 
     for (; i < k;) {
       n = d[i];
