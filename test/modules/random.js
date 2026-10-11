@@ -22,6 +22,21 @@ T('random', function () {
     T.assert(r.sd() <= sd && r.gte(0) && r.lt(1) && r.eq(r) && r.eq(r.valueOf()));
   }
 
+  // Web Crypto limits each getRandomValues call to 65536 bytes.
+  if (typeof crypto != 'undefined' && crypto && crypto.getRandomValues) {
+    var CryptoDecimal = Decimal.clone({ crypto: true, precision: 114689 }),
+      sizes = [114681, 114688, 114689, 114695, 229376, 229377];
+
+    for (i = 0; i < sizes.length; i++) {
+      sd = sizes[i];
+      r = CryptoDecimal.random(sd);
+      T.assert(r.dp() <= sd && r.gte(0) && r.lt(1));
+    }
+
+    r = CryptoDecimal.random();
+    T.assert(r.dp() <= CryptoDecimal.precision && r.gte(0) && r.lt(1));
+  }
+
   tx(function () { Decimal.random(Infinity) }, 'Infinity');
   tx(function () { Decimal.random('-Infinity') }, "'-Infinity'");
   tx(function () { Decimal.random(NaN) }, 'NaN');
