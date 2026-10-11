@@ -118,4 +118,28 @@ T('hypot', function () {
   t('0.4519719010451812700381881242155284703426402593258190987', '92346327717009585478189395590602.34545881237122995324639951758026247635570631069180557087', 55, 4, '92346327717009585478189395590602.3454588123712299532464');
   t('69398002688216703269792743800286307271116693445111111111111111', '-211393667179764005100083390018873694', 100, 0, '69398002688216703269792743800286307271116693445111111433074862.06409526630410784634920186057594444197');
   t('0.19', '-5288.143883', 42, 3, '5288.14388641329593020355143132324946951485');
+
+
+  // A rejected argument must not disable rounding or exponent limits for later operations,
+  // including operations performed with another cloned constructor.
+  var Ctor = Decimal.clone({ defaults: true, precision: 3, rounding: 4, minE: -6, maxE: 6 }),
+    Other = Decimal.clone({ defaults: true, precision: 2, rounding: 0 });
+
+  function assertInvalidArgumentRestoresRounding(args) {
+    T.assertException(function () {
+      Ctor.hypot.apply(Ctor, args);
+    }, 'invalid hypot argument');
+    T.assertEqual('12300', new Ctor(12345).plus(1).valueOf());
+    T.assertEqual('13000', new Other(12345).times(1).valueOf());
+    T.assertEqual('Infinity', new Ctor('1e7').valueOf());
+    T.assertEqual('0', new Ctor('1e-7').valueOf());
+    T.assertEqual('5', Ctor.hypot(3, 4).valueOf());
+  }
+
+  assertInvalidArgumentRestoresRounding(['invalid']);
+  assertInvalidArgumentRestoresRounding([3, 'invalid']);
+  assertInvalidArgumentRestoresRounding([3, 4, 'invalid']);
+  assertInvalidArgumentRestoresRounding([3, void 0]);
+  assertInvalidArgumentRestoresRounding([3, null]);
+  assertInvalidArgumentRestoresRounding([3, {}]);
 });
