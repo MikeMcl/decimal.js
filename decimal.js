@@ -4525,20 +4525,21 @@
 
     external = false;
 
-    for (i = 0; i < arguments.length;) {
-      n = new this(arguments[i++]);
-      if (!n.d) {
-        if (n.s) {
-          external = true;
-          return new this(1 / 0);
+    try {
+      for (i = 0; i < arguments.length;) {
+        n = new this(arguments[i++]);
+        if (!n.d) {
+          if (n.s) {
+            return new this(1 / 0);
+          }
+          t = n;
+        } else if (t.d) {
+          t = t.plus(n.times(n));
         }
-        t = n;
-      } else if (t.d) {
-        t = t.plus(n.times(n));
       }
+    } finally {
+      external = true;
     }
-
-    external = true;
 
     return t.sqrt();
   }
@@ -4865,8 +4866,11 @@
       x = new this(args[i]);
 
     external = false;
-    for (; x.s && ++i < args.length;) x = x.plus(args[i]);
-    external = true;
+    try {
+      for (; x.s && ++i < args.length;) x = x.plus(args[i]);
+    } finally {
+      external = true;
+    }
 
     return finalise(x, this.precision, this.rounding);
   }

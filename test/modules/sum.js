@@ -61,4 +61,28 @@ T('sum', function () {
   t(0, new Decimal('-Infinity'), '9', new Decimal(0), 11);
   t(0, '9', new Decimal(0), 11, -Infinity);
   t(4, new Decimal(-Infinity), 0, '9', new Decimal(0), -Infinity, 2);
+
+
+  // A rejected argument must not disable rounding or exponent limits for later operations,
+  // including operations performed with another cloned constructor.
+  var Ctor = Decimal.clone({ defaults: true, precision: 3, rounding: 4, minE: -6, maxE: 6 }),
+    Other = Decimal.clone({ defaults: true, precision: 2, rounding: 0 });
+
+  function assertInvalidArgumentRestoresRounding(args) {
+    T.assertException(function () {
+      Ctor.sum.apply(Ctor, args);
+    }, 'invalid sum argument');
+    T.assertEqual('12300', new Ctor(12345).plus(1).valueOf());
+    T.assertEqual('13000', new Other(12345).times(1).valueOf());
+    T.assertEqual('Infinity', new Ctor('1e7').valueOf());
+    T.assertEqual('0', new Ctor('1e-7').valueOf());
+    T.assertEqual('7', Ctor.sum(3, 4).valueOf());
+  }
+
+  assertInvalidArgumentRestoresRounding(['invalid']);
+  assertInvalidArgumentRestoresRounding([3, 'invalid']);
+  assertInvalidArgumentRestoresRounding([3, 4, 'invalid']);
+  assertInvalidArgumentRestoresRounding([3, void 0]);
+  assertInvalidArgumentRestoresRounding([3, null]);
+  assertInvalidArgumentRestoresRounding([3, {}]);
 });
