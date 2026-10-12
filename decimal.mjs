@@ -302,10 +302,12 @@ P.cosine = P.cos = function () {
   Ctor.precision = pr + Math.max(x.e, x.sd()) + LOG_BASE;
   Ctor.rounding = 1;
 
-  x = cosine(Ctor, toLessThanHalfPi(Ctor, x));
-
-  Ctor.precision = pr;
-  Ctor.rounding = rm;
+  try {
+    x = cosine(Ctor, toLessThanHalfPi(Ctor, x));
+  } finally {
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
+  }
 
   return finalise(quadrant == 2 || quadrant == 3 ? x.neg() : x, pr, rm, true);
 };
@@ -1698,10 +1700,12 @@ P.sine = P.sin = function () {
   Ctor.precision = pr + Math.max(x.e, x.sd()) + LOG_BASE;
   Ctor.rounding = 1;
 
-  x = sine(Ctor, toLessThanHalfPi(Ctor, x));
-
-  Ctor.precision = pr;
-  Ctor.rounding = rm;
+  try {
+    x = sine(Ctor, toLessThanHalfPi(Ctor, x));
+  } finally {
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
+  }
 
   return finalise(quadrant > 2 ? x.neg() : x, pr, rm, true);
 };
@@ -1834,12 +1838,14 @@ P.tangent = P.tan = function () {
   Ctor.precision = pr + 10;
   Ctor.rounding = 1;
 
-  x = x.sin();
-  x.s = 1;
-  x = divide(x, new Ctor(1).minus(x.times(x)).sqrt(), pr + 10, 0);
-
-  Ctor.precision = pr;
-  Ctor.rounding = rm;
+  try {
+    x = x.sin();
+    x.s = 1;
+    x = divide(x, new Ctor(1).minus(x.times(x)).sqrt(), pr + 10, 0);
+  } finally {
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
+  }
 
   return finalise(quadrant == 2 || quadrant == 4 ? x.neg() : x, pr, rm, true);
 };

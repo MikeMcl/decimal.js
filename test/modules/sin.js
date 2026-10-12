@@ -124,4 +124,43 @@ T('sin', function () {
   // Actual:          0.08887912368108
   // Expected:
   //t('5900', 14, 4, '0.088879123681079');
+
+  // A pi-limit error must restore settings before the caller catches it. See #97 and #265.
+  function assertPiLimitRestoresSettings(Ctor, pr, rm, n) {
+    var i, message,
+      savedPrecision = Ctor.precision,
+      savedRounding = Ctor.rounding,
+      Fresh = Ctor.clone({ precision: pr, rounding: rm });
+
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
+    try {
+      // Check consecutive instance and static calls without resetting settings between them.
+      for (i = 0; i < 2; i++) {
+        message = '';
+        try {
+          if (i) Ctor.sin(n);
+          else new Ctor(n).sin();
+        } catch (e) {
+          message = e.message;
+        }
+        T.assertEqual('[DecimalError] Precision limit exceeded', message);
+        T.assertEqual(pr, Ctor.precision);
+        T.assertEqual(rm, Ctor.rounding);
+        T.assertEqual(new Fresh(1).div(3).valueOf(), new Ctor(1).div(3).valueOf());
+      }
+    } finally {
+      Ctor.precision = savedPrecision;
+      Ctor.rounding = savedRounding;
+    }
+  }
+
+  assertPiLimitRestoresSettings(Decimal, 1030, 4, 1);
+  assertPiLimitRestoresSettings(Decimal, 20, 4, '1e1000');
+
+  var Ctor = Decimal.clone(), rm;
+  for (rm = 0; rm <= 8; rm++) {
+    assertPiLimitRestoresSettings(Ctor, 1030, rm, 1);
+    assertPiLimitRestoresSettings(Ctor, 20, rm, '1e1000');
+  }
 });

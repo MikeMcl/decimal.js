@@ -118,4 +118,43 @@ T('tan', function () {
   t('6587685840713754402278094276205491723366077405819490595067025408026873250375623638673063957701601231', 107, 3, '0.88106648906135934944047838538886082156746682725824571546159607795133625640190620741982638843180493222615294');
   t('0.524217411165998018391262237830297491516856805040463896080592290487405064611025001607311512479709354535407130581948832593516281243820812174844723190311545869854968531247730387537943969800839367585396013641826800875467649274673709974876292276089324234102809573076731030535244688816', 76, 3, '0.5781754114340578960371795632804762026798421163023137415437904934165060267084');
   t('323646192595.4845', 127, 6, '-0.3747612268270038347175054875779625030989108207803221587812055629899198693615407534041949990189331417585285760850333254670480789');
+
+  // A pi-limit error must restore settings before the caller catches it. See #97 and #265.
+  function assertPiLimitRestoresSettings(Ctor, pr, rm, n) {
+    var i, message,
+      savedPrecision = Ctor.precision,
+      savedRounding = Ctor.rounding,
+      Fresh = Ctor.clone({ precision: pr, rounding: rm });
+
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
+    try {
+      // Check consecutive instance and static calls without resetting settings between them.
+      for (i = 0; i < 2; i++) {
+        message = '';
+        try {
+          if (i) Ctor.tan(n);
+          else new Ctor(n).tan();
+        } catch (e) {
+          message = e.message;
+        }
+        T.assertEqual('[DecimalError] Precision limit exceeded', message);
+        T.assertEqual(pr, Ctor.precision);
+        T.assertEqual(rm, Ctor.rounding);
+        T.assertEqual(new Fresh(1).div(3).valueOf(), new Ctor(1).div(3).valueOf());
+      }
+    } finally {
+      Ctor.precision = savedPrecision;
+      Ctor.rounding = savedRounding;
+    }
+  }
+
+  assertPiLimitRestoresSettings(Decimal, 1030, 4, 1);
+  assertPiLimitRestoresSettings(Decimal, 20, 4, '1e1000');
+
+  var Ctor = Decimal.clone(), rm;
+  for (rm = 0; rm <= 8; rm++) {
+    assertPiLimitRestoresSettings(Ctor, 1030, rm, 1);
+    assertPiLimitRestoresSettings(Ctor, 20, rm, '1e1000');
+  }
 });
