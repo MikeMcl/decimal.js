@@ -120,4 +120,43 @@ T('cos', function () {
   t('0.10859933721171128209598967066', 80, 4, '0.99410888528803407646108267824473898405842663808987770888683180574685964084716924');
   t('2813920.875088303362819', 33, 2, '-0.866254989781355498995879756871368');
   t('35999999999999999999999999999999999999999.999999999999999999999999919', 38, 3, '-0.9562598584240982386154988349219959087');
+
+  // A pi-limit error must restore settings before the caller catches it. See #97 and #265.
+  function assertPiLimitRestoresSettings(Ctor, pr, rm, n) {
+    var i, message,
+      savedPrecision = Ctor.precision,
+      savedRounding = Ctor.rounding,
+      Fresh = Ctor.clone({ precision: pr, rounding: rm });
+
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
+    try {
+      // Check consecutive instance and static calls without resetting settings between them.
+      for (i = 0; i < 2; i++) {
+        message = '';
+        try {
+          if (i) Ctor.cos(n);
+          else new Ctor(n).cos();
+        } catch (e) {
+          message = e.message;
+        }
+        T.assertEqual('[DecimalError] Precision limit exceeded', message);
+        T.assertEqual(pr, Ctor.precision);
+        T.assertEqual(rm, Ctor.rounding);
+        T.assertEqual(new Fresh(1).div(3).valueOf(), new Ctor(1).div(3).valueOf());
+      }
+    } finally {
+      Ctor.precision = savedPrecision;
+      Ctor.rounding = savedRounding;
+    }
+  }
+
+  assertPiLimitRestoresSettings(Decimal, 1030, 4, 1);
+  assertPiLimitRestoresSettings(Decimal, 20, 4, '1e1000');
+
+  var Ctor = Decimal.clone(), rm;
+  for (rm = 0; rm <= 8; rm++) {
+    assertPiLimitRestoresSettings(Ctor, 1030, rm, 1);
+    assertPiLimitRestoresSettings(Ctor, 20, rm, '1e1000');
+  }
 });
