@@ -1158,7 +1158,7 @@
     }
 
     // The result will have a non-terminating decimal expansion if base is 10 and arg is not an
-    // integer power of 10.
+    // integer power of 10, or if base is 2 and arg is not an integer power of 2.
     if (isBase10) {
       if (d.length > 1) {
         inf = true;
@@ -1166,6 +1166,8 @@
         for (k = d[0]; k % 10 === 0;) k /= 10;
         inf = k !== 1;
       }
+    } else if (base.eq(2)) {
+      inf = !isPowerOfTwo(arg);
     }
 
     external = false;
@@ -1207,7 +1209,9 @@
 
           break;
         }
-      } while (checkRoundingDigits(r.d, k += 10, rm));
+      // The first rounding digit is no longer in the window, so whatever the rounding mode the
+      // result is still at a rounding boundary only if the new rounding digits are 99999 or 00000.
+      } while (checkRoundingDigits(r.d, k += 10, 1));
     }
 
     external = true;
@@ -2602,6 +2606,36 @@
           (d[di + 1] / k / 1000 | 0) == mathpow(10, i - 3) - 1;
       }
     }
+
+    return r;
+  }
+
+
+  /*
+   * Return true if the finite, positive Decimal `x` is an integer power of two, i.e. 2^n for some
+   * integer n, otherwise return false. Must be called with `external` true.
+   */
+  function isPowerOfTwo(x) {
+    var n, r,
+      Ctor = x.constructor,
+      pr = Ctor.precision,
+      rm = Ctor.rounding,
+      sd = x.sd(),
+      str = digitsToString(x.d);
+
+    // Estimate n = log2(x) from the leading digits and the exponent.
+    n = Math.round((x.e + Math.log(+('0.' + str.slice(0, 15))) / Math.LN10 + 1) / (Math.LN2 / Math.LN10));
+
+    // 2^n has floor(n * log10(2)) + 1 significant digits if n >= 0, and floor(-n * log10(5)) + 1
+    // if n < 0, so it cannot equal x if |n| * log10(2) > sd + 1.
+    if (!isFinite(n) || Math.abs(n) * 0.30103 > sd + 1) return false;
+
+    // Calculate 2^n exactly and compare.
+    Ctor.precision = Math.ceil(Math.abs(n) * 0.69898) + 2;
+    Ctor.rounding = 1;
+    r = new Ctor(2).pow(n).eq(x);
+    Ctor.precision = pr;
+    Ctor.rounding = rm;
 
     return r;
   }
