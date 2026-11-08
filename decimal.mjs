@@ -2082,7 +2082,8 @@ P.toFraction = function (maxD) {
   external = false;
   n = new Ctor(digitsToString(xd));
   pr = Ctor.precision;
-  Ctor.precision = e = xd.length * LOG_BASE * 2;
+  // Include the denominator limit so integer remainders and convergents stay exact.
+  Ctor.precision = e = Math.max(xd.length * LOG_BASE, maxD.e) * 2;
 
   for (;;)  {
     q = divide(n, d, 0, 1, 1);
@@ -2096,6 +2097,15 @@ P.toFraction = function (maxD) {
     d2 = d;
     d = n.minus(q.times(d2));
     n = d2;
+
+    // The current convergent is exact. This also handles a ROUND_FLOOR -0
+    // remainder and avoids expanding a large denominator in the comparison below.
+    if (!d.d[0]) {
+      Ctor.precision = pr;
+      external = true;
+      n1.s = x.s;
+      return [n1, d1];
+    }
   }
 
   d2 = divide(maxD.minus(d0), d1, 0, 1, 1);

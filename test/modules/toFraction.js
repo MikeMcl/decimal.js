@@ -228,4 +228,49 @@ T('toFraction', function () {
   tx(function () {new Decimal('123.45').toFraction(-23)}, ".toFraction(-23)");
   tx(function () {new Decimal('123.45').toFraction(Infinity)}, ".toFraction(Infinity)");
   tx(function () {new Decimal('123.45').toFraction('-Infinity')}, ".toFraction('-Infinity')");
+
+  var precisions = [1, 20, 80], i, rm, D, x, before, fraction,
+    denominator = '1' + new Array(95).join('0'),
+    tiny = '0.999999999999999999999999e-70';
+
+  // Exact fractions must not depend on rounding or the configured precision.
+  for (i = 0; i < precisions.length; i++) {
+    for (rm = 0; rm < 9; rm++) {
+      Decimal.set({ precision: precisions[i], rounding: rm });
+
+      t('1,2', '0.5');
+      t('1,2', '0.5', 2);
+      t('1,2', '0.5', 3);
+      t('-1,2', '-0.5');
+      t('0,1', '0');
+      t('7,1', '7');
+      t('2,3', '0.6', 3);
+      t('-2,3', '-0.6', 3);
+      t('999999999999999999999999,' + denominator, tiny);
+      t('-999999999999999999999999,' + denominator, '-' + tiny);
+      t('999999999999999999999999,' + denominator, tiny, '1e94');
+
+      // A small denominator limit must not require expanding the full exponent.
+      t('0,1', '1e-1000000', 1);
+      fraction = new Decimal('1e-1000000').toFraction();
+      T.assertEqual('1', fraction[0].valueOf());
+      T.assertEqual('1e+1000000', fraction[1].toExponential());
+      T.assertEqual('-0', new Decimal('-0').toFraction()[0].valueOf());
+      T.assertEqual(precisions[i], Decimal.precision);
+      T.assertEqual(rm, Decimal.rounding);
+
+      D = Decimal.clone();
+      x = new D(tiny);
+      before = new D('1.2345').plus(0).valueOf();
+      fraction = x.toFraction();
+      T.assertEqual('999999999999999999999999,' + denominator, fraction.toString());
+      T.assert(fraction[0].constructor === D && fraction[1].constructor === D);
+      T.assertEqual(new Decimal(tiny).valueOf(), x.valueOf());
+      T.assertEqual(precisions[i], D.precision);
+      T.assertEqual(rm, D.rounding);
+      T.assertEqual(before, new D('1.2345').plus(0).valueOf());
+    }
+  }
+
+  Decimal.set({ precision: 20, rounding: 4 });
 });
