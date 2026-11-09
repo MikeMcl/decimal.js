@@ -44,7 +44,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "test": "node ./test/test.js"
+    "test": "node ./test/test.js",
+    "test:runner": "node ./test/runner.js"
   },
   "types": "decimal.d.ts",
   "files": [

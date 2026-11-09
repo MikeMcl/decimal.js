@@ -74,3 +74,5 @@ console.log('\n Testing decimal.js\n');
 
 time = new Date() - time;
 console.log('\n In total, ' + passed + ' of ' + total + ' tests passed in ' + (time / 1e3) + ' secs.\n');
+
+if (passed !== total) process.exitCode = 1;
