@@ -3322,7 +3322,8 @@
 
     // Here exp(x) and 1 + x round identically, including directed rounding.
     // Avoid extending precision across an arbitrarily long run of nines below 1.
-    if (sd == null && x.e < -pr - 2) return new Ctor(1).plus(x);
+    // Add to x so an argument created before a minE change is not copied as zero.
+    if (sd == null && x.e < -pr - 2) return x.plus(1);
 
     if (sd == null) {
       external = false;

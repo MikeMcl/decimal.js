@@ -84,6 +84,35 @@ T('exp', function () {
     T.assertEqual(rm, Tiny.rounding);
   }
 
+  // Existing arguments retain their value after the constructor's range is narrowed.
+  var changedLimits = [
+    ['-1e-6', '0.9', 1, 1, -2],
+    ['1e-6', '2', 1, 0, -2],
+    ['-1e-6', '0.9', 1, 3, -2],
+    ['1e-6', '2', 1, 2, -2],
+    ['-1e-6', '1', 1, 4, -2],
+    ['1e-6', '1', 1, 4, -2],
+    ['-1e-6', '0', 1, 1, 0],
+    ['1e-6', '2', 1, 0, 0],
+    ['-1e-12', '0.999999', 6, 1, -2],
+    ['1e-12', '1.00001', 6, 0, -2]
+  ];
+  for (i = 0; i < changedLimits.length; i++) {
+    var fixture = changedLimits[i],
+      Changed = Decimal.clone({ precision: fixture[2], rounding: fixture[3], minE: -100, maxE: 100 }),
+      argument = new Changed(fixture[0]),
+      digits = argument.d.slice(),
+      exponent = argument.e,
+      sign = argument.s;
+    Changed.set({ minE: fixture[4], maxE: 0 });
+    T.assertEqual(fixture[1], argument.exp().valueOf());
+    T.assertEqualProps(digits, exponent, sign, argument);
+    T.assertEqual(fixture[2], Changed.precision);
+    T.assertEqual(fixture[3], Changed.rounding);
+    T.assertEqual(fixture[4], Changed.minE);
+    T.assertEqual(0, Changed.maxE);
+  }
+
   t('4.504575', '90.42990317191332252519829', 25, 5);
   t('6.3936622751479561979', '598.04277120550571020949043340838952845520759628012', 50, 4);
   t('0.000000000000000004', '1.000000000000000004000000000000000008001', 40, 2);
