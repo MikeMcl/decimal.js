@@ -2556,8 +2556,8 @@
 
   /*
    * Check 5 rounding digits if `repeating` is null, 4 otherwise.
-   * `repeating == null` if caller is `log` or `pow`,
-   * `repeating != null` if caller is `naturalLogarithm` or `naturalExponential`.
+   * `repeating == null` if caller is `log`, `pow` or `naturalExponential`,
+   * `repeating != null` if caller is `naturalLogarithm`.
    */
   function checkRoundingDigits(d, i, rm, repeating) {
     var di, k, r, rd;
@@ -3306,7 +3306,6 @@
    */
   function naturalExponential(x, sd) {
     var denominator, guard, j, pow, sum, t, wpr,
-      rep = 0,
       i = 0,
       k = 0,
       Ctor = x.constructor,
@@ -3320,6 +3319,11 @@
         ? !x.d[0] ? 1 : x.s < 0 ? 0 : 1 / 0
         : x.s ? x.s < 0 ? 0 : x : 0 / 0);
     }
+
+    // Here exp(x) and 1 + x round identically, including directed rounding.
+    // Avoid extending precision across an arbitrarily long run of nines below 1.
+    // Add to x so an argument created before a minE change is not copied as zero.
+    if (sd == null && x.e < -pr - 2) return x.plus(1);
 
     if (sd == null) {
       external = false;
@@ -3338,9 +3342,9 @@
       k += 5;
     }
 
-    // Use 2 * log10(2^k) + 5 (empirically derived) to estimate the increase in precision
-    // necessary to ensure the first 4 rounding digits are correct.
-    guard = Math.log(mathpow(2, k)) / Math.LN10 * 2 + 5 | 0;
+    // Use 2 * log10(2^k) + 6 (empirically derived) to estimate the increase in precision
+    // necessary to ensure the first 5 rounding digits are correct.
+    guard = Math.log(mathpow(2, k)) / Math.LN10 * 2 + 6 | 0;
     wpr += guard;
     denominator = pow = sum = new Ctor(1);
     Ctor.precision = wpr;
@@ -3354,18 +3358,18 @@
         j = k;
         while (j--) sum = finalise(sum.times(sum), wpr, 1);
 
-        // Check to see if the first 4 rounding digits are [49]999.
+        // Check whether the first 5 rounding digits are close to a rounding boundary.
         // If so, repeat the summation with a higher precision, otherwise
         // e.g. with precision: 18, rounding: 1
         // exp(18.404272462595034083567793919843761) = 98372560.1229999999 (should be 98372560.123)
         // `wpr - guard` is the index of first rounding digit.
         if (sd == null) {
 
-          if (rep < 3 && checkRoundingDigits(sum.d, wpr - guard, rm, rep)) {
+          // After extending precision, check the new guard window for runs of nines or zeros.
+          if (checkRoundingDigits(sum.d, wpr - guard, wpr === pr + guard ? rm : 1)) {
             Ctor.precision = wpr += 10;
             denominator = pow = t = new Ctor(1);
             i = 0;
-            rep++;
           } else {
             return finalise(sum, Ctor.precision = pr, rm, external = true);
           }

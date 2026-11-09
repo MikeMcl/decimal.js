@@ -29,6 +29,90 @@ T('exp', function () {
   t('NaN', String(Math.exp(NaN)), 40, 4);
   t('1', '2.718281828459045235360287471352662497757', 40, 4);
 
+  // Inputs on both sides of rounding boundaries, including cases needing more than 30 guard digits.
+  // Expected values were checked with Python Decimal at 200 and 300 significant digits.
+  var i, rm, boundaries = [
+    ['0.4054651081081643819780131154643491365', '1', 1],
+    ['0.4054651081081643819780131154643491366', '2', 1],
+    ['0.4054651081081643819780131154643491365719904234624941976140143241441006712489142512677524278173134012', '1', 1],
+    ['0.4054651081081643819780131154643491365719904234624941976140143241441006712489142512677524278173134013', '2', 1],
+    ['-0.287682072451780927439219005993827431503509710897761056506666', '0.7', 1],
+    ['-0.287682072451780927439219005993827431503509710897761056506665', '0.8', 1],
+    ['-0.005012541823544282043093738958367781386598', '0.99', 2],
+    ['-0.005012541823544282043093738958367781386597', '1', 2],
+    ['-0.005012541823544282043093738958367781386597831048328707280874823484439635943483775951873462877397236752', '0.99', 2],
+    ['-0.005012541823544282043093738958367781386597831048328707280874823484439635943483775951873462877397236751', '1', 2],
+    ['0.210666029803097141833911716856634657897218919766562764580235', '1.234', 4],
+    ['0.210666029803097141833911716856634657897218919766562764580236', '1.235', 4]
+  ];
+
+  for (i = 0; i < boundaries.length; i++) {
+    for (rm = 4; rm <= 8; rm++) t(boundaries[i][0], boundaries[i][1], boundaries[i][2], rm);
+  }
+  T.assertEqual(4, Decimal.precision);
+  T.assertEqual(8, Decimal.rounding);
+
+  // Directed rounding and the exact zero argument must retain their existing behavior.
+  for (rm = 0; rm < 4; rm++) {
+    t(boundaries[0][0], rm === 0 || rm === 2 ? '2' : '1', 1, rm);
+    t(boundaries[1][0], rm === 0 || rm === 2 ? '2' : '1', 1, rm);
+  }
+  for (rm = 0; rm <= 8; rm++) t('0', '1', 1, rm);
+
+  // Tiny arguments must not require precision proportional to the exponent.
+  // The last six cases straddle the small-argument shortcut at precision 6.
+  for (rm = 0; rm <= 8; rm++) {
+    t('1e-10000', rm === 0 || rm === 2 ? '2' : '1', 1, rm);
+    t('-1e-10000', rm === 1 || rm === 3 ? '0.9' : '1', 1, rm);
+    t('1e-10000', rm === 0 || rm === 2 ? '1.00001' : '1', 6, rm);
+    t('-1e-10000', rm === 1 || rm === 3 ? '0.999999' : '1', 6, rm);
+    t('1e-9', rm === 0 || rm === 2 ? '1.00001' : '1', 6, rm);
+    t('-1e-9', rm === 1 || rm === 3 ? '0.999999' : '1', 6, rm);
+    t('1e-8', rm === 0 || rm === 2 ? '1.00001' : '1', 6, rm);
+    t('-1e-8', rm === 1 || rm === 3 ? '0.999999' : '1', 6, rm);
+    t('1e-7', rm === 0 || rm === 2 ? '1.00001' : '1', 6, rm);
+    t('-1e-7', rm === 1 || rm === 3 ? '0.999999' : '1', 6, rm);
+  }
+
+  for (rm = 0; rm <= 8; rm++) {
+    var Tiny = Decimal.clone({ precision: 6, rounding: rm, minE: -10000, maxE: 0 });
+    T.assertEqual(rm === 0 || rm === 2 ? '1.00001' : '1', new Tiny('1e-10000').exp().valueOf());
+    T.assertEqual(rm === 1 || rm === 3 ? '0.999999' : '1', new Tiny('-1e-10000').exp().valueOf());
+    T.assertEqual('1', new Tiny('1e-10001').exp().valueOf());
+    T.assertEqual('1', new Tiny('-1e-10001').exp().valueOf());
+    T.assertEqual(6, Tiny.precision);
+    T.assertEqual(rm, Tiny.rounding);
+  }
+
+  // Existing arguments retain their value after the constructor's range is narrowed.
+  var changedLimits = [
+    ['-1e-6', '0.9', 1, 1, -2],
+    ['1e-6', '2', 1, 0, -2],
+    ['-1e-6', '0.9', 1, 3, -2],
+    ['1e-6', '2', 1, 2, -2],
+    ['-1e-6', '1', 1, 4, -2],
+    ['1e-6', '1', 1, 4, -2],
+    ['-1e-6', '0', 1, 1, 0],
+    ['1e-6', '2', 1, 0, 0],
+    ['-1e-12', '0.999999', 6, 1, -2],
+    ['1e-12', '1.00001', 6, 0, -2]
+  ];
+  for (i = 0; i < changedLimits.length; i++) {
+    var fixture = changedLimits[i],
+      Changed = Decimal.clone({ precision: fixture[2], rounding: fixture[3], minE: -100, maxE: 100 }),
+      argument = new Changed(fixture[0]),
+      digits = argument.d.slice(),
+      exponent = argument.e,
+      sign = argument.s;
+    Changed.set({ minE: fixture[4], maxE: 0 });
+    T.assertEqual(fixture[1], argument.exp().valueOf());
+    T.assertEqualProps(digits, exponent, sign, argument);
+    T.assertEqual(fixture[2], Changed.precision);
+    T.assertEqual(fixture[3], Changed.rounding);
+    T.assertEqual(fixture[4], Changed.minE);
+    T.assertEqual(0, Changed.maxE);
+  }
+
   t('4.504575', '90.42990317191332252519829', 25, 5);
   t('6.3936622751479561979', '598.04277120550571020949043340838952845520759628012', 50, 4);
   t('0.000000000000000004', '1.000000000000000004000000000000000008001', 40, 2);
