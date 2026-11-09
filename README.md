@@ -217,6 +217,12 @@ Each separate test module can also be executed individually, for example:
 node test/modules/toFraction
 ```
 
+To check the Node.js test runner's exit status for passing and failing assertions:
+
+```bash
+npm run test:runner
+```
+
 To run the tests in a browser, open *test/test.html*.
 
 ## Minify
