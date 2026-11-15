@@ -193,11 +193,11 @@ var EXP_LIMIT = 9e15,                      // 0 to 9e15
  * Return a new Decimal whose value is the absolute value of this Decimal.
  *
  */
-P.absoluteValue = P.abs = function () {
-  var x = new this.constructor(this);
+function abs(x) {
+  x = new x.constructor(x);
   if (x.s < 0) x.s = 1;
   return finalise(x);
-};
+}
 
 
 /*
@@ -205,9 +205,9 @@ P.absoluteValue = P.abs = function () {
  * direction of positive Infinity.
  *
  */
-P.ceil = function () {
-  return finalise(new this.constructor(this), this.e + 1, 2);
-};
+function ceil(x) {
+  return finalise(new x.constructor(x), x.e + 1, 2);
+}
 
 
 /*
@@ -218,17 +218,16 @@ P.ceil = function () {
  * max {number|string|bigint|Decimal}
  *
  */
-P.clampedTo = P.clamp = function (min, max) {
+function clamp(x, min, max) {
   var k,
-    x = this,
     Ctor = x.constructor;
   min = new Ctor(min);
   max = new Ctor(max);
   if (!min.s || !max.s) return new Ctor(NaN);
-  if (min.gt(max)) throw Error(invalidArgument + max);
-  k = x.cmp(min);
-  return k < 0 ? min : x.cmp(max) > 0 ? max : new Ctor(x);
-};
+  if (gt(min, max)) throw Error(invalidArgument + max);
+  k = cmp(x, min);
+  return k < 0 ? min : cmp(x, max) > 0 ? max : new Ctor(x);
+}
 
 
 /*
@@ -239,9 +238,8 @@ P.clampedTo = P.clamp = function (min, max) {
  *   NaN  if the value of either Decimal is NaN.
  *
  */
-P.comparedTo = P.cmp = function (y) {
+function cmp(x, y) {
   var i, j, xdL, ydL,
-    x = this,
     xd = x.d,
     yd = (y = new x.constructor(y)).d,
     xs = x.s,
@@ -271,7 +269,7 @@ P.comparedTo = P.cmp = function (y) {
 
   // Compare lengths.
   return xdL === ydL ? 0 : xdL > ydL ^ xs < 0 ? 1 : -1;
-};
+}
 
 
 /*
@@ -287,9 +285,8 @@ P.comparedTo = P.cmp = function (y) {
  * cos(NaN)       = NaN
  *
  */
-P.cosine = P.cos = function () {
+function cos(x) {
   var pr, rm,
-    x = this,
     Ctor = x.constructor;
 
   if (!x.d) return new Ctor(NaN);
@@ -299,7 +296,7 @@ P.cosine = P.cos = function () {
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  Ctor.precision = pr + Math.max(x.e, x.sd()) + LOG_BASE;
+  Ctor.precision = pr + Math.max(x.e, sd(x)) + LOG_BASE;
   Ctor.rounding = 1;
 
   x = cosine(Ctor, toLessThanHalfPi(Ctor, x));
@@ -307,8 +304,8 @@ P.cosine = P.cos = function () {
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return finalise(quadrant == 2 || quadrant == 3 ? x.neg() : x, pr, rm, true);
-};
+  return finalise(quadrant == 2 || quadrant == 3 ? neg(x) : x, pr, rm, true);
+}
 
 
 /*
@@ -327,12 +324,11 @@ P.cosine = P.cos = function () {
  * Math.cbrt(x) = (x < 0 ? -Math.pow(-x, 1/3) : Math.pow(x, 1/3))
  *
  */
-P.cubeRoot = P.cbrt = function () {
+function cbrt(x) {
   var e, m, n, r, rep, s, sd, t, t3, t3plusx,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite() || x.isZero()) return new Ctor(x);
+  if (!decimalIsFinite(x) || isZero(x)) return new Ctor(x);
   external = false;
 
   // Initial estimate.
@@ -370,9 +366,9 @@ P.cubeRoot = P.cbrt = function () {
   // TODO? Compare Newton's method.
   for (;;) {
     t = r;
-    t3 = t.times(t).times(t);
-    t3plusx = t3.plus(x);
-    r = divide(t3plusx.plus(x).times(t), t3plusx.plus(t3), sd + 2, 1);
+    t3 = mul(mul(t, t), t);
+    t3plusx = add(t3, x);
+    r = divide(mul(add(t3plusx, x), t), add(t3plusx, t3), sd + 2, 1);
 
     // TODO? Replace with for-loop and checkRoundingDigits.
     if (digitsToString(t.d).slice(0, sd) === (n = digitsToString(r.d)).slice(0, sd)) {
@@ -387,7 +383,7 @@ P.cubeRoot = P.cbrt = function () {
         if (!rep) {
           finalise(t, e + 1, 0);
 
-          if (t.times(t).times(t).eq(x)) {
+          if (eq(mul(mul(t, t), t), x)) {
             r = t;
             break;
           }
@@ -403,7 +399,7 @@ P.cubeRoot = P.cbrt = function () {
 
           // Truncate to the first rounding digit.
           finalise(r, e + 1, 1);
-          m = !r.times(r).times(r).eq(x);
+          m = !eq(mul(mul(r, r), r), x);
         }
 
         break;
@@ -414,21 +410,21 @@ P.cubeRoot = P.cbrt = function () {
   external = true;
 
   return finalise(r, e, Ctor.rounding, m);
-};
+}
 
 
 /*
  * Return the number of decimal places of the value of this Decimal.
  *
  */
-P.decimalPlaces = P.dp = function () {
+function dp(x) {
   var w,
-    d = this.d,
+    d = x.d,
     n = NaN;
 
   if (d) {
     w = d.length - 1;
-    n = (w - mathfloor(this.e / LOG_BASE)) * LOG_BASE;
+    n = (w - mathfloor(x.e / LOG_BASE)) * LOG_BASE;
 
     // Subtract the number of trailing zeros of the last word.
     w = d[w];
@@ -437,7 +433,7 @@ P.decimalPlaces = P.dp = function () {
   }
 
   return n;
-};
+}
 
 
 /*
@@ -461,9 +457,9 @@ P.decimalPlaces = P.dp = function () {
  * `precision` significant digits using rounding mode `rounding`.
  *
  */
-P.dividedBy = P.div = function (y) {
-  return divide(this, new this.constructor(y));
-};
+function div(x, y) {
+  return divide(x, new x.constructor(y));
+}
 
 
 /*
@@ -471,20 +467,19 @@ P.dividedBy = P.div = function (y) {
  * by the value of `y`, rounded to `precision` significant digits using rounding mode `rounding`.
  *
  */
-P.dividedToIntegerBy = P.divToInt = function (y) {
-  var x = this,
-    Ctor = x.constructor;
+function divToInt(x, y) {
+  var Ctor = x.constructor;
   return finalise(divide(x, new Ctor(y), 0, 1, 1), Ctor.precision, Ctor.rounding);
-};
+}
 
 
 /*
  * Return true if the value of this Decimal is equal to the value of `y`, otherwise return false.
  *
  */
-P.equals = P.eq = function (y) {
-  return this.cmp(y) === 0;
-};
+function eq(x, y) {
+  return cmp(x, y) === 0;
+}
 
 
 /*
@@ -492,9 +487,9 @@ P.equals = P.eq = function (y) {
  * direction of negative Infinity.
  *
  */
-P.floor = function () {
-  return finalise(new this.constructor(this), this.e + 1, 3);
-};
+function floor(x) {
+  return finalise(new x.constructor(x), x.e + 1, 3);
+}
 
 
 /*
@@ -502,9 +497,9 @@ P.floor = function () {
  * false.
  *
  */
-P.greaterThan = P.gt = function (y) {
-  return this.cmp(y) > 0;
-};
+function gt(x, y) {
+  return cmp(x, y) > 0;
+}
 
 
 /*
@@ -512,10 +507,10 @@ P.greaterThan = P.gt = function (y) {
  * otherwise return false.
  *
  */
-P.greaterThanOrEqualTo = P.gte = function (y) {
-  var k = this.cmp(y);
+function gte(x, y) {
+  var k = cmp(x, y);
   return k == 1 || k === 0;
-};
+}
 
 
 /*
@@ -543,18 +538,17 @@ P.greaterThanOrEqualTo = P.gte = function (y) {
  * TODO? Compare performance of cosh(x) = 0.5 * (exp(x) + exp(-x))
  *
  */
-P.hyperbolicCosine = P.cosh = function () {
+function cosh(x) {
   var k, n, pr, rm, len,
-    x = this,
     Ctor = x.constructor,
     one = new Ctor(1);
 
-  if (!x.isFinite()) return new Ctor(x.s ? 1 / 0 : NaN);
-  if (x.isZero()) return one;
+  if (!decimalIsFinite(x)) return new Ctor(x.s ? 1 / 0 : NaN);
+  if (isZero(x)) return one;
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  Ctor.precision = pr + Math.max(x.e, x.sd()) + 4;
+  Ctor.precision = pr + Math.max(x.e, sd(x)) + 4;
   Ctor.rounding = 1;
   len = x.d.length;
 
@@ -571,19 +565,19 @@ P.hyperbolicCosine = P.cosh = function () {
     n = '2.3283064365386962890625e-10';
   }
 
-  x = taylorSeries(Ctor, 1, x.times(n), new Ctor(1), true);
+  x = taylorSeries(Ctor, 1, mul(x, n), new Ctor(1), true);
 
   // Reverse argument reduction
   var cosh2_x,
     i = k,
     d8 = new Ctor(8);
   for (; i--;) {
-    cosh2_x = x.times(x);
-    x = one.minus(cosh2_x.times(d8.minus(cosh2_x.times(d8))));
+    cosh2_x = mul(x, x);
+    x = sub(one, mul(cosh2_x, sub(d8, mul(cosh2_x, d8))));
   }
 
   return finalise(x, Ctor.precision = pr, Ctor.rounding = rm, true);
-};
+}
 
 
 /*
@@ -616,16 +610,15 @@ P.hyperbolicCosine = P.cosh = function () {
  * TODO? Compare performance of sinh(x) = 0.5 * (exp(x) - exp(-x))
  *
  */
-P.hyperbolicSine = P.sinh = function () {
+function sinh(x) {
   var k, pr, rm, len,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite() || x.isZero()) return new Ctor(x);
+  if (!decimalIsFinite(x) || isZero(x)) return new Ctor(x);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  Ctor.precision = pr + Math.max(x.e, x.sd()) + 4;
+  Ctor.precision = pr + Math.max(x.e, sd(x)) + 4;
   Ctor.rounding = 1;
   len = x.d.length;
 
@@ -645,7 +638,7 @@ P.hyperbolicSine = P.sinh = function () {
     k = 1.4 * Math.sqrt(len);
     k = k > 16 ? 16 : k | 0;
 
-    x = x.times(1 / tinyPow(5, k));
+    x = mul(x, 1 / tinyPow(5, k));
     x = taylorSeries(Ctor, 2, x, x, true);
 
     // Reverse argument reduction
@@ -654,8 +647,8 @@ P.hyperbolicSine = P.sinh = function () {
       d16 = new Ctor(16),
       d20 = new Ctor(20);
     for (; k--;) {
-      sinh2_x = x.times(x);
-      x = x.times(d5.plus(sinh2_x.times(d16.times(sinh2_x).plus(d20))));
+      sinh2_x = mul(x, x);
+      x = mul(x, add(d5, mul(sinh2_x, add(mul(d16, sinh2_x), d20))));
     }
   }
 
@@ -663,7 +656,7 @@ P.hyperbolicSine = P.sinh = function () {
   Ctor.rounding = rm;
 
   return finalise(x, pr, rm, true);
-};
+}
 
 
 /*
@@ -682,21 +675,20 @@ P.hyperbolicSine = P.sinh = function () {
  * tanh(NaN)       = NaN
  *
  */
-P.hyperbolicTangent = P.tanh = function () {
+function tanh(x) {
   var pr, rm,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite()) return new Ctor(x.s);
-  if (x.isZero()) return new Ctor(x);
+  if (!decimalIsFinite(x)) return new Ctor(x.s);
+  if (isZero(x)) return new Ctor(x);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
   Ctor.precision = pr + 7;
   Ctor.rounding = 1;
 
-  return divide(x.sinh(), x.cosh(), Ctor.precision = pr, Ctor.rounding = rm);
-};
+  return divide(sinh(x), cosh(x), Ctor.precision = pr, Ctor.rounding = rm);
+}
 
 
 /*
@@ -718,22 +710,21 @@ P.hyperbolicTangent = P.tanh = function () {
  * acos(NaN)     = NaN
  *
  */
-P.inverseCosine = P.acos = function () {
-  var x = this,
-    Ctor = x.constructor,
-    k = x.abs().cmp(1),
+function acos(x) {
+  var Ctor = x.constructor,
+    k = cmp(abs(x), 1),
     pr = Ctor.precision,
     rm = Ctor.rounding;
 
   if (k !== -1) {
     return k === 0
       // |x| is 1
-      ? x.isNeg() ? getPi(Ctor, pr, rm) : new Ctor(0)
+      ? isNeg(x) ? getPi(Ctor, pr, rm) : new Ctor(0)
       // |x| > 1 or x is NaN
       : new Ctor(NaN);
   }
 
-  if (x.isZero()) return getPi(Ctor, pr + 4, rm).times(0.5);
+  if (isZero(x)) return mul(getPi(Ctor, pr + 4, rm), 0.5);
 
   // TODO? Special case acos(0.5) = pi/3 and acos(-0.5) = 2*pi/3
 
@@ -741,13 +732,13 @@ P.inverseCosine = P.acos = function () {
   Ctor.rounding = 1;
 
   // See https://github.com/MikeMcl/decimal.js/pull/217
-  x = new Ctor(1).minus(x).div(x.plus(1)).sqrt().atan();
+  x = atan(sqrt(div(sub(new Ctor(1), x), add(x, 1))));
 
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return x.times(2);
-};
+  return mul(x, 2);
+}
 
 
 /*
@@ -769,28 +760,27 @@ P.inverseCosine = P.acos = function () {
  * acosh(-1)        = NaN
  *
  */
-P.inverseHyperbolicCosine = P.acosh = function () {
+function acosh(x) {
   var pr, rm,
-    x = this,
     Ctor = x.constructor;
 
-  if (x.lte(1)) return new Ctor(x.eq(1) ? 0 : NaN);
-  if (!x.isFinite()) return new Ctor(x);
+  if (lte(x, 1)) return new Ctor(eq(x, 1) ? 0 : NaN);
+  if (!decimalIsFinite(x)) return new Ctor(x);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  Ctor.precision = pr + Math.max(Math.abs(x.e), x.sd()) + 4;
+  Ctor.precision = pr + Math.max(Math.abs(x.e), sd(x)) + 4;
   Ctor.rounding = 1;
   external = false;
 
-  x = x.times(x).minus(1).sqrt().plus(x);
+  x = add(sqrt(sub(mul(x, x), 1)), x);
 
   external = true;
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return x.ln();
-};
+  return ln(x);
+}
 
 
 /*
@@ -809,27 +799,26 @@ P.inverseHyperbolicCosine = P.acosh = function () {
  * asinh(-0)        = -0
  *
  */
-P.inverseHyperbolicSine = P.asinh = function () {
+function asinh(x) {
   var pr, rm,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite() || x.isZero()) return new Ctor(x);
+  if (!decimalIsFinite(x) || isZero(x)) return new Ctor(x);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  Ctor.precision = pr + 2 * Math.max(Math.abs(x.e), x.sd()) + 6;
+  Ctor.precision = pr + 2 * Math.max(Math.abs(x.e), sd(x)) + 6;
   Ctor.rounding = 1;
   external = false;
 
-  x = x.times(x).plus(1).sqrt().plus(x);
+  x = add(sqrt(add(mul(x, x), 1)), x);
 
   external = true;
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return x.ln();
-};
+  return ln(x);
+}
 
 
 /*
@@ -851,34 +840,33 @@ P.inverseHyperbolicSine = P.asinh = function () {
  * atanh(-1)        = -Infinity
  *
  */
-P.inverseHyperbolicTangent = P.atanh = function () {
+function atanh(x) {
   var pr, rm, wpr, xsd,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite()) return new Ctor(NaN);
-  if (x.e >= 0) return new Ctor(x.abs().eq(1) ? x.s / 0 : x.isZero() ? x : NaN);
+  if (!decimalIsFinite(x)) return new Ctor(NaN);
+  if (x.e >= 0) return new Ctor(eq(abs(x), 1) ? x.s / 0 : isZero(x) ? x : NaN);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  xsd = x.sd();
+  xsd = sd(x);
 
   if (Math.max(xsd, pr) < 2 * -x.e - 1) return finalise(new Ctor(x), pr, rm, true);
 
   Ctor.precision = wpr = xsd - x.e;
 
-  x = divide(x.plus(1), new Ctor(1).minus(x), wpr + pr, 1);
+  x = divide(add(x, 1), sub(new Ctor(1), x), wpr + pr, 1);
 
   Ctor.precision = pr + 4;
   Ctor.rounding = 1;
 
-  x = x.ln();
+  x = ln(x);
 
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return x.times(0.5);
-};
+  return mul(x, 0.5);
+}
 
 
 /*
@@ -902,15 +890,14 @@ P.inverseHyperbolicTangent = P.atanh = function () {
  * TODO? Compare performance of Taylor series.
  *
  */
-P.inverseSine = P.asin = function () {
+function asin(x) {
   var halfPi, k,
     pr, rm,
-    x = this,
     Ctor = x.constructor;
 
-  if (x.isZero()) return new Ctor(x);
+  if (isZero(x)) return new Ctor(x);
 
-  k = x.abs().cmp(1);
+  k = cmp(abs(x), 1);
   pr = Ctor.precision;
   rm = Ctor.rounding;
 
@@ -918,7 +905,7 @@ P.inverseSine = P.asin = function () {
 
     // |x| is 1
     if (k === 0) {
-      halfPi = getPi(Ctor, pr + 4, rm).times(0.5);
+      halfPi = mul(getPi(Ctor, pr + 4, rm), 0.5);
       halfPi.s = x.s;
       return halfPi;
     }
@@ -933,13 +920,13 @@ P.inverseSine = P.asin = function () {
   Ctor.rounding = 1;
 
   // See https://github.com/MikeMcl/decimal.js/issues/249
-  x = x.div(new Ctor(1).minus(x).times(new Ctor(1).plus(x)).sqrt().plus(1)).atan();
+  x = atan(div(x, add(sqrt(mul(sub(new Ctor(1), x), add(new Ctor(1), x))), 1)));
 
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return x.times(2);
-};
+  return mul(x, 2);
+}
 
 
 /*
@@ -960,24 +947,23 @@ P.inverseSine = P.asin = function () {
  * atan(NaN)       = NaN
  *
  */
-P.inverseTangent = P.atan = function () {
+function atan(x) {
   var i, j, k, n, px, t, r, wpr, x2,
-    x = this,
     Ctor = x.constructor,
     pr = Ctor.precision,
     rm = Ctor.rounding;
 
-  if (!x.isFinite()) {
+  if (!decimalIsFinite(x)) {
     if (!x.s) return new Ctor(NaN);
     if (pr + 4 <= PI_PRECISION) {
-      r = getPi(Ctor, pr + 4, rm).times(0.5);
+      r = mul(getPi(Ctor, pr + 4, rm), 0.5);
       r.s = x.s;
       return r;
     }
-  } else if (x.isZero()) {
+  } else if (isZero(x)) {
     return new Ctor(x);
-  } else if (x.abs().eq(1) && pr + 4 <= PI_PRECISION) {
-    r = getPi(Ctor, pr + 4, rm).times(0.25);
+  } else if (eq(abs(x), 1) && pr + 4 <= PI_PRECISION) {
+    r = mul(getPi(Ctor, pr + 4, rm), 0.25);
     r.s = x.s;
     return r;
   }
@@ -993,105 +979,105 @@ P.inverseTangent = P.atan = function () {
 
   k = Math.min(28, wpr / LOG_BASE + 2 | 0);
 
-  for (i = k; i; --i) x = x.div(x.times(x).plus(1).sqrt().plus(1));
+  for (i = k; i; --i) x = div(x, add(sqrt(add(mul(x, x), 1)), 1));
 
   external = false;
 
   j = Math.ceil(wpr / LOG_BASE);
   n = 1;
-  x2 = x.times(x);
+  x2 = mul(x, x);
   r = new Ctor(x);
   px = x;
 
   // atan(x) = x - x^3/3 + x^5/5 - x^7/7 + ...
   for (; i !== -1;) {
-    px = px.times(x2);
-    t = r.minus(px.div(n += 2));
+    px = mul(px, x2);
+    t = sub(r, div(px, n += 2));
 
-    px = px.times(x2);
-    r = t.plus(px.div(n += 2));
+    px = mul(px, x2);
+    r = add(t, div(px, n += 2));
 
     if (r.d[j] !== void 0) for (i = j; r.d[i] === t.d[i] && i--;);
   }
 
-  if (k) r = r.times(2 << (k - 1));
+  if (k) r = mul(r, 2 << (k - 1));
 
   external = true;
 
   return finalise(r, Ctor.precision = pr, Ctor.rounding = rm, true);
-};
+}
 
 
 /*
  * Return true if the value of this Decimal is a finite number, otherwise return false.
  *
  */
-P.isFinite = function () {
-  return !!this.d;
-};
+function decimalIsFinite(x) {
+  return !!x.d;
+}
 
 
 /*
  * Return true if the value of this Decimal is an integer, otherwise return false.
  *
  */
-P.isInteger = P.isInt = function () {
-  return !!this.d && mathfloor(this.e / LOG_BASE) > this.d.length - 2;
-};
+function isInt(x) {
+  return !!x.d && mathfloor(x.e / LOG_BASE) > x.d.length - 2;
+}
 
 
 /*
  * Return true if the value of this Decimal is NaN, otherwise return false.
  *
  */
-P.isNaN = function () {
-  return !this.s;
-};
+function decimalIsNaN(x) {
+  return !x.s;
+}
 
 
 /*
  * Return true if the value of this Decimal is negative, otherwise return false.
  *
  */
-P.isNegative = P.isNeg = function () {
-  return this.s < 0;
-};
+function isNeg(x) {
+  return x.s < 0;
+}
 
 
 /*
  * Return true if the value of this Decimal is positive, otherwise return false.
  *
  */
-P.isPositive = P.isPos = function () {
-  return this.s > 0;
-};
+function isPos(x) {
+  return x.s > 0;
+}
 
 
 /*
  * Return true if the value of this Decimal is 0 or -0, otherwise return false.
  *
  */
-P.isZero = function () {
-  return !!this.d && this.d[0] === 0;
-};
+function isZero(x) {
+  return !!x.d && x.d[0] === 0;
+}
 
 
 /*
  * Return true if the value of this Decimal is less than `y`, otherwise return false.
  *
  */
-P.lessThan = P.lt = function (y) {
-  return this.cmp(y) < 0;
-};
+function lt(x, y) {
+  return cmp(x, y) < 0;
+}
 
 
 /*
  * Return true if the value of this Decimal is less than or equal to `y`, otherwise return false.
  *
  */
-P.lessThanOrEqualTo = P.lte = function (y) {
-  return this.cmp(y) < 1;
-};
+function lte(x, y) {
+  return cmp(x, y) < 1;
+}
 
 
 /*
@@ -1124,9 +1110,9 @@ P.lessThanOrEqualTo = P.lte = function (y) {
  * [base] {number|string|bigint|Decimal} The base of the logarithm.
  *
  */
-P.logarithm = P.log = function (base) {
+function log(x, base) {
   var isBase10, d, denominator, k, inf, num, sd, r,
-    arg = this,
+    arg = x,
     Ctor = arg.constructor,
     pr = Ctor.precision,
     rm = Ctor.rounding,
@@ -1141,15 +1127,15 @@ P.logarithm = P.log = function (base) {
     d = base.d;
 
     // Return NaN if base is negative, or non-finite, or is 0 or 1.
-    if (base.s < 0 || !d || !d[0] || base.eq(1)) return new Ctor(NaN);
+    if (base.s < 0 || !d || !d[0] || eq(base, 1)) return new Ctor(NaN);
 
-    isBase10 = base.eq(10);
+    isBase10 = eq(base, 10);
   }
 
   d = arg.d;
 
   // Is arg negative, non-finite, 0 or 1?
-  if (arg.s < 0 || !d || !d[0] || arg.eq(1)) {
+  if (arg.s < 0 || !d || !d[0] || eq(arg, 1)) {
     return new Ctor(d && !d[0] ? -1 / 0 : arg.s != 1 ? NaN : d ? 0 : 1 / 0);
   }
 
@@ -1209,7 +1195,7 @@ P.logarithm = P.log = function (base) {
   external = true;
 
   return finalise(r, pr, rm);
-};
+}
 
 
 /*
@@ -1257,9 +1243,8 @@ P.min = function () {
  * significant digits using rounding mode `rounding`.
  *
  */
-P.minus = P.sub = function (y) {
+function sub(x, y) {
   var d, e, i, j, k, len, pr, rm, xd, xe, xLTy, yd,
-    x = this,
     Ctor = x.constructor;
 
   y = new Ctor(y);
@@ -1284,7 +1269,7 @@ P.minus = P.sub = function (y) {
   // If signs differ...
   if (x.s != y.s) {
     y.s = -y.s;
-    return x.plus(y);
+    return add(x, y);
   }
 
   xd = x.d;
@@ -1404,7 +1389,7 @@ P.minus = P.sub = function (y) {
   y.e = getBase10Exponent(xd, e);
 
   return external ? finalise(y, pr, rm) : y;
-};
+}
 
 
 /*
@@ -1431,9 +1416,8 @@ P.minus = P.sub = function (y) {
  * The result depends on the modulo mode.
  *
  */
-P.modulo = P.mod = function (y) {
+function mod(x, y) {
   var q,
-    x = this,
     Ctor = x.constructor;
 
   y = new Ctor(y);
@@ -1453,18 +1437,18 @@ P.modulo = P.mod = function (y) {
 
     // Euclidian division: q = sign(y) * floor(x / abs(y))
     // result = x - q * y    where  0 <= result < abs(y)
-    q = divide(x, y.abs(), 0, 3, 1);
+    q = divide(x, abs(y), 0, 3, 1);
     q.s *= y.s;
   } else {
     q = divide(x, y, 0, Ctor.modulo, 1);
   }
 
-  q = q.times(y);
+  q = mul(q, y);
 
   external = true;
 
-  return x.minus(q);
-};
+  return sub(x, q);
+}
 
 
 /*
@@ -1473,9 +1457,9 @@ P.modulo = P.mod = function (y) {
  * significant digits using rounding mode `rounding`.
  *
  */
-P.naturalExponential = P.exp = function () {
-  return naturalExponential(this);
-};
+function exp(x) {
+  return naturalExponential(x);
+}
 
 
 /*
@@ -1483,9 +1467,9 @@ P.naturalExponential = P.exp = function () {
  * rounded to `precision` significant digits using rounding mode `rounding`.
  *
  */
-P.naturalLogarithm = P.ln = function () {
-  return naturalLogarithm(this);
-};
+function ln(x) {
+  return naturalLogarithm(x);
+}
 
 
 /*
@@ -1493,11 +1477,11 @@ P.naturalLogarithm = P.ln = function () {
  * -1.
  *
  */
-P.negated = P.neg = function () {
-  var x = new this.constructor(this);
+function neg(x) {
+  x = new x.constructor(x);
   x.s = -x.s;
   return finalise(x);
-};
+}
 
 
 /*
@@ -1521,9 +1505,8 @@ P.negated = P.neg = function () {
  * significant digits using rounding mode `rounding`.
  *
  */
-P.plus = P.add = function (y) {
+function add(x, y) {
   var carry, d, e, i, k, len, pr, rm, xd, yd,
-    x = this,
     Ctor = x.constructor;
 
   y = new Ctor(y);
@@ -1546,7 +1529,7 @@ P.plus = P.add = function (y) {
    // If signs differ...
   if (x.s != y.s) {
     y.s = -y.s;
-    return x.minus(y);
+    return sub(x, y);
   }
 
   xd = x.d;
@@ -1631,7 +1614,7 @@ P.plus = P.add = function (y) {
   y.e = getBase10Exponent(xd, e);
 
   return external ? finalise(y, pr, rm) : y;
-};
+}
 
 
 /*
@@ -1640,9 +1623,8 @@ P.plus = P.add = function (y) {
  * [z] {boolean|number} Whether to count integer-part trailing zeros: true, false, 1 or 0.
  *
  */
-P.precision = P.sd = function (z) {
-  var k,
-    x = this;
+function sd(x, z) {
+  var k;
 
   if (z !== void 0 && z !== !!z && z !== 1 && z !== 0) throw Error(invalidArgument + z);
 
@@ -1654,7 +1636,7 @@ P.precision = P.sd = function (z) {
   }
 
   return k;
-};
+}
 
 
 /*
@@ -1662,12 +1644,11 @@ P.precision = P.sd = function (z) {
  * rounding mode `rounding`.
  *
  */
-P.round = function () {
-  var x = this,
-    Ctor = x.constructor;
+function round(x) {
+  var Ctor = x.constructor;
 
   return finalise(new Ctor(x), x.e + 1, Ctor.rounding);
-};
+}
 
 
 /*
@@ -1685,17 +1666,16 @@ P.round = function () {
  * sin(NaN)       = NaN
  *
  */
-P.sine = P.sin = function () {
+function sin(x) {
   var pr, rm,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite()) return new Ctor(NaN);
-  if (x.isZero()) return new Ctor(x);
+  if (!decimalIsFinite(x)) return new Ctor(NaN);
+  if (isZero(x)) return new Ctor(x);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
-  Ctor.precision = pr + Math.max(x.e, x.sd()) + LOG_BASE;
+  Ctor.precision = pr + Math.max(x.e, sd(x)) + LOG_BASE;
   Ctor.rounding = 1;
 
   x = sine(Ctor, toLessThanHalfPi(Ctor, x));
@@ -1703,8 +1683,8 @@ P.sine = P.sin = function () {
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return finalise(quadrant > 2 ? x.neg() : x, pr, rm, true);
-};
+  return finalise(quadrant > 2 ? neg(x) : x, pr, rm, true);
+}
 
 
 /*
@@ -1719,9 +1699,8 @@ P.sine = P.sin = function () {
  *  sqrt(-0) = -0
  *
  */
-P.squareRoot = P.sqrt = function () {
+function sqrt(x) {
   var m, n, sd, r, rep, t,
-    x = this,
     d = x.d,
     e = x.e,
     s = x.s,
@@ -1763,7 +1742,7 @@ P.squareRoot = P.sqrt = function () {
   // Newton-Raphson iteration.
   for (;;) {
     t = r;
-    r = t.plus(divide(x, t, sd + 2, 1)).times(0.5);
+    r = mul(add(t, divide(x, t, sd + 2, 1)), 0.5);
 
     // TODO? Replace with for-loop and checkRoundingDigits.
     if (digitsToString(t.d).slice(0, sd) === (n = digitsToString(r.d)).slice(0, sd)) {
@@ -1778,7 +1757,7 @@ P.squareRoot = P.sqrt = function () {
         if (!rep) {
           finalise(t, e + 1, 0);
 
-          if (t.times(t).eq(x)) {
+          if (eq(mul(t, t), x)) {
             r = t;
             break;
           }
@@ -1794,7 +1773,7 @@ P.squareRoot = P.sqrt = function () {
 
           // Truncate to the first rounding digit.
           finalise(r, e + 1, 1);
-          m = !r.times(r).eq(x);
+          m = !eq(mul(r, r), x);
         }
 
         break;
@@ -1805,7 +1784,7 @@ P.squareRoot = P.sqrt = function () {
   external = true;
 
   return finalise(r, e, Ctor.rounding, m);
-};
+}
 
 
 /*
@@ -1821,28 +1800,27 @@ P.squareRoot = P.sqrt = function () {
  * tan(NaN)       = NaN
  *
  */
-P.tangent = P.tan = function () {
+function tan(x) {
   var pr, rm,
-    x = this,
     Ctor = x.constructor;
 
-  if (!x.isFinite()) return new Ctor(NaN);
-  if (x.isZero()) return new Ctor(x);
+  if (!decimalIsFinite(x)) return new Ctor(NaN);
+  if (isZero(x)) return new Ctor(x);
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
   Ctor.precision = pr + 10;
   Ctor.rounding = 1;
 
-  x = x.sin();
+  x = sin(x);
   x.s = 1;
-  x = divide(x, new Ctor(1).minus(x.times(x)).sqrt(), pr + 10, 0);
+  x = divide(x, sqrt(sub(new Ctor(1), mul(x, x))), pr + 10, 0);
 
   Ctor.precision = pr;
   Ctor.rounding = rm;
 
-  return finalise(quadrant == 2 || quadrant == 4 ? x.neg() : x, pr, rm, true);
-};
+  return finalise(quadrant == 2 || quadrant == 4 ? neg(x) : x, pr, rm, true);
+}
 
 
 /*
@@ -1866,9 +1844,8 @@ P.tangent = P.tan = function () {
  * digits using rounding mode `rounding`.
  *
  */
-P.times = P.mul = function (y) {
+function mul(x, y) {
   var carry, e, i, k, r, rL, t, xdL, ydL,
-    x = this,
     Ctor = x.constructor,
     xd = x.d,
     yd = (y = new Ctor(y)).d;
@@ -1930,7 +1907,7 @@ P.times = P.mul = function (y) {
   y.e = getBase10Exponent(r, e);
 
   return external ? finalise(y, Ctor.precision, Ctor.rounding) : y;
-};
+}
 
 
 /*
@@ -1943,9 +1920,9 @@ P.times = P.mul = function (y) {
  * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
  *
  */
-P.toBinary = function (sd, rm) {
-  return toStringBinary(this, 2, sd, rm);
-};
+function toBinary(x, sd, rm) {
+  return toStringBinary(x, 2, sd, rm);
+}
 
 
 /*
@@ -1958,9 +1935,8 @@ P.toBinary = function (sd, rm) {
  * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
  *
  */
-P.toDecimalPlaces = P.toDP = function (dp, rm) {
-  var x = this,
-    Ctor = x.constructor;
+function toDP(x, dp, rm) {
+  var Ctor = x.constructor;
 
   x = new Ctor(x);
   if (dp === void 0) return x;
@@ -1971,7 +1947,7 @@ P.toDecimalPlaces = P.toDP = function (dp, rm) {
   else checkInt32(rm, 0, 8);
 
   return finalise(x, dp + x.e + 1, rm);
-};
+}
 
 
 /*
@@ -1982,9 +1958,8 @@ P.toDecimalPlaces = P.toDP = function (dp, rm) {
  * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
  *
  */
-P.toExponential = function (dp, rm) {
+function toExponential(x, dp, rm) {
   var str,
-    x = this,
     Ctor = x.constructor;
 
   if (dp === void 0) {
@@ -1999,8 +1974,8 @@ P.toExponential = function (dp, rm) {
     str = finiteToString(x, true, dp + 1);
   }
 
-  return x.isNeg() && !x.isZero() ? '-' + str : str;
-};
+  return isNeg(x) && !isZero(x) ? '-' + str : str;
+}
 
 
 /*
@@ -2019,9 +1994,8 @@ P.toExponential = function (dp, rm) {
  * (-0.5).toFixed(0) is '-0'.
  *
  */
-P.toFixed = function (dp, rm) {
+function toFixed(x, dp, rm) {
   var str, y,
-    x = this,
     Ctor = x.constructor;
 
   if (dp === void 0) {
@@ -2038,8 +2012,8 @@ P.toFixed = function (dp, rm) {
 
   // To determine whether to add the minus sign look at the value before it was rounded,
   // i.e. look at `x` rather than `y`.
-  return x.isNeg() && !x.isZero() ? '-' + str : str;
-};
+  return isNeg(x) && !isZero(x) ? '-' + str : str;
+}
 
 
 /*
@@ -2053,9 +2027,8 @@ P.toFixed = function (dp, rm) {
  * [maxD] {number|string|bigint|Decimal} Maximum denominator. Integer >= 1 and < Infinity.
  *
  */
-P.toFraction = function (maxD) {
+function toFraction(x, maxD) {
   var d, d0, d1, d2, e, k, n, n0, n1, pr, q, r,
-    x = this,
     xd = x.d,
     Ctor = x.constructor;
 
@@ -2075,8 +2048,8 @@ P.toFraction = function (maxD) {
     maxD = e > 0 ? d : n1;
   } else {
     n = new Ctor(maxD);
-    if (!n.isInt() || n.lt(n1)) throw Error(invalidArgument + n);
-    maxD = n.gt(d) ? (e > 0 ? d : n1) : n;
+    if (!isInt(n) || lt(n, n1)) throw Error(invalidArgument + n);
+    maxD = gt(n, d) ? (e > 0 ? d : n1) : n;
   }
 
   external = false;
@@ -2086,32 +2059,32 @@ P.toFraction = function (maxD) {
 
   for (;;)  {
     q = divide(n, d, 0, 1, 1);
-    d2 = d0.plus(q.times(d1));
-    if (d2.cmp(maxD) == 1) break;
+    d2 = add(d0, mul(q, d1));
+    if (cmp(d2, maxD) == 1) break;
     d0 = d1;
     d1 = d2;
     d2 = n1;
-    n1 = n0.plus(q.times(d2));
+    n1 = add(n0, mul(q, d2));
     n0 = d2;
     d2 = d;
-    d = n.minus(q.times(d2));
+    d = sub(n, mul(q, d2));
     n = d2;
   }
 
-  d2 = divide(maxD.minus(d0), d1, 0, 1, 1);
-  n0 = n0.plus(d2.times(n1));
-  d0 = d0.plus(d2.times(d1));
+  d2 = divide(sub(maxD, d0), d1, 0, 1, 1);
+  n0 = add(n0, mul(d2, n1));
+  d0 = add(d0, mul(d2, d1));
   n0.s = n1.s = x.s;
 
   // Determine which fraction is closer to x, n0/d0 or n1/d1?
-  r = divide(n1, d1, e, 1).minus(x).abs().cmp(divide(n0, d0, e, 1).minus(x).abs()) < 1
+  r = cmp(abs(sub(divide(n1, d1, e, 1), x)), abs(sub(divide(n0, d0, e, 1), x))) < 1
       ? [n1, d1] : [n0, d0];
 
   Ctor.precision = pr;
   external = true;
 
   return r;
-};
+}
 
 
 /*
@@ -2124,9 +2097,9 @@ P.toFraction = function (maxD) {
  * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
  *
  */
-P.toHexadecimal = P.toHex = function (sd, rm) {
-  return toStringBinary(this, 16, sd, rm);
-};
+function toHex(x, sd, rm) {
+  return toStringBinary(x, 16, sd, rm);
+}
 
 
 /*
@@ -2145,9 +2118,8 @@ P.toHexadecimal = P.toHex = function (sd, rm) {
  * 'toNearest() rounding mode out of range: {rm}'
  *
  */
-P.toNearest = function (y, rm) {
-  var x = this,
-    Ctor = x.constructor;
+function toNearest(x, y, rm) {
+  var Ctor = x.constructor;
 
   x = new Ctor(x);
 
@@ -2179,7 +2151,7 @@ P.toNearest = function (y, rm) {
   // If y is not zero, calculate the nearest multiple of y to x.
   if (y.d[0]) {
     external = false;
-    x = divide(x, y, 0, rm, 1).times(y);
+    x = mul(divide(x, y, 0, rm, 1), y);
     external = true;
     finalise(x);
 
@@ -2190,7 +2162,7 @@ P.toNearest = function (y, rm) {
   }
 
   return x;
-};
+}
 
 
 /*
@@ -2198,9 +2170,9 @@ P.toNearest = function (y, rm) {
  * Zero keeps its sign.
  *
  */
-P.toNumber = function () {
-  return +this;
-};
+function toNumber(x) {
+  return +x;
+}
 
 
 /*
@@ -2213,9 +2185,9 @@ P.toNumber = function () {
  * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
  *
  */
-P.toOctal = function (sd, rm) {
-  return toStringBinary(this, 8, sd, rm);
-};
+function toOctal(x, sd, rm) {
+  return toStringBinary(x, 8, sd, rm);
+}
 
 
 /*
@@ -2261,9 +2233,8 @@ P.toOctal = function (sd, rm) {
  * y {number|string|bigint|Decimal} The power to which to raise this Decimal.
  *
  */
-P.toPower = P.pow = function (y) {
+function pow(x, y) {
   var e, k, pr, r, rm, s,
-    x = this,
     Ctor = x.constructor,
     yn = +(y = new Ctor(y));
 
@@ -2272,12 +2243,12 @@ P.toPower = P.pow = function (y) {
 
   x = new Ctor(x);
 
-  if (x.eq(1)) return x;
+  if (eq(x, 1)) return x;
 
   pr = Ctor.precision;
   rm = Ctor.rounding;
 
-  if (y.eq(1)) return finalise(x, pr, rm);
+  if (eq(y, 1)) return finalise(x, pr, rm);
 
   // y exponent
   e = mathfloor(y.e / LOG_BASE);
@@ -2285,7 +2256,7 @@ P.toPower = P.pow = function (y) {
   // If y is a small integer use the 'exponentiation by squaring' algorithm.
   if (e >= y.d.length - 1 && (k = yn < 0 ? -yn : yn) <= MAX_SAFE_INTEGER) {
     r = intPow(Ctor, x, k, pr);
-    return y.s < 0 ? new Ctor(1).div(r) : finalise(r, pr, rm);
+    return y.s < 0 ? div(new Ctor(1), r) : finalise(r, pr, rm);
   }
 
   s = x.s;
@@ -2330,7 +2301,7 @@ P.toPower = P.pow = function (y) {
   k = Math.min(12, (e + '').length);
 
   // r = x^y = exp(y*ln(x))
-  r = naturalExponential(y.times(naturalLogarithm(x, pr + k)), pr);
+  r = naturalExponential(mul(y, naturalLogarithm(x, pr + k)), pr);
 
   // r may be Infinity, e.g. (0.9999999999999999).pow(-1e+40)
   if (r.d) {
@@ -2344,7 +2315,7 @@ P.toPower = P.pow = function (y) {
       e = pr + 10;
 
       // Truncate to the increased precision plus five rounding digits.
-      r = finalise(naturalExponential(y.times(naturalLogarithm(x, e + k)), e), e + 5, 1);
+      r = finalise(naturalExponential(mul(y, naturalLogarithm(x, e + k)), e), e + 5, 1);
 
       // Check for 14 nines from the 2nd rounding digit (the first rounding digit may be 4 or 9).
       if (+digitsToString(r.d).slice(pr + 1, pr + 15) + 1 == 1e14) {
@@ -2358,7 +2329,7 @@ P.toPower = P.pow = function (y) {
   Ctor.rounding = rm;
 
   return finalise(r, pr, rm);
-};
+}
 
 
 /*
@@ -2372,9 +2343,8 @@ P.toPower = P.pow = function (y) {
  * [rm] {number} Rounding mode. Integer, 0 to 8 inclusive.
  *
  */
-P.toPrecision = function (sd, rm) {
+function toPrecision(x, sd, rm) {
   var str,
-    x = this,
     Ctor = x.constructor;
 
   if (sd === void 0) {
@@ -2389,8 +2359,8 @@ P.toPrecision = function (sd, rm) {
     str = finiteToString(x, sd <= x.e || x.e <= Ctor.toExpNeg, sd);
   }
 
-  return x.isNeg() && !x.isZero() ? '-' + str : str;
-};
+  return isNeg(x) && !isZero(x) ? '-' + str : str;
+}
 
 
 /*
@@ -2407,9 +2377,8 @@ P.toPrecision = function (sd, rm) {
  * 'toSD() rounding mode out of range: {rm}'
  *
  */
-P.toSignificantDigits = P.toSD = function (sd, rm) {
-  var x = this,
-    Ctor = x.constructor;
+function toSD(x, sd, rm) {
+  var Ctor = x.constructor;
 
   if (sd === void 0) {
     sd = Ctor.precision;
@@ -2422,7 +2391,7 @@ P.toSignificantDigits = P.toSD = function (sd, rm) {
   }
 
   return finalise(new Ctor(x), sd, rm);
-};
+}
 
 
 /*
@@ -2432,22 +2401,21 @@ P.toSignificantDigits = P.toSD = function (sd, rm) {
  * `toExpPos`, or a negative exponent equal to or less than `toExpNeg`.
  *
  */
-P.toString = function () {
-  var x = this,
-    Ctor = x.constructor,
+function toString(x) {
+  var Ctor = x.constructor,
     str = finiteToString(x, x.e <= Ctor.toExpNeg || x.e >= Ctor.toExpPos);
 
-  return x.isNeg() && !x.isZero() ? '-' + str : str;
-};
+  return isNeg(x) && !isZero(x) ? '-' + str : str;
+}
 
 
 /*
  * Return a new Decimal whose value is the value of this Decimal truncated to a whole number.
  *
  */
-P.truncated = P.trunc = function () {
-  return finalise(new this.constructor(this), this.e + 1, 1);
-};
+function trunc(x) {
+  return finalise(new x.constructor(x), x.e + 1, 1);
+}
 
 
 /*
@@ -2455,13 +2423,12 @@ P.truncated = P.trunc = function () {
  * Unlike `toString`, negative zero will include the minus sign.
  *
  */
-P.valueOf = P.toJSON = function () {
-  var x = this,
-    Ctor = x.constructor,
+function valueOf(x) {
+  var Ctor = x.constructor,
     str = finiteToString(x, x.e <= Ctor.toExpNeg || x.e >= Ctor.toExpPos);
 
-  return x.isNeg() ? '-' + str : str;
-};
+  return isNeg(x) ? '-' + str : str;
+}
 
 
 // Helper functions for Decimal.prototype (P) and/or Decimal methods, and their callers.
@@ -2637,7 +2604,7 @@ function convertBase(str, baseIn, baseOut) {
 function cosine(Ctor, x) {
   var k, len, y;
 
-  if (x.isZero()) return x;
+  if (isZero(x)) return x;
 
   // Argument reduction: cos(4x) = 8*(cos^4(x) - cos^2(x)) + 1
   // i.e. cos(x) = 8*(cos^4(x/4) - cos^2(x/4)) + 1
@@ -2654,12 +2621,12 @@ function cosine(Ctor, x) {
 
   Ctor.precision += k;
 
-  x = taylorSeries(Ctor, 1, x.times(y), new Ctor(1));
+  x = taylorSeries(Ctor, 1, mul(x, y), new Ctor(1));
 
   // Reverse argument reduction
   for (var i = k; i--;) {
-    var cos2x = x.times(x);
-    x = cos2x.times(cos2x).minus(cos2x).times(8).plus(1);
+    var cos2x = mul(x, x);
+    x = add(mul(sub(mul(cos2x, cos2x), cos2x), 8), 1);
   }
 
   Ctor.precision -= k;
@@ -3107,7 +3074,7 @@ var divide = (function () {
 
 
 function finiteToString(x, isExp, sd) {
-  if (!x.isFinite()) return nonFiniteToString(x);
+  if (!decimalIsFinite(x)) return nonFiniteToString(x);
   var k,
     e = x.e,
     str = digitsToString(x.d),
@@ -3157,12 +3124,14 @@ function getLn10(Ctor, sd, pr) {
     if (pr) Ctor.precision = pr;
     throw Error(precisionLimitExceeded);
   }
+  if (typeof LN10 == 'string') LN10 = new Ctor(LN10);
   return finalise(new Ctor(LN10), sd, 1, true);
 }
 
 
 function getPi(Ctor, sd, rm) {
   if (sd > PI_PRECISION) throw Error(precisionLimitExceeded);
+  if (typeof PI == 'string') PI = new Ctor(PI);
   return finalise(new Ctor(PI), sd, rm, true);
 }
 
@@ -3213,7 +3182,7 @@ function intPow(Ctor, x, n, pr) {
 
   for (;;) {
     if (n % 2) {
-      r = r.times(x);
+      r = mul(r, x);
       if (truncate(r.d, k)) isTruncated = true;
     }
 
@@ -3226,7 +3195,7 @@ function intPow(Ctor, x, n, pr) {
       break;
     }
 
-    x = x.times(x);
+    x = mul(x, x);
     truncate(x.d, k);
   }
 
@@ -3258,7 +3227,7 @@ function maxOrMin(Ctor, args, n) {
       break;
     }
 
-    k = x.cmp(y);
+    k = cmp(x, y);
 
     if (k === n || k === 0 && x.s === n) {
       x = y;
@@ -3330,7 +3299,7 @@ function naturalExponential(x, sd) {
   while (x.e > -2) {
 
     // x = x / 2^5
-    x = x.times(t);
+    x = mul(x, t);
     k += 5;
   }
 
@@ -3342,13 +3311,13 @@ function naturalExponential(x, sd) {
   Ctor.precision = wpr;
 
   for (;;) {
-    pow = finalise(pow.times(x), wpr, 1);
-    denominator = denominator.times(++i);
-    t = sum.plus(divide(pow, denominator, wpr, 1));
+    pow = finalise(mul(pow, x), wpr, 1);
+    denominator = mul(denominator, ++i);
+    t = add(sum, divide(pow, denominator, wpr, 1));
 
     if (digitsToString(t.d).slice(0, wpr) === digitsToString(sum.d).slice(0, wpr)) {
       j = k;
-      while (j--) sum = finalise(sum.times(sum), wpr, 1);
+      while (j--) sum = finalise(mul(sum, sum), wpr, 1);
 
       // Check to see if the first 4 rounding digits are [49]999.
       // If so, repeat the summation with a higher precision, otherwise
@@ -3431,7 +3400,7 @@ function naturalLogarithm(y, sd) {
     //while (c0 < 9 && c0 != 1 || c0 == 1 && c.charAt(1) > 1) {
     // max n is 6 (gives 0.7 - 1.3)
     while (c0 < 7 && c0 != 1 || c0 == 1 && c.charAt(1) > 3) {
-      x = x.times(y);
+      x = mul(x, y);
       c = digitsToString(x.d);
       c0 = c.charAt(0);
       n++;
@@ -3450,8 +3419,8 @@ function naturalLogarithm(y, sd) {
     // The argument reduction method above may result in overflow if the argument y is a massive
     // number with exponent >= 1500000000000000 (9e15 / 6 = 1.5e15), so instead recall this
     // function using ln(x*10^e) = ln(x) + e*ln(10).
-    t = getLn10(Ctor, wpr + 2, pr).times(e + '');
-    x = naturalLogarithm(new Ctor(c0 + '.' + c.slice(1)), wpr - guard).plus(t);
+    t = mul(getLn10(Ctor, wpr + 2, pr), e + '');
+    x = add(naturalLogarithm(new Ctor(c0 + '.' + c.slice(1)), wpr - guard), t);
     Ctor.precision = pr;
 
     return sd == null ? finalise(x, pr, rm, external = true) : x;
@@ -3463,20 +3432,20 @@ function naturalLogarithm(y, sd) {
   // Taylor series.
   // ln(y) = ln((1 + x)/(1 - x)) = 2(x + x^3/3 + x^5/5 + x^7/7 + ...)
   // where x = (y - 1)/(y + 1)    (|x| < 1)
-  sum = numerator = x = divide(x.minus(1), x.plus(1), wpr, 1);
-  x2 = finalise(x.times(x), wpr, 1);
+  sum = numerator = x = divide(sub(x, 1), add(x, 1), wpr, 1);
+  x2 = finalise(mul(x, x), wpr, 1);
   denominator = 3;
 
   for (;;) {
-    numerator = finalise(numerator.times(x2), wpr, 1);
-    t = sum.plus(divide(numerator, new Ctor(denominator), wpr, 1));
+    numerator = finalise(mul(numerator, x2), wpr, 1);
+    t = add(sum, divide(numerator, new Ctor(denominator), wpr, 1));
 
     if (digitsToString(t.d).slice(0, wpr) === digitsToString(sum.d).slice(0, wpr)) {
-      sum = sum.times(2);
+      sum = mul(sum, 2);
 
       // Reverse the argument reduction. Check that e is not 0 because, besides preventing an
       // unnecessary calculation, -0 + 0 = +0 and to ensure correct rounding -0 needs to stay -0.
-      if (e !== 0) sum = sum.plus(getLn10(Ctor, wpr + 2, pr).times(e + ''));
+      if (e !== 0) sum = add(sum, mul(getLn10(Ctor, wpr + 2, pr), e + ''));
       sum = divide(sum, new Ctor(n), wpr, 1);
 
       // Is rm > 3 and the first 4 rounding digits 4999, or rm < 4 (or the summation has
@@ -3488,8 +3457,8 @@ function naturalLogarithm(y, sd) {
       if (sd == null) {
         if (checkRoundingDigits(sum.d, wpr - guard, rm, rep)) {
           Ctor.precision = wpr += guard;
-          t = numerator = x = divide(x1.minus(1), x1.plus(1), wpr, 1);
-          x2 = finalise(x.times(x), wpr, 1);
+          t = numerator = x = divide(sub(x1, 1), add(x1, 1), wpr, 1);
+          x2 = finalise(mul(x, x), wpr, 1);
           denominator = rep = 1;
         } else {
           return finalise(sum, Ctor.precision = pr, rm, external = true);
@@ -3667,7 +3636,17 @@ function parseOther(x, str) {
   if (isFloat) x = divide(x, divisor, len * 4);
 
   // Multiply by the binary exponent part if present.
-  if (p) x = x.times(Math.abs(p) < 54 ? mathpow(2, p) : Decimal.pow(2, p));
+  if (p) {
+    if (Math.abs(p) < 54) {
+      x = mul(x, mathpow(2, p));
+    } else {
+
+      // 2^p by exponentiation by squaring, as in `pow`, which isn't used so that it, and the
+      // `exp` and `ln` it needs, can be tree-shaken.
+      divisor = intPow(Ctor, new Ctor(2), p < 0 ? -p : p, Ctor.precision);
+      x = mul(x, p < 0 ? div(new Ctor(1), divisor) : finalise(divisor, Ctor.precision, Ctor.rounding));
+    }
+  }
   external = true;
 
   return x;
@@ -3684,7 +3663,7 @@ function sine(Ctor, x) {
     len = x.d.length;
 
   if (len < 3) {
-    return x.isZero() ? x : taylorSeries(Ctor, 2, x, x);
+    return isZero(x) ? x : taylorSeries(Ctor, 2, x, x);
   }
 
   // Argument reduction: sin(5x) = 16*sin^5(x) - 20*sin^3(x) + 5*sin(x)
@@ -3695,7 +3674,7 @@ function sine(Ctor, x) {
   k = 1.4 * Math.sqrt(len);
   k = k > 16 ? 16 : k | 0;
 
-  x = x.times(1 / tinyPow(5, k));
+  x = mul(x, 1 / tinyPow(5, k));
   x = taylorSeries(Ctor, 2, x, x);
 
   // Reverse argument reduction
@@ -3704,8 +3683,8 @@ function sine(Ctor, x) {
     d16 = new Ctor(16),
     d20 = new Ctor(20);
   for (; k--;) {
-    sin2_x = x.times(x);
-    x = x.times(d5.plus(sin2_x.times(d16.times(sin2_x).minus(d20))));
+    sin2_x = mul(x, x);
+    x = mul(x, add(d5, mul(sin2_x, sub(mul(d16, sin2_x), d20))));
   }
 
   return x;
@@ -3720,14 +3699,14 @@ function taylorSeries(Ctor, n, x, y, isHyperbolic) {
     k = Math.ceil(pr / LOG_BASE);
 
   external = false;
-  x2 = x.times(x);
+  x2 = mul(x, x);
   u = new Ctor(y);
 
   for (;;) {
-    t = divide(u.times(x2), new Ctor(n++ * n++), pr, 1);
-    u = isHyperbolic ? y.plus(t) : y.minus(t);
-    y = divide(t.times(x2), new Ctor(n++ * n++), pr, 1);
-    t = u.plus(y);
+    t = divide(mul(u, x2), new Ctor(n++ * n++), pr, 1);
+    u = isHyperbolic ? add(y, t) : sub(y, t);
+    y = divide(mul(t, x2), new Ctor(n++ * n++), pr, 1);
+    t = add(u, y);
 
     if (t.d[k] !== void 0) {
       for (j = k; t.d[j] === u.d[j] && j--;);
@@ -3761,24 +3740,24 @@ function toLessThanHalfPi(Ctor, x) {
   var t,
     isNeg = x.s < 0,
     pi = getPi(Ctor, Ctor.precision, 1),
-    halfPi = pi.times(0.5);
+    halfPi = mul(pi, 0.5);
 
-  x = x.abs();
+  x = abs(x);
 
-  if (x.lte(halfPi)) {
+  if (lte(x, halfPi)) {
     quadrant = isNeg ? 4 : 1;
     return x;
   }
 
-  t = x.divToInt(pi);
+  t = divToInt(x, pi);
 
-  if (t.isZero()) {
+  if (isZero(t)) {
     quadrant = isNeg ? 3 : 2;
   } else {
-    x = x.minus(t.times(pi));
+    x = sub(x, mul(t, pi));
 
     // 0 <= x < pi
-    if (x.lte(halfPi)) {
+    if (lte(x, halfPi)) {
       quadrant = isOdd(t) ? (isNeg ? 2 : 3) : (isNeg ? 4 : 1);
       return x;
     }
@@ -3786,7 +3765,7 @@ function toLessThanHalfPi(Ctor, x) {
     quadrant = isOdd(t) ? (isNeg ? 1 : 4) : (isNeg ? 3 : 2);
   }
 
-  return x.minus(pi).abs();
+  return abs(sub(x, pi));
 }
 
 
@@ -3809,7 +3788,7 @@ function toStringBinary(x, baseOut, sd, rm) {
     rm = Ctor.rounding;
   }
 
-  if (!x.isFinite()) {
+  if (!decimalIsFinite(x)) {
     str = nonFiniteToString(x);
   } else {
     str = finiteToString(x);
@@ -3990,8 +3969,8 @@ function truncate(arr, len) {
  * x {number|string|bigint|Decimal}
  *
  */
-function abs(x) {
-  return new this(x).abs();
+function staticAbs(x) {
+  return abs(new this(x));
 }
 
 
@@ -4001,8 +3980,8 @@ function abs(x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function acos(x) {
-  return new this(x).acos();
+function staticAcos(x) {
+  return acos(new this(x));
 }
 
 
@@ -4013,8 +3992,8 @@ function acos(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function acosh(x) {
-  return new this(x).acosh();
+function staticAcosh(x) {
+  return acosh(new this(x));
 }
 
 
@@ -4026,8 +4005,8 @@ function acosh(x) {
  * y {number|string|bigint|Decimal}
  *
  */
-function add(x, y) {
-  return new this(x).plus(y);
+function staticAdd(x, y) {
+  return add(new this(x), y);
 }
 
 
@@ -4038,8 +4017,8 @@ function add(x, y) {
  * x {number|string|bigint|Decimal}
  *
  */
-function asin(x) {
-  return new this(x).asin();
+function staticAsin(x) {
+  return asin(new this(x));
 }
 
 
@@ -4050,8 +4029,8 @@ function asin(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function asinh(x) {
-  return new this(x).asinh();
+function staticAsinh(x) {
+  return asinh(new this(x));
 }
 
 
@@ -4062,8 +4041,8 @@ function asinh(x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function atan(x) {
-  return new this(x).atan();
+function staticAtan(x) {
+  return atan(new this(x));
 }
 
 
@@ -4074,8 +4053,8 @@ function atan(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function atanh(x) {
-  return new this(x).atanh();
+function staticAtanh(x) {
+  return atanh(new this(x));
 }
 
 
@@ -4118,30 +4097,30 @@ function atan2(y, x) {
 
   // Both ±Infinity
   } else if (!y.d && !x.d) {
-    r = getPi(this, wpr, 1).times(x.s > 0 ? 0.25 : 0.75);
+    r = mul(getPi(this, wpr, 1), x.s > 0 ? 0.25 : 0.75);
     r.s = y.s;
 
   // x is ±Infinity or y is ±0
-  } else if (!x.d || y.isZero()) {
+  } else if (!x.d || isZero(y)) {
     r = x.s < 0 ? getPi(this, pr, rm) : new this(0);
     r.s = y.s;
 
   // y is ±Infinity or x is ±0
-  } else if (!y.d || x.isZero()) {
-    r = getPi(this, wpr, 1).times(0.5);
+  } else if (!y.d || isZero(x)) {
+    r = mul(getPi(this, wpr, 1), 0.5);
     r.s = y.s;
 
   // Both non-zero and finite
   } else if (x.s < 0) {
     this.precision = wpr;
     this.rounding = 1;
-    r = this.atan(divide(y, x, wpr, 1));
+    r = atan(divide(y, x, wpr, 1));
     x = getPi(this, wpr, 1);
     this.precision = pr;
     this.rounding = rm;
-    r = y.s < 0 ? r.minus(x) : r.plus(x);
+    r = y.s < 0 ? sub(r, x) : add(r, x);
   } else {
-    r = this.atan(divide(y, x, wpr, 1));
+    r = atan(divide(y, x, wpr, 1));
   }
 
   return r;
@@ -4155,8 +4134,8 @@ function atan2(y, x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function cbrt(x) {
-  return new this(x).cbrt();
+function staticCbrt(x) {
+  return cbrt(new this(x));
 }
 
 
@@ -4166,7 +4145,7 @@ function cbrt(x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function ceil(x) {
+function staticCeil(x) {
   return finalise(x = new this(x), x.e + 1, 2);
 }
 
@@ -4179,8 +4158,8 @@ function ceil(x) {
  * max {number|string|bigint|Decimal}
  *
  */
-function clamp(x, min, max) {
-  return new this(x).clamp(min, max);
+function staticClamp(x, min, max) {
+  return clamp(new this(x), min, max);
 }
 
 
@@ -4253,8 +4232,8 @@ function config(obj) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function cos(x) {
-  return new this(x).cos();
+function staticCos(x) {
+  return cos(new this(x));
 }
 
 
@@ -4265,8 +4244,8 @@ function cos(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function cosh(x) {
-  return new this(x).cosh();
+function staticCosh(x) {
+  return cosh(new this(x));
 }
 
 
@@ -4399,7 +4378,10 @@ function clone(obj) {
     throw Error(invalidArgument + v);
   }
 
-  Decimal.prototype = P;
+  Decimal.prototype = this.prototype;
+
+  // Inherit the static methods of the parent constructor, e.g. `Decimal.add`.
+  for (p in this) if (this.hasOwnProperty(p) && typeof this[p] == 'function') Decimal[p] = this[p];
 
   Decimal.ROUND_UP = 0;
   Decimal.ROUND_DOWN = 1;
@@ -4416,44 +4398,6 @@ function clone(obj) {
   Decimal.clone = clone;
   Decimal.isDecimal = isDecimalInstance;
 
-  Decimal.abs = abs;
-  Decimal.acos = acos;
-  Decimal.acosh = acosh;        // ES6
-  Decimal.add = add;
-  Decimal.asin = asin;
-  Decimal.asinh = asinh;        // ES6
-  Decimal.atan = atan;
-  Decimal.atanh = atanh;        // ES6
-  Decimal.atan2 = atan2;
-  Decimal.cbrt = cbrt;          // ES6
-  Decimal.ceil = ceil;
-  Decimal.clamp = clamp;
-  Decimal.cos = cos;
-  Decimal.cosh = cosh;          // ES6
-  Decimal.div = div;
-  Decimal.exp = exp;
-  Decimal.floor = floor;
-  Decimal.hypot = hypot;        // ES6
-  Decimal.ln = ln;
-  Decimal.log = log;
-  Decimal.log10 = log10;        // ES6
-  Decimal.log2 = log2;          // ES6
-  Decimal.max = max;
-  Decimal.min = min;
-  Decimal.mod = mod;
-  Decimal.mul = mul;
-  Decimal.pow = pow;
-  Decimal.random = random;
-  Decimal.round = round;
-  Decimal.sign = sign;          // ES6
-  Decimal.sin = sin;
-  Decimal.sinh = sinh;          // ES6
-  Decimal.sqrt = sqrt;
-  Decimal.sub = sub;
-  Decimal.sum = sum;
-  Decimal.tan = tan;
-  Decimal.tanh = tanh;          // ES6
-  Decimal.trunc = trunc;        // ES6
 
   if (obj === void 0) obj = {};
   if (obj) {
@@ -4477,8 +4421,8 @@ function clone(obj) {
  * y {number|string|bigint|Decimal}
  *
  */
-function div(x, y) {
-  return new this(x).div(y);
+function staticDiv(x, y) {
+  return div(new this(x), y);
 }
 
 
@@ -4489,8 +4433,8 @@ function div(x, y) {
  * x {number|string|bigint|Decimal} The power to which to raise the base of the natural log.
  *
  */
-function exp(x) {
-  return new this(x).exp();
+function staticExp(x) {
+  return exp(new this(x));
 }
 
 
@@ -4500,7 +4444,7 @@ function exp(x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function floor(x) {
+function staticFloor(x) {
   return finalise(x = new this(x), x.e + 1, 3);
 }
 
@@ -4529,13 +4473,13 @@ function hypot() {
       }
       t = n;
     } else if (t.d) {
-      t = t.plus(n.times(n));
+      t = add(t, mul(n, n));
     }
   }
 
   external = true;
 
-  return t.sqrt();
+  return sqrt(t);
 }
 
 
@@ -4545,7 +4489,7 @@ function hypot() {
  *
  */
 function isDecimalInstance(obj) {
-  return obj instanceof Decimal || obj && obj.toStringTag === tag || false;
+  return P.isPrototypeOf(obj) || obj && obj.toStringTag === tag || false;
 }
 
 
@@ -4556,8 +4500,8 @@ function isDecimalInstance(obj) {
  * x {number|string|bigint|Decimal}
  *
  */
-function ln(x) {
-  return new this(x).ln();
+function staticLn(x) {
+  return ln(new this(x));
 }
 
 
@@ -4571,8 +4515,8 @@ function ln(x) {
  * y {number|string|bigint|Decimal} The base of the logarithm.
  *
  */
-function log(x, y) {
-  return new this(x).log(y);
+function staticLog(x, y) {
+  return log(new this(x), y);
 }
 
 
@@ -4584,7 +4528,7 @@ function log(x, y) {
  *
  */
 function log2(x) {
-  return new this(x).log(2);
+  return log(new this(x), 2);
 }
 
 
@@ -4596,7 +4540,7 @@ function log2(x) {
  *
  */
 function log10(x) {
-  return new this(x).log(10);
+  return log(new this(x), 10);
 }
 
 
@@ -4630,8 +4574,8 @@ function min() {
  * y {number|string|bigint|Decimal}
  *
  */
-function mod(x, y) {
-  return new this(x).mod(y);
+function staticMod(x, y) {
+  return mod(new this(x), y);
 }
 
 
@@ -4643,8 +4587,8 @@ function mod(x, y) {
  * y {number|string|bigint|Decimal}
  *
  */
-function mul(x, y) {
-  return new this(x).mul(y);
+function staticMul(x, y) {
+  return mul(new this(x), y);
 }
 
 
@@ -4656,8 +4600,8 @@ function mul(x, y) {
  * y {number|string|bigint|Decimal} The exponent.
  *
  */
-function pow(x, y) {
-  return new this(x).pow(y);
+function staticPow(x, y) {
+  return pow(new this(x), y);
 }
 
 
@@ -4774,7 +4718,7 @@ function random(sd) {
  * x {number|string|bigint|Decimal}
  *
  */
-function round(x) {
+function staticRound(x) {
   return finalise(x = new this(x), x.e + 1, this.rounding);
 }
 
@@ -4803,8 +4747,8 @@ function sign(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function sin(x) {
-  return new this(x).sin();
+function staticSin(x) {
+  return sin(new this(x));
 }
 
 
@@ -4815,8 +4759,8 @@ function sin(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function sinh(x) {
-  return new this(x).sinh();
+function staticSinh(x) {
+  return sinh(new this(x));
 }
 
 
@@ -4827,8 +4771,8 @@ function sinh(x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function sqrt(x) {
-  return new this(x).sqrt();
+function staticSqrt(x) {
+  return sqrt(new this(x));
 }
 
 
@@ -4840,8 +4784,8 @@ function sqrt(x) {
  * y {number|string|bigint|Decimal}
  *
  */
-function sub(x, y) {
-  return new this(x).sub(y);
+function staticSub(x, y) {
+  return sub(new this(x), y);
 }
 
 
@@ -4860,7 +4804,7 @@ function sum() {
     x = new this(args[i]);
 
   external = false;
-  for (; x.s && ++i < args.length;) x = x.plus(args[i]);
+  for (; x.s && ++i < args.length;) x = add(x, args[i]);
   external = true;
 
   return finalise(x, this.precision, this.rounding);
@@ -4874,8 +4818,8 @@ function sum() {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function tan(x) {
-  return new this(x).tan();
+function staticTan(x) {
+  return tan(new this(x));
 }
 
 
@@ -4886,8 +4830,8 @@ function tan(x) {
  * x {number|string|bigint|Decimal} A value in radians.
  *
  */
-function tanh(x) {
-  return new this(x).tanh();
+function staticTanh(x) {
+  return tanh(new this(x));
 }
 
 
@@ -4897,19 +4841,257 @@ function tanh(x) {
  * x {number|string|bigint|Decimal}
  *
  */
-function trunc(x) {
+function staticTrunc(x) {
   return finalise(x = new this(x), x.e + 1, 1);
 }
 
 
-P[Symbol.for('nodejs.util.inspect.custom')] = P.toString;
+/*
+ * Return a prototype method that calls `fn` with `this` as its first argument.
+ *
+ */
+function method(fn) {
+  return function (a, b) {
+    return fn(this, a, b);
+  };
+}
+
+
+/*
+ * Create the full Decimal constructor, with all the methods on its prototype and all the static
+ * methods. Bundlers can drop it, and the functions only it uses, if it is not imported.
+ *
+ */
+function createDecimal() {
+  var i, j, m, f,
+    proto = Object.create(P),
+    Decimal = clone.call({ prototype: proto }, DEFAULTS),
+    methods = [
+      [abs, 'absoluteValue', 'abs'],
+      [ceil, 'ceil'],
+      [clamp, 'clampedTo', 'clamp'],
+      [cmp, 'comparedTo', 'cmp'],
+      [cos, 'cosine', 'cos'],
+      [cbrt, 'cubeRoot', 'cbrt'],
+      [dp, 'decimalPlaces', 'dp'],
+      [div, 'dividedBy', 'div'],
+      [divToInt, 'dividedToIntegerBy', 'divToInt'],
+      [eq, 'equals', 'eq'],
+      [floor, 'floor'],
+      [gt, 'greaterThan', 'gt'],
+      [gte, 'greaterThanOrEqualTo', 'gte'],
+      [cosh, 'hyperbolicCosine', 'cosh'],
+      [sinh, 'hyperbolicSine', 'sinh'],
+      [tanh, 'hyperbolicTangent', 'tanh'],
+      [acos, 'inverseCosine', 'acos'],
+      [acosh, 'inverseHyperbolicCosine', 'acosh'],
+      [asinh, 'inverseHyperbolicSine', 'asinh'],
+      [atanh, 'inverseHyperbolicTangent', 'atanh'],
+      [asin, 'inverseSine', 'asin'],
+      [atan, 'inverseTangent', 'atan'],
+      [decimalIsFinite, 'isFinite'],
+      [isInt, 'isInteger', 'isInt'],
+      [decimalIsNaN, 'isNaN'],
+      [isNeg, 'isNegative', 'isNeg'],
+      [isPos, 'isPositive', 'isPos'],
+      [isZero, 'isZero'],
+      [lt, 'lessThan', 'lt'],
+      [lte, 'lessThanOrEqualTo', 'lte'],
+      [log, 'logarithm', 'log'],
+      [sub, 'minus', 'sub'],
+      [mod, 'modulo', 'mod'],
+      [exp, 'naturalExponential', 'exp'],
+      [ln, 'naturalLogarithm', 'ln'],
+      [neg, 'negated', 'neg'],
+      [add, 'plus', 'add'],
+      [sd, 'precision', 'sd'],
+      [round, 'round'],
+      [sin, 'sine', 'sin'],
+      [sqrt, 'squareRoot', 'sqrt'],
+      [tan, 'tangent', 'tan'],
+      [mul, 'times', 'mul'],
+      [toBinary, 'toBinary'],
+      [toDP, 'toDecimalPlaces', 'toDP'],
+      [toExponential, 'toExponential'],
+      [toFixed, 'toFixed'],
+      [toFraction, 'toFraction'],
+      [toHex, 'toHexadecimal', 'toHex'],
+      [toNearest, 'toNearest'],
+      [toNumber, 'toNumber'],
+      [toOctal, 'toOctal'],
+      [pow, 'toPower', 'pow'],
+      [toPrecision, 'toPrecision'],
+      [toSD, 'toSignificantDigits', 'toSD'],
+      [trunc, 'truncated', 'trunc']
+    ];
+
+  for (i = 0; i < methods.length; i++) {
+    m = methods[i];
+    f = method(m[0]);
+    for (j = 1; j < m.length; j++) proto[m[j]] = f;
+  }
+
+  proto.constructor = Decimal;
+  Decimal.abs = staticAbs;
+  Decimal.acos = staticAcos;
+  Decimal.acosh = staticAcosh;        // ES6
+  Decimal.add = staticAdd;
+  Decimal.asin = staticAsin;
+  Decimal.asinh = staticAsinh;        // ES6
+  Decimal.atan = staticAtan;
+  Decimal.atanh = staticAtanh;        // ES6
+  Decimal.atan2 = atan2;
+  Decimal.cbrt = staticCbrt;          // ES6
+  Decimal.ceil = staticCeil;
+  Decimal.clamp = staticClamp;
+  Decimal.cos = staticCos;
+  Decimal.cosh = staticCosh;          // ES6
+  Decimal.div = staticDiv;
+  Decimal.exp = staticExp;
+  Decimal.floor = staticFloor;
+  Decimal.hypot = hypot;        // ES6
+  Decimal.ln = staticLn;
+  Decimal.log = staticLog;
+  Decimal.log10 = log10;        // ES6
+  Decimal.log2 = log2;          // ES6
+  Decimal.max = max;
+  Decimal.min = min;
+  Decimal.mod = staticMod;
+  Decimal.mul = staticMul;
+  Decimal.pow = staticPow;
+  Decimal.random = random;
+  Decimal.round = staticRound;
+  Decimal.sign = sign;          // ES6
+  Decimal.sin = staticSin;
+  Decimal.sinh = staticSinh;          // ES6
+  Decimal.sqrt = staticSqrt;
+  Decimal.sub = staticSub;
+  Decimal.sum = sum;
+  Decimal.tan = staticTan;
+  Decimal.tanh = staticTanh;          // ES6
+  Decimal.trunc = staticTrunc;        // ES6
+
+  return Decimal;
+}
+
+
+P.toString = P[Symbol.for('nodejs.util.inspect.custom')] = method(toString);
+P.valueOf = P.toJSON = method(valueOf);
 P[Symbol.toStringTag] = 'Decimal';
 
-// Create and configure initial Decimal constructor.
-export var Decimal = P.constructor = clone(DEFAULTS);
+// Create and configure the initial Decimal constructors.
 
-// Create the internal constants from their string values.
-LN10 = new Decimal(LN10);
-PI = new Decimal(PI);
+// A Decimal constructor whose prototype only has `toString`, `valueOf` and `toJSON`. Use it with
+// the exported functions to bundle only the code that is used, e.g. `add(new DecimalLite(1), 2)`.
+export var DecimalLite = P.constructor = /*#__PURE__*/ clone.call({ prototype: P }, DEFAULTS);
+
+// A Decimal constructor with all the prototype and static methods.
+export var Decimal = /*#__PURE__*/ createDecimal();
 
 export default Decimal;
+
+// Each function takes a Decimal as its first argument and is equivalent to the prototype method of
+// the same name, e.g. `add(x, y)` is `x.add(y)`.
+export {
+  abs as absoluteValue,
+  abs,
+  ceil,
+  clamp as clampedTo,
+  clamp,
+  cmp as comparedTo,
+  cmp,
+  cos as cosine,
+  cos,
+  cbrt as cubeRoot,
+  cbrt,
+  dp as decimalPlaces,
+  dp,
+  div as dividedBy,
+  div,
+  divToInt as dividedToIntegerBy,
+  divToInt,
+  eq as equals,
+  eq,
+  floor,
+  gt as greaterThan,
+  gt,
+  gte as greaterThanOrEqualTo,
+  gte,
+  cosh as hyperbolicCosine,
+  cosh,
+  sinh as hyperbolicSine,
+  sinh,
+  tanh as hyperbolicTangent,
+  tanh,
+  acos as inverseCosine,
+  acos,
+  acosh as inverseHyperbolicCosine,
+  acosh,
+  asinh as inverseHyperbolicSine,
+  asinh,
+  atanh as inverseHyperbolicTangent,
+  atanh,
+  asin as inverseSine,
+  asin,
+  atan as inverseTangent,
+  atan,
+  decimalIsFinite as isFinite,
+  isInt as isInteger,
+  isInt,
+  decimalIsNaN as isNaN,
+  isNeg as isNegative,
+  isNeg,
+  isPos as isPositive,
+  isPos,
+  isZero,
+  lt as lessThan,
+  lt,
+  lte as lessThanOrEqualTo,
+  lte,
+  log as logarithm,
+  log,
+  sub as minus,
+  sub,
+  mod as modulo,
+  mod,
+  exp as naturalExponential,
+  exp,
+  ln as naturalLogarithm,
+  ln,
+  neg as negated,
+  neg,
+  add as plus,
+  add,
+  sd as precision,
+  sd,
+  round,
+  sin as sine,
+  sin,
+  sqrt as squareRoot,
+  sqrt,
+  tan as tangent,
+  tan,
+  mul as times,
+  mul,
+  toBinary,
+  toDP as toDecimalPlaces,
+  toDP,
+  toExponential,
+  toFixed,
+  toFraction,
+  toHex as toHexadecimal,
+  toHex,
+  toNearest,
+  toNumber,
+  toOctal,
+  pow as toPower,
+  pow,
+  toPrecision,
+  toSD as toSignificantDigits,
+  toSD,
+  toString,
+  trunc as truncated,
+  trunc,
+  valueOf,
+  valueOf as toJSON
+};
