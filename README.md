@@ -203,6 +203,25 @@ x.s                            // -1                    sign
 
 For further information see the [API](http://mikemcl.github.io/decimal.js/) reference in the *doc* directory.
 
+### Tree shaking
+
+The ES module, *decimal.mjs*, also exports each prototype method as a function that takes the
+Decimal as its first argument, and `DecimalLite`, a Decimal constructor whose prototype only has
+`toString`, `valueOf` and `toJSON`.
+
+If only these are imported, a bundler can leave out the methods that are not used.
+
+```js
+import { DecimalLite, add, times, toFixed } from 'decimal.js';
+
+const x = new DecimalLite('0.1');
+toFixed(times(add(x, '0.2'), 3), 2)    // '0.90'   same as x.plus('0.2').times(3).toFixed(2)
+```
+
+The functions return a Decimal created by the constructor of their first argument, and also accept
+Decimals created by `Decimal`. `DecimalLite` has the same configuration properties and `config`,
+`set`, `clone` and `isDecimal` methods as `Decimal`, but no other static methods.
+
 ## Test
 
 To run the tests using Node.js from the root directory:
