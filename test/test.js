@@ -41,6 +41,7 @@ console.log('\n Testing decimal.js\n');
   'neg',
   'plus',
   'pow',
+  'powSqrt',
   'random',
   'round',
   'sign',

@@ -9,7 +9,7 @@ T('pow against sqrt', function () {
     maxE: 9e15
   });
 
-  for (var e, n, p, r, s; total < 10000; ) {
+  for (var e, n, p, r, s, total = 0; total < 10000; total++) {
 
     // Get a random value in the range [0,1) with a random number of significant digits
     // in the range [1, 40], as a string in exponential format.
